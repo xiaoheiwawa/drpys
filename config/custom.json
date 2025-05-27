@@ -23,16 +23,7 @@
                 "jxurl": "https://www.ququkan.cc"
             }
         },
-	{
-  "key": "drpyS_OleVod",
-  "name": "欧乐影院(T4)┃[APP]",
-  "type": 4,
-  "api": "https://py.doube.eu.org/spider?site=OleVod",
-  "searchable": 1,
-  "quickSearch": 0,
-  "filterable": 0,
-  "changeable": 0
-},
+	
 	 {
       "key": "drpyS_再看[APP]",
       "name": "再看┃[APP]",
