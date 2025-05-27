@@ -24,16 +24,6 @@
             }
         },
 	{
-      "key": "drpyS_在看[APP]",
-      "name": "🔶在看┃[APP]",
-      "type": 4,
-      "api": "https://zhxy.eu.org/api/APPM[模版]",
-      "searchable": 1,
-      "filterable": 1,
-      "quickSearch": 0,
-      "ext": "H4sIAAAAAAAAA8soKSmw0tc3NLHUs7DQMzPRMzQztLI0NTJVMTQyNjE1M7ewdHRydnF1c1cBAHuN6osrAAAA"
-    },
-	{
       "key": "drpyS_人人[APP]",
       "name": "人人┃[APP]",
       "type": 4,
@@ -43,26 +33,8 @@
       "quickSearch": 0,
       "ext": "H4sIAAAAAAAAA8soKSkottLXLy7LLDDUSyvNU8lJzE/JTC1OSSwvLi5PLE5RAQBDNIHLIwAAAA=="
     },
-	 {
-      "key": "drpyS_晴天[APP]",
-      "name": "晴天┃[APP]",
-      "type": 4,
-      "api": "https://zhxy.eu.org/api/APPM[模版]",
-      "searchable": 1,
-      "filterable": 1,
-      "quickSearch": 0,
-      "ext": "H4sIAAAAAAAAA8soKSkottLXTywoSM4t1isuzTPJ1ivJL1BJMjAyTUlOsUw2srBMTkoyVgEAuAqSVioAAAA="
-    },
-    {
-      "key": "drpyS_若惜[APP]",
-      "name": "若惜┃[APP]",
-      "type": 4,
-      "api": "https://zhxy.eu.org/api/APPM[模版]",
-      "searchable": 1,
-      "filterable": 1,
-      "quickSearch": 0,
-      "ext": "H4sIAAAAAAAAA8soKSmw0tc3NDTQMzHQM7XUM7SwsLI0NTJXSU1KTDFOM0w0tUgyNLY0NlYBAPPjUVMrAAAA"
-    },
+	
+    
 		
 		{
 			"key": "live",
