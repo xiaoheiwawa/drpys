@@ -1,6 +1,6 @@
 var rule = {
   类型: '影视',
-  title: '吾爱影视',
+  title: '吾爱影视[APP]',
   desc: '源动力出品',
   host: 'https://52movies.top',
   url: '/vodshow/fyclass-fyfilter/',
