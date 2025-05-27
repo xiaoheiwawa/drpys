@@ -23,6 +23,28 @@
                 "jxurl": "https://www.ququkan.cc"
             }
         },
+	{
+      "key": "drpyS_黑木影视[APP]",
+      "name": "黑木影视┃[APP]",
+      "type": 1,
+      "api": "https://heimuer.ggff.net/api.php/tvbox",
+      "searchable": 1,
+      "quickSearch": 1,
+      "filterable": 0,
+      "header": {
+        "User-Agent": "Lavf/58.12.100"
+      }
+    },
+	 {
+      "key": "drpyS_沐辰欧乐影院[APP]",
+      "name": "沐辰欧乐影院┃[APP]",
+      "type": 4,
+      "api": "https://py.doube.eu.org/spider?site=OleVod",
+      "searchable": 1,
+      "quickSearch": 0,
+      "filterable": 0,
+      "changeable": 0
+    },
 	
 	 {
       "key": "drpyS_再看[APP]",
