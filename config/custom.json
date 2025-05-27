@@ -24,6 +24,15 @@
             }
         },
 	{
+        "key": "drpyS_独播[APP]",
+        "name": "独播库┃[APP]",
+        "type": 3,
+        "api": "csp_WexdubokuGuard",
+        "jar": "https://raw.githubusercontent.com/cyalias/mytvs-github/387dcc33d090319ec8ef3b70f475a8a0fe0ae070/tvboxqq/%E7%8E%8B%E4%BA%8C%E5%B0%8F/spider.jar",
+        "searchable": 1,
+        "changeable": 1
+    },
+	{
       "key": "drpyS_人人[APP]",
       "name": "人人┃[APP]",
       "type": 4,
