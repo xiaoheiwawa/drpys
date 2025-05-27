@@ -1,6 +1,6 @@
 var rule = {
     类型: '影视',
-    title: '永乐视频',
+    title: '永乐视频[APP]',
     author:'不告诉你',
     desc: '不告诉你',
     logo:'https://i-blog.csdnimg.cn/blog_migrate/2621e710a94ab40ba66645d47f296aaf.gif',
