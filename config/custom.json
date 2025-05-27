@@ -11,8 +11,8 @@
 			"ext": ""
 		},
 	{
-            "key": "drjs_趣看",
-            "name": "趣看[优](DR)",
+            "key": "drpyS_趣看[APP]",
+            "name": "趣看┃[APP]",
             "type": 3,
             "quickSearch": 1,
             "api": "csp_AppMuou",
