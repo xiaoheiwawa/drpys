@@ -10,19 +10,6 @@
 			"order_num": 7,
 			"ext": ""
 		},
-	{
-      "key": "drpyS_人人[APP]",
-      "name": "人人┃[APP]",
-      "type": 4,
-      "api": "https://zhxy.eu.org/api/APPM[模版]",
-      "searchable": 1,
-      "filterable": 1,
-      "quickSearch": 0,
-      "ext": "H4sIAAAAAAAAA8soKSkottLXLy7LLDDUSyvNU8lJzE/JTC1OSSwvLi5PLE5RAQBDNIHLIwAAAA=="
-    },
-	
-    
-		
 		{
 			"key": "live",
 			"name": "聚合[直播]",
@@ -33,48 +20,6 @@
 			"filterable": 1,
 			"order_num": 12,
 			"ext": ""
-		},
-	{"key":"csp_影探蓝光","name":"💠影探蓝光","type":3,"api":"csp_AppYsV2","searchable":1,"quickSearch":1,"filterable":1,"ext":"http://cszb.lyyytv.cn/api.php/app/"},
-		{
-        "key": "drjs_金牌",
-        "name": "金牌[优](DR)",
-        "type": 3,
-        "api": "https://cnb.cool/zhyadc/YsBox/-/git/raw/main/drpy_libs/drpy2.min.js",
-        "searchable": 1,
-        "filterable": 1,
-        "quickSearch": 0,
-        "ext": "https://cnb.cool/zhyadc/YsBox/-/git/raw/main/drpy_js/金牌[优].js"
-    },
-	{
-      "key": "drjs_影探",
-      "name": "影探[优](DR)",
-      "type": 3,
-      "api": "csp_ApplvDV2",
-      "jar": "http://103.45.162.207:25252/tvbox/custom_spider.jar",
-      "ext": "0###WH5hCFZ2WEJ1BH1CVFxmQVt+Xw1QamUGdVt9TXkAcUNYZQZPVHp2QmBucU95S3pecARbCFF6dgJ1TwpQVnp1AVtlBktQalsBXX5qTWwAA0JgbnFIeQBbQWNxZQxlAXVcWlh9VFYCW19pYnZVbGp1Q1hhYgF4ZnZDdHJyVVFfW19jYQpuVl9ADQ=="
-    },
-	{
-			"key": "py_hitvAPP.py",
-			"name": "hitvAPP[优](py)",
-			"type": 3,
-			"api": "https://cnb.cool/yyboos/bosyy/-/git/raw/main/py/plugin/app/hitvAPP.py",
-			"searchable": 1,
-			"quickSearch": 1,
-			"filterable": 1,
-			"order_num": 0,
-			"ext": ""
-		},
-
-
-    {
-        "key": "drjs_苹果",
-        "name": "苹果[优](DR)",
-        "type": 3,
-        "api": "https://cnb.cool/zhyadc/YsBox/-/git/raw/main/drpy_libs/drpy2.min.js",
-        "searchable": 1,
-        "filterable": 1,
-        "quickSearch": 0,
-        "ext": "https://cnb.cool/zhyadc/YsBox/-/git/raw/main/drpy_js/苹果[优].js"
-    }
+		}
 
 ]
