@@ -10,16 +10,5 @@
 			"order_num": 7,
 			"ext": ""
 		},
-		{
-			"key": "live",
-			"name": "聚合[直播]",
-			"type": 3,
-			"api": "https://cnb.cool/zhyadc/YsBox/-/git/raw/main/open/live_open.js",
-			"searchable": 1,
-			"quickSearch": 1,
-			"filterable": 1,
-			"order_num": 12,
-			"ext": ""
-		}
 
 ]
