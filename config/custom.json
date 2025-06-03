@@ -11,16 +11,6 @@
 			"ext": ""
 		},
 	{
-            "key": "csp_appys_臻彩",
-            "name": "臻彩世界",
-            "type": 3,
-            "api": "csp_AppYsV2",
-            "searchable": 1,
-            "quickSearch": 1,
-            "filterable": 1,
-            "ext": "http://cms.lygdyy.cn/api.php/app/"
-        },
-	{
             "key": "drpyS_趣看[APP]",
             "name": "趣看┃[APP]",
             "type": 3,
