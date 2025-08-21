@@ -1,0 +1,132 @@
+{
+    "盘类": {
+        "多多": {
+            "url": "优雅$多多"
+        }
+    },
+    "盘Ta": {
+        "雷鲸": {
+            "url": "优雅$雷鲸"
+        },
+        "盘它": {
+            "url": "优雅$盘它"
+        }
+    },
+    "ApptoV5": {
+        "追忆": {
+            "url": "http://111.173.114.61:8762"
+        }
+    },
+    "AppRJ": {
+        "示例": {
+            "host": ""
+        },
+        "天天": {
+            "url": "http://tt.ysdqjs.cn"
+        },
+        "浪酷": {
+            "url": "http://v.lkuys.cn"
+        }
+    },
+    "AppGet": {
+        "说明": {
+            "site": "",
+            "dataKey": ""
+        },
+        "瓜仔": {
+            "host": "http://app.guaziys.com",
+            "datakey": "25356B9148F742ED"
+        },
+        "火猫": {
+            "site": "https://cunchu8.obs.cn-north-4.myhuaweicloud.com/03.txt",
+            "dataKey": "J6AIORKJ3PQOJKM9"
+        },
+        "魔方": {
+            "site": "https://www.snysw.xyz/mfys.txt",
+            "dataKey": "1234567887654321"
+        },
+        "爱看": {
+            "url": "http://154.37.220.65",
+            "dataKey": "uI1TkPJC8B46AyN3"
+        },
+        "橘子": {
+            "site": "http://t.bffree.cn/1.txt",
+            "dataKey": "2015692015692015"
+        },
+        "鲸鱼": {
+            "muban": "AppQiji",
+            "host": "",
+            "hosturl": "https://jingyu4k-1312635929.cos.ap-nanjing.myqcloud.com/1.json",
+            "key": "AAdgrdghjfgswerA",
+            "iv": "AAdgrdghjfgswerA",
+            "verify": "true",
+            "username": "",
+            "password": "",
+            "会员时长": "",
+            "lazyheader": {}
+        },
+        "蓝光": {
+            "muban": "AppGet",
+            "host": "http://122.228.193.2:9654",
+            "hosturl": "",
+            "key": "ca94b06ca3c7d80e",
+            "iv": "ca94b06ca3c7d80e",
+            "verify": "true",
+            "username": "",
+            "password": "",
+            "会员时长": "",
+            "lazyheader": {}
+        },
+        "示例": {
+            "muban": "模板类型(AppGet,AppQiji)",
+            "host": "host和hosturl二填一",
+            "hosturl": "域名地址",
+            "key": "数据加解密秘钥",
+            "iv": "一般同上",
+            "verify": "是否启用搜索验证，字符串true或false",
+            "username": "APP账号用户名",
+            "password": "APP账号密码",
+            "会员时长": "会员函数(gzip压缩)",
+            "lazyheader": "视频播放请求头,JSON格式"
+        }
+    },
+    "AppMuou": {
+        "示例": {
+            "host": "",
+            "hosturl": "",
+            "version": ""
+        },
+        "演员": {
+            "host": "https://vod.feiwang.cc"
+        },
+        "落功阁": {
+            "host": "https://ww.ndjdnd.icu"
+        }
+    },
+    "AppShark": {
+        "示例": {
+            "host": "",
+            "hosturl": "",
+            "key": "",
+            "key1": "",
+            "key2": "",
+            "version": ""
+        },
+        "说明": {
+            "host": "http://110.42.7.59:11822",
+            "hosturl": "",
+            "key": "1e765e9b09b4dbba",
+            "key1": "",
+            "key2": "",
+            "version": ""
+        },
+        "光映视界": {
+            "host": "",
+            "hosturl": "https://ymdtsy.lingutv.cn/shark/api.txt",
+            "key": "IKXRx4M6cB45SNTs",
+            "key1": "rectangleadsadxa",
+            "key2": "aassddwwxxllsx1x",
+            "version": "2.2.0"
+        }
+    }
+}

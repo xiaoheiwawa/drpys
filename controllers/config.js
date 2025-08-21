@@ -1,15 +1,17 @@
 import {readdirSync, readFileSync, writeFileSync, existsSync} from 'fs';
+import {readFile} from 'fs/promises';
 import path from 'path';
 import * as drpy from '../libs/drpyS.js';
 import '../libs_drpy/jinja.js'
 import {naturalSort, urljoin, updateQueryString} from '../utils/utils.js'
 import {md5} from "../libs_drpy/crypto-util.js";
 import {ENV} from "../utils/env.js";
+import FileHeaderManager from "../utils/fileHeaderManager.js";
+import {extractNameFromCode} from "../utils/python.js";
 import {validateBasicAuth, validatePwd} from "../utils/api_validate.js";
 import {getSitesMap} from "../utils/sites-map.js";
 import {getParsesDict} from "../utils/file.js";
 import batchExecute from '../libs_drpy/batchExecute.js';
-import { fileURLToPath } from 'url';
 
 const {jsEncoder} = drpy;
 
@@ -17,7 +19,9 @@ const {jsEncoder} = drpy;
 async function generateSiteJSON(options, requestHost, sub, pwd) {
     const jsDir = options.jsDir;
     const dr2Dir = options.dr2Dir;
+    const pyDir = options.pyDir;
     const configDir = options.configDir;
+    const jsonDir = options.jsonDir;
     const subFilePath = options.subFilePath;
     const rootDir = options.rootDir;
 
@@ -49,19 +53,59 @@ async function generateSiteJSON(options, requestHost, sub, pwd) {
         }
     }
     let sites = [];
+
+    //以下为自定义APP模板部分
+    try {
+    //  const templateConfigPath = path.join(jsonDir, './App模板配置.json');
+    const templateConfigPath = path.join(configDir, '../pz/App模板配置.json');
+    if (existsSync(templateConfigPath)) {
+        const templateContent = readFileSync(templateConfigPath, 'utf-8');
+        const templateConfig = JSON.parse(templateContent);
+        sites = Object.entries(templateConfig).filter(([key]) => valid_files.includes(`${key}[模板].js`))
+            .flatMap(([key, config]) =>
+                Object.entries(config)
+                    // .filter(([name]) => name !== "示例")
+                    .filter(([name]) => { return !/^(说明|示例)$/.test(name) })
+                    .map(([name]) => {
+                        // 判断key是否包含'App'，决定是否添加[M]
+                        const processedKey = key.includes('App') ? 'M' : key.replace('App', '');
+                        return {
+                            key: `drpyS_${name}_${key}`,
+                            name: `${name}[${processedKey}]`, // 这里是修改后的逻辑
+                            type: 4,
+                            api: `${requestHost}/api/${key}[模板]${pwd ? `?pwd=${pwd}` : ''}`,
+                            searchable: 1,
+                            filterable: 1,
+                            quickSearch: 0,
+                            // ext: `../json/App模板配置.json$${name}`
+                            ext: jsEncoder.gzip(`优雅永不过时$${name}`) // 压缩ext
+                        }
+                    }));
+    }
+} catch (e) {
+    console.error('读取App模板配置失败:', e.message);
+}
+
+    //以上为自定义APP[模板]配置自动添加代码
+
     let link_jar = '';
+    let enableRuleName = ENV.get('enable_rule_name', '0') === '1';
+    let isLoaded = await drpy.isLoaded();
+    let forceHeader = Number(process.env.FORCE_HEADER) || 0;
+    let dr2ApiType = Number(process.env.DR2_API_TYPE) || 0; // 0 ds里的api 1壳子内置
     // console.log('hide_adult:', ENV.get('hide_adult'));
     if (ENV.get('hide_adult') === '1') {
         valid_files = valid_files.filter(it => !(new RegExp('\\[[密]\\]|密+')).test(it));
     }
     let SitesMap = getSitesMap(configDir);
     // console.log(SitesMap);
+    log(`开始生成ds的t4配置，jsDir:${jsDir},源数量: ${valid_files.length}`);
+
     const tasks = valid_files.map((file) => {
         return {
             func: async ({file, jsDir, requestHost, pwd, drpy, SitesMap, jsEncoder}) => {
                 const baseName = path.basename(file, '.js'); // 去掉文件扩展名
-     let api = `${requestHost}/api/${baseName}`;  // 使用请求的 host 地址，避免硬编码端口
-  // let api = `https://zhxy.eu.org/api/${baseName}`;  // 使用请求的 host 地址，避免硬编码端口
+                let api = `${requestHost}/api/${baseName}`;  // 使用请求的 host 地址，避免硬编码端口
                 if (pwd) {
                     api += `?pwd=${pwd}`;
                 }
@@ -70,16 +114,41 @@ async function generateSiteJSON(options, requestHost, sub, pwd) {
                     filterable: 0, // 固定值
                     quickSearch: 0, // 固定值
                 };
-                try {
-                    ruleObject = await drpy.getRuleObject(path.join(jsDir, file));
-                } catch (e) {
-                    throw new Error(`Error parsing rule object for file: ${file}, ${e.message}`);
+                let ruleMeta = {...ruleObject};
+                // if (baseName.includes('抖音直播弹幕')) {
+                const filePath = path.join(jsDir, file);
+                const header = await FileHeaderManager.readHeader(filePath);
+                // console.log('ds header:', header);
+                if (!header || forceHeader) {
+                    try {
+                        ruleObject = await drpy.getRuleObject(filePath);
+                    } catch (e) {
+                        throw new Error(`Error parsing rule object for file: ${file}, ${e.message}`);
+                    }
+                    Object.assign(ruleMeta, {
+                        title: ruleObject.title,
+                        searchable: ruleObject.searchable,
+                        filterable: ruleObject.filterable,
+                        quickSearch: ruleObject.quickSearch,
+                        more: ruleObject.more,
+                        logo: ruleObject.logo,
+                        lang: 'ds',
+                    });
+                    // console.log('ds ruleMeta:', ruleMeta);
+                    await FileHeaderManager.writeHeader(filePath, ruleMeta);
+                } else {
+                    Object.assign(ruleMeta, header);
                 }
+                if (!isLoaded) {
+                    const sizeInBytes = await FileHeaderManager.getFileSize(filePath, {humanReadable: true});
+                    console.log(`Loading RuleObject: ${filePath} fileSize:${sizeInBytes}`);
+                }
+                ruleMeta.title = enableRuleName ? ruleMeta.title || baseName : baseName;
 
                 let fileSites = [];
                 if (baseName === 'push_agent') {
                     let key = 'push_agent';
-                    let name = `${ruleObject.title}(DS)`;
+                    let name = `${ruleMeta.title}(DS)`;
                     fileSites.push({key, name});
                 } else if (SitesMap.hasOwnProperty(baseName) && Array.isArray(SitesMap[baseName])) {
                     SitesMap[baseName].forEach((it) => {
@@ -92,8 +161,8 @@ async function generateSiteJSON(options, requestHost, sub, pwd) {
                         fileSites.push({key, name, ext});
                     });
                 } else {
-                    let key = `drpyS_${baseName}`;
-                    let name = `${baseName}(DS)`;
+                    let key = `drpyS_${ruleMeta.title}`;
+                    let name = `${ruleMeta.title}(DS)`;
                     fileSites.push({key, name});
                 }
 
@@ -103,11 +172,7 @@ async function generateSiteJSON(options, requestHost, sub, pwd) {
                         name: fileSite.name,
                         type: 4, // 固定值
                         api,
-                        searchable: ruleObject.searchable,
-                        filterable: ruleObject.filterable,
-                        quickSearch: ruleObject.quickSearch,
-                        more: ruleObject.more,
-                        logo: ruleObject.logo,
+                        ...ruleMeta,
                         ext: fileSite.ext || "", // 固定为空字符串
                     };
                     sites.push(site);
@@ -117,7 +182,6 @@ async function generateSiteJSON(options, requestHost, sub, pwd) {
             id: file,
         };
     });
-
     const listener = {
         func: (param, id, error, result) => {
             if (error) {
@@ -142,8 +206,8 @@ async function generateSiteJSON(options, requestHost, sub, pwd) {
             return {
                 func: async ({file, dr2Dir, requestHost, pwd, drpy, SitesMap}) => {
                     const baseName = path.basename(file, '.js'); // 去掉文件扩展名
-               // let api = `https://gitee.com/zhxyad/YsBox/raw/master/drpy_libs/drpy2.min.js`;  // 使用内置drpy2
-                let api = `https://cnb.cool/zhyadc/YsBox/-/git/raw/main/drpy_libs/drpy2.min.js`;  // 使用内置drpy2
+                    // dr2ApiType=0 使用接口drpy2 dr2ApiType=1 使用壳子内置的drpy2
+                    let api = dr2ApiType ? `assets://js/lib/drpy2.js` : `${requestHost}/public/drpy/drpy2.min.js`;
                     let ext = `${requestHost}/js/${file}`;
                     if (pwd) {
                         ext += `?pwd=${pwd}`;
@@ -153,17 +217,40 @@ async function generateSiteJSON(options, requestHost, sub, pwd) {
                         filterable: 0, // 固定值
                         quickSearch: 0, // 固定值
                     };
-                    try {
-                        // console.log('file:', path.join(dr2Dir, file));
-                        ruleObject = await drpy.getRuleObject(path.join(dr2Dir, file));
-                    } catch (e) {
-                        throw new Error(`Error parsing rule object for file: ${file}, ${e.message}`);
+                    let ruleMeta = {...ruleObject};
+                    const filePath = path.join(dr2Dir, file);
+                    const header = await FileHeaderManager.readHeader(filePath);
+                    // console.log('dr2 header:', header);
+                    if (!header || forceHeader) {
+                        try {
+                            ruleObject = await drpy.getRuleObject(path.join(filePath));
+                        } catch (e) {
+                            throw new Error(`Error parsing rule object for file: ${file}, ${e.message}`);
+                        }
+                        Object.assign(ruleMeta, {
+                            title: ruleObject.title,
+                            searchable: ruleObject.searchable,
+                            filterable: ruleObject.filterable,
+                            quickSearch: ruleObject.quickSearch,
+                            more: ruleObject.more,
+                            logo: ruleObject.logo,
+                            lang: 'dr2',
+                        });
+                        // console.log('dr2 ruleMeta:', ruleMeta);
+                        await FileHeaderManager.writeHeader(filePath, ruleMeta);
+                    } else {
+                        Object.assign(ruleMeta, header);
                     }
+                    if (!isLoaded) {
+                        const sizeInBytes = await FileHeaderManager.getFileSize(filePath, {humanReadable: true});
+                        console.log(`Loading RuleObject: ${filePath} fileSize:${sizeInBytes}`);
+                    }
+                    ruleMeta.title = enableRuleName ? ruleMeta.title || baseName : baseName;
 
                     let fileSites = [];
                     if (baseName === 'push_agent') {
                         let key = 'push_agent';
-                        let name = `${ruleObject.title}(DR2)`;
+                        let name = `${ruleMeta.title}(DR2)`;
                         fileSites.push({key, name, ext});
                     } else if (SitesMap.hasOwnProperty(baseName) && Array.isArray(SitesMap[baseName])) {
                         SitesMap[baseName].forEach((it) => {
@@ -173,8 +260,8 @@ async function generateSiteJSON(options, requestHost, sub, pwd) {
                             fileSites.push({key, name, ext: _ext});
                         });
                     } else {
-                        let key = `drpy2_${baseName}`;
-                        let name = `${baseName}(DR2)`;
+                        let key = `drpy2_${ruleMeta.title}`;
+                        let name = `${ruleMeta.title}(DR2)`;
                         fileSites.push({key, name, ext});
                     }
 
@@ -184,11 +271,7 @@ async function generateSiteJSON(options, requestHost, sub, pwd) {
                             name: fileSite.name,
                             type: 3, // 固定值
                             api,
-                            searchable: ruleObject.searchable,
-                            filterable: ruleObject.filterable,
-                            quickSearch: ruleObject.quickSearch,
-                            more: ruleObject.more,
-                            logo: ruleObject.logo,
+                            ...ruleMeta,
                             ext: fileSite.ext || "", // 固定为空字符串
                         };
                         sites.push(site);
@@ -200,6 +283,92 @@ async function generateSiteJSON(options, requestHost, sub, pwd) {
         });
 
         await batchExecute(dr2_tasks, listener);
+
+    }
+
+    // 根据用户是否启用py源去生成对应配置
+    if (ENV.get('enable_py', '1') === '1') {
+        const py_files = readdirSync(pyDir);
+        let py_valid_files = py_files.filter((file) => file.endsWith('.py') && !file.startsWith('_')); // 筛选出不是 "_" 开头的 .py 文件
+        // log(py_valid_files);
+        log(`开始生成python的t3配置，pyDir:${pyDir},源数量: ${py_valid_files.length}`);
+
+        const py_tasks = py_valid_files.map((file) => {
+            return {
+                func: async ({file, pyDir, requestHost, pwd, SitesMap}) => {
+                    const baseName = path.basename(file, '.py'); // 去掉文件扩展名
+                    const extJson = path.join(pyDir, baseName + '.json');
+                    let api = `${requestHost}/py/${file}`;
+                    let ext = existsSync(extJson) ? `${requestHost}/py/${file}` : '';
+                    if (pwd) {
+                        api += `?pwd=${pwd}`;
+                        if (ext) {
+                            ext += `?pwd=${pwd}`;
+                        }
+                    }
+                    let ruleObject = {
+                        searchable: 1, // 固定值
+                        filterable: 1, // 固定值
+                        quickSearch: 1, // 固定值
+                    };
+                    let ruleMeta = {...ruleObject};
+                    const filePath = path.join(pyDir, file);
+                    const header = await FileHeaderManager.readHeader(filePath);
+                    // console.log('py header:', header);
+                    if (!header || forceHeader) {
+                        const fileContent = await readFile(filePath, 'utf-8');
+                        const title = extractNameFromCode(fileContent) || baseName;
+                        Object.assign(ruleMeta, {
+                            title: title,
+                            lang: 'hipy',
+                        });
+                        // console.log('py ruleMeta:', ruleMeta);
+                        await FileHeaderManager.writeHeader(filePath, ruleMeta);
+                    } else {
+                        Object.assign(ruleMeta, header);
+                    }
+                    if (!isLoaded) {
+                        const sizeInBytes = await FileHeaderManager.getFileSize(filePath, {humanReadable: true});
+                        console.log(`Loading RuleObject: ${filePath} fileSize:${sizeInBytes}`);
+                    }
+                    ruleMeta.title = enableRuleName ? ruleMeta.title || baseName : baseName;
+
+                    let fileSites = [];
+                    if (baseName === 'push_agent') {
+                        let key = 'push_agent';
+                        let name = `${ruleMeta.title}(hipy)`;
+                        fileSites.push({key, name, ext});
+                    } else if (SitesMap.hasOwnProperty(baseName) && Array.isArray(SitesMap[baseName])) {
+                        SitesMap[baseName].forEach((it) => {
+                            let key = `hipy_py_${it.alias}`;
+                            let name = `${it.alias}(hipy)`;
+                            let _ext = updateQueryString(ext, it.queryStr);
+                            fileSites.push({key, name, ext: _ext});
+                        });
+                    } else {
+                        let key = `hipy_py_${ruleMeta.title}`;
+                        let name = `${ruleMeta.title}(hipy)`;
+                        fileSites.push({key, name, ext});
+                    }
+
+                    fileSites.forEach((fileSite) => {
+                        const site = {
+                            key: fileSite.key,
+                            name: fileSite.name,
+                            type: 3, // 固定值
+                            api,
+                            ...ruleMeta,
+                            ext: fileSite.ext || "", // 固定为空字符串
+                        };
+                        sites.push(site);
+                    });
+                },
+                param: {file, pyDir, requestHost, pwd, SitesMap},
+                id: file,
+            };
+        });
+
+        await batchExecute(py_tasks, listener);
 
     }
 
@@ -246,23 +415,30 @@ async function generateSiteJSON(options, requestHost, sub, pwd) {
         } catch (e) {
         }
     }
-     
-// 读取 custom.json 文件
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const customFilePath = path.join(__dirname, '../config/custom.json');
+let customSites = [];
+    let customFilePath = path.join(configDir, '../pz/custom.json');
+    try {
+    const customFileContent = readFileSync(customFilePath, 'utf-8');
+      customSites = JSON.parse(customFileContent);
+    } catch (e) {
+    console.log('custom.json 文件不存在或读取失败，使用空数组作为默认值。');
+  customSites = [];
+    }
+    
+ 
 
-
-//console.log('customFilePath的结果:', customFilePath);
-// 检查路径是否有效
-  const customSites = JSON.parse(readFileSync(customFilePath, 'utf-8'));
-   sites = sites.concat(customSites);
+sites = sites.concat(customSites);
 //console.log('sites的结果:', sites);
 //修改名称    
 sites.forEach(site => {
   // 初始化 newName
   let newName = site.name;
+ // log(`newName的结果: ${newName}`);
   // 修改名称
   newName = newName
+  .replace(/(\(?)(py)(\)?)$/, '[$2]')
+  .replace(/py/g, '派储')
+  .replace(/APP模板/g, 'APP')
   .replace(/优汐|哥哥|影院|弹幕/g, '')
   .replace(/(小米|闪电)\[盘\]/g, '$1[优汐]')
   .replace(/(云盘资源网)\[盘\]/g, '$1[阿里]')
@@ -280,9 +456,10 @@ sites.forEach(site => {
   .replace(/短剧库/g, '剧库')
   .replace(/KTV歌厅/g, 'KTV')
   .replace(/点歌欢唱\[B\]/g, '点歌欢唱[听]')
+  .replace(/\[G\]|\[M\]|\[S\]/g, '[APP]')
  // .replace(/云盘资源网/g, '阿里资源网')
   
-  .replace(/金牌/g, '金牌[优]')
+  //.replace(/金牌/g, '金牌[优]')
   .replace(/荐片/g, '荐片[优]')
   .replace(/皮皮虾/g, '皮皮')
   .replace(/奇珍异兽/g, '奇异')
@@ -304,7 +481,7 @@ sites.forEach(site => {
 
 if (newName.includes('[听]')) {
     if (newName.match(/播|本|相|博|蜻/)) {
-        newName = newName.replace(/以后/g,'').replace(/(\[听\])/g, '[知识]');
+        newName = newName.replace(/以后/g,'').replace(/(\[听\])/g, '[知]');
     } else if (newName.match(/六|酷我|吧|老白|书/)) {
         newName = newName.replace(/以后/g,'').replace(/(\[听\])/g, '[听书]');
     } else if (newName.match(/U/)) {
@@ -318,6 +495,14 @@ if (newName.includes('[听]')) {
           .replace(/哔哩大全\[官\]/g, '大全[哔哩]')
           .replace(/哔哩教育\[官\]/g, '教育[哔哩]');
     }
+    if (newName.match(/盘Ta/)) {
+        newName = newName
+          .replace(/盘它\[盘Ta\]/g, '盘它[移动]')
+          .replace(/雷鲸\[盘Ta\]/g, '雷鲸[天翼]');
+    }
+        newName = newName
+          .replace(/push/g, '手机[推送]');
+    
     site.name = newName;
   const specialRegex = /\[.*?\]/;
   let specialStart;
@@ -337,17 +522,20 @@ if (newName.includes('[听]')) {
     "[存储]": "🗂️",
     "[分享]": "🗂️",
     "[夸克]": "🟣",
-    "[盘]": "🔵",
+    "[派储]": "🔷",
+    "[盘类]": "🔵",
     "[APP]": "🔶",
     "[优]": "❤️",
+    "金牌": "❤️",
+    "苹果": "❤️",
     "[儿]": "👶",
     "[球]": "⚽",
-
     "[合]": "🎁",
     "[短]": "📱",
+    "剧多": "📱",
     "[直]": "📡",
     "[戏]": "🎭",
-    "[知识]": "📻",
+    "[知]": "📻",
   //  "相声": "📻",
     "[磁]": "🧲",
     "[慢]": "🐢",
@@ -370,6 +558,7 @@ if (newName.includes('[听]')) {
     "[央]": "🌎",
     "[弹幕]": "😎",
     "置": "⚙️",
+    "[功]": "⚙️",
     "交互": "⚙️",
     "推": "🛴",
     "": "📺"
@@ -381,6 +570,7 @@ if (newName.includes('[听]')) {
 
    baseName = specialStart!== -1? newName.substring(0, specialStart) : newName;
 //baseName = baseName.substring(0, 2);
+
 if (/^[a-zA-Z0-9].*/.test(baseName) && baseName.length >= 1) {
         baseName = baseName.substring(0, 4);
     } else {
@@ -391,6 +581,7 @@ if (/^[a-zA-Z0-9].*/.test(baseName) && baseName.length >= 1) {
    tsName = newName.substring(specialStart, specialEnd)
    .replace(/\[短\]/g, '[短剧]')
 .replace(/\[密\]/g, '[私密]')
+.replace(/\[知\]/g, '[知识]')
  .replace(/\[资\]/g, '[资源]')
  .replace(/\[飞\]/g, '[飞机]')
  .replace(/\[官\]/g, '[官源]')
@@ -411,6 +602,7 @@ if (/^[a-zA-Z0-9].*/.test(baseName) && baseName.length >= 1) {
  .replace(/\[书\]/g, '[小说]')
  .replace(/\[儿\]/g, '[儿童]')
  .replace(/\[虫\]/g, '[爬虫]')
+ .replace(/\[功\]/g, '[功能]')
 .replace(/\((.*?)\)/g, '[$1]')  // 将 (任意字符) 改成 [任意字符]
 //.replace(/\[|\]/g, '')
 //.replace(/\([.*?]\)/g, '')
@@ -422,105 +614,146 @@ if (match) {
     result = match[0];
    // console.log(result); 
 } else {
-    console.log('未找到匹配的内容');
+   // console.log('未找到匹配的内容');
 }
 
 
-  for (let key in emojiMap) {
+//  console.log(`✅处理站点: ${site.name}`);
+    //console.log(`✅匹配关键字: 当前名称=${site.name}, 匹配过程...`);
+for (let key in emojiMap) {
     if (site.name.includes(key)) {
-      addedEmoji = emojiMap[key];
-      break;
+      //  console.log(`✅匹配到关键字: ${key}, 使用图标: ${emojiMap[key]}`);
+        addedEmoji = emojiMap[key];
+        break;
     }
-  }
+}
+   // console.log(`重组前: baseName=${baseName}, tsName=${tsName}, addedEmoji=${addedEmoji}`);
 
   if (addedEmoji) {
    // site.name = addedEmoji + baseName +'┃'+ tsName + result; // 更新 site.name
     site.name = addedEmoji + baseName +'┃'+ tsName; // 更新 site.name
+  //  site.name = addedEmoji + baseName ; // 更新 site.name
   } 
 });
 
-function customSort(a, b) {
+
+// 应用自定义排序
     // 定义排序顺序
     /*
     let order = ['[APP]'  ,'[优汐]', '[夸克]' ,'[云盘]',  '[天翼]',  '[移动]' ,'[阿里]','🗂️' ,'[优质]',  
     '⚙️', '[合集]', '[官源]', '[直播]', '[知识]', '[听书]', '[音乐]',   
     '[动漫]', '[短剧]', '🅱️',  '[爬虫]', '🔎' ,'👶'  ,'⚽'  , '🎭'  , '📚'];
     */
-    let order = ['🔶'  ,'🔴', '🟣' ,'🔵',  '🟠',  '🟡' ,'🟢','🗂️' ,'❤️',  
-    '⚙️', '🎁', '🏠', '🚀', '📻', '🎧️', '🎻',   
-    '💮', '📱', '🅱️',  '🐞', '🔎' ,'👶'  ,'⚽'  , '🎭' , '🔱' , '📚'];
-   // let js_order = ['🏆瓜子┃[APP]', '🏆人人┃[APP]','🐿️闪电┃[优汐]'];
-    let js_order = ['KKK'];
-    // 先按照 js_order 排序
-    let i = js_order.indexOf(a.name.split('(')[0]);
-    let j = js_order.indexOf(b.name.split('(')[0]);
-
-    if (i!== -1 && j!== -1) {
-        return i - j;
-    } else if (i!== -1) {
-        return -1;
-    } else if (j!== -1) {
-        return 1;
+function customSort(a, b) {
+    // 定义排序顺序
+    const order = ['🔶', '🔴', '🔵', '🟣', '🟠', '🟡', '🟢', '🗂️', 
+                  '❤️', '⚙️', '🎁', '🏠', '🚀', '📻', '🎧️', '🎻', 
+                  '💮', '📱', '🅱️', '🐞', '🔎', '👶', '⚽', '🎭', '🔱', '📚'];
+    
+    // 定义优先排序的关键字（模糊匹配）
+    const js_order = ['瓜子', '光映', '鲸鱼','gg','u映'];
+    
+    // 获取站点名称
+    const aName = a.name;
+    const bName = b.name;
+    
+    // 1. 优先按 js_order 关键字模糊匹配排序
+    let aOrderIndex = -1;
+    let bOrderIndex = -1;
+    
+    // 查找 aName 在 js_order 中的匹配位置
+    for (let i = 0; i < js_order.length; i++) {
+        if (aName.includes(js_order[i])) {
+            aOrderIndex = i;
+            break; // 找到第一个匹配项即停止
+        }
     }
-
-    function getIndex(name, order) {
+    
+    // 查找 bName 在 js_order 中的匹配位置
+    for (let i = 0; i < js_order.length; i++) {
+        if (bName.includes(js_order[i])) {
+            bOrderIndex = i;
+            break; // 找到第一个匹配项即停止
+        }
+    }
+    
+    // 处理优先排序逻辑
+    if (aOrderIndex !== -1 || bOrderIndex !== -1) {
+        if (aOrderIndex !== -1 && bOrderIndex !== -1) {
+            // 两者都匹配，按关键字顺序排序
+            return aOrderIndex - bOrderIndex;
+        }
+        // 只有一方匹配，匹配的排在前面
+        return aOrderIndex !== -1 ? -1 : 1;
+    }
+    
+    // 2. 按图标顺序排序
+    function getIconIndex(name) {
         for (let i = 0; i < order.length; i++) {
             if (name.includes(order[i])) {
                 return i;
             }
         }
-        return order.length;
+        return order.length; // 未找到返回最大值
     }
-
-    let indexA = getIndex(a.name, order);
-    let indexB = getIndex(b.name, order);
-    if (indexA!== indexB) {
-        return indexA - indexB;
-    }
-
-    // 放最后
-    const hasPushA = a.name.includes('推送');
-    const hasPushB = b.name.includes('推送');
-    if (hasPushA &&!hasPushB) {
-        return 1;
-    } else if (!hasPushA && hasPushB) {
-        return -1;
-    }
-
-    if (indexA === indexB) {
-        if (a.name.length!== b.name.length) {
-            return a.name.length - b.name.length;
-        }
-        return a.name.localeCompare(b.name);
-    }
-    return 0;
-}
-
-function shouldExclude(site) {
-    const excludeKeywords = ['短剧库','PTT', '密', '莫离', 
-    'hvd', '瓜子┃[优质]', '虎牙直播[官](DR)', '擦', '皮皮',   '📺','小熊','资源',
-  '豆瓣', 'ACG', 'Omo', 'NO', '好乐','非凡','文采','人人','4K-A','点歌','耐看',
-//  '多多','虎斑','低端','欧哥','ggg','六趣',
-   '玩偶',
-  '团长', '奥秘','闪电'
-    ];
-    //,'虎斑', '六趣' '木偶','下饭'
-    // 判断 site.name 是否包含任何一个排除关键词
-    return excludeKeywords.some(keyword => site.name.includes(keyword));
-}
-// 使用 filter 方法对 sites 数组进行过滤
-sites = sites.filter(site =>!shouldExclude(site));
-
-    // 订阅再次处理别名的情况
-    if (sub) {
-        if (sub.mode === 0) {
-            sites = sites.filter(it => (new RegExp(sub.reg || '.*')).test(it.name));
-        } else if (sub.mode === 1) {
-            sites = sites.filter(it => !(new RegExp(sub.reg || '.*')).test(it.name));
-        }
-    }
-    sites.sort(customSort);
     
+    const aIconIndex = getIconIndex(aName);
+    const bIconIndex = getIconIndex(bName);
+    
+    if (aIconIndex !== bIconIndex) {
+        // 图标索引不同，按索引顺序排序
+        return aIconIndex - bIconIndex;
+    }
+    
+    // 3. 处理推送类站点（放最后）
+    const hasPushA = aName.includes('推送');
+    const hasPushB = bName.includes('推送');
+    
+    if (hasPushA && !hasPushB) {
+        return 1; // a 有推送，b 没有，a 排后面
+    } else if (!hasPushA && hasPushB) {
+        return -1; // b 有推送，a 没有，b 排后面
+    }
+    
+    // 4. 按名称长度和字典顺序排序
+    if (aName.length !== bName.length) {
+        return aName.length - bName.length;
+    }
+    
+    return aName.localeCompare(bName);
+}
+
+
+    function shouldExclude(s) {
+    const kws = [
+        'Appg', 'Apps', 'Appm','Appr','Appv','Appc','Appt',
+      '模板', 'uuu','密',
+    ];
+    return kws.some(kw => s.name.toLowerCase().includes(kw.toLowerCase()));
+}
+sites = sites.filter(site => !shouldExclude(site));
+
+let noticeSites = [];
+    let notice_abspath = path.join(configDir, '../pz/notice.json');
+    try {
+    const noticeFile = readFileSync(notice_abspath, 'utf-8');
+      noticeSites = JSON.parse(noticeFile);
+    } catch (e) {}
+    let now = new Date();
+    let year = String(now.getFullYear()).slice(-2); // 年份只保留两位
+    let month = String(now.getMonth() + 1).padStart(2, '0'); // 月份从0开始，用padStart补零
+    let day = String(now.getDate()).padStart(2, '0');
+    let hour = String(now.getHours()).padStart(2, '0');
+    let minute = String(now.getMinutes()).padStart(2, '0');
+    let second = String(now.getSeconds()).padStart(2, '0');
+    let formattedTime = `${year}/${month}/${day} ${hour}:${minute}:${second}`;
+    noticeSites = noticeSites.map(site => {
+        site.isNotice = true; // 添加标记
+        if (site.key === "提示") {
+            site.name = `(🎉${formattedTime})(${site.name})`;
+        }
+        return site;
+    });
     // 订阅再次处理别名的情况
     if (sub) {
         if (sub.mode === 0) {
@@ -533,7 +766,9 @@ sites = sites.filter(site =>!shouldExclude(site));
     if (ENV.get('hide_adult') === '1') {
         sites = sites.filter(it => !(new RegExp('\\[[密]\\]|密+')).test(it.name));
     }
-   // sites = naturalSort(sites, 'name', sort_list);
+sites = naturalSort(sites, 'name', sort_list);
+sites.sort(customSort);
+sites = sites.concat(noticeSites);  // 正确赋值
     return {sites, spider: link_jar};
 }
 
@@ -609,98 +844,81 @@ async function generateParseJSON(jxDir, requestHost) {
         param: {}, // 外部参数可以在这里传入
     };
     await batchExecute(tasks, listener);
-   // let filtered_parses = parses.filter(item => ['车姐4K', '柒豪4K' ].includes(item.name));
-  
     let filtered_parses = parses.filter(item => 
-    /(巧|4K)/.test(item.name) && !/(虎斑|车姐)/.test(item.name)
+  /(包含|虾米|4k|1080)/i.test(item.name) && !/(不包含|优雅)/i.test(item.name)
 );
-//return { parses };
-    let sorted_parses = naturalSort(filtered_parses, 'name', ['柒豪4K']);
+
+
+    let sorted_parses = naturalSort(filtered_parses, 'name', ['1080']);
     parses = sorted_parses;
 
   //  parses = filtered_parses;
    return {parses};
-    /*
+   /*
+    let sorted_parses = naturalSort(parses, 'name', ['JSON并发', 'JSON合集', '虾米', '奇奇']);
+    let sorted_jx_dict = naturalSort(jx_dict, 'name', ['J', 'W']);
     parses = sorted_parses.concat(sorted_jx_dict);
     return {parses};
     */
 }
 
-const fs = require('fs'); // 引入文件系统模块
-// 获取当前工作目录
-const currentDir = process.cwd();
-// 构造配置文件的路径
-const filePath = path.join(currentDir, 'config', 'live.json');
+function generateLivesJSON(configDir, requestHost) {
+    let noticeSites = [];
+    let filePath = path.join(configDir, '../pz/live.json');
+    let liveConfig; 
 
-// 定义一个函数，用于生成直播信息的JSON对象
-function generateLivesJSON(requestHost) {
-    // 检查文件是否存在
-    if (!fs.existsSync(filePath)) {
-        console.warn('直播文件不存在，返回空的直播列表', filePath);
-        return { lives: [] }; // 如果文件不存在，直接返回空的直播列表
+    try {
+        liveConfig = JSON.parse(readFileSync(filePath, 'utf-8'));
+    } catch (e) {
+        console.warn('直播文件不存在，返回空列表', filePath);
+        return { lives: [] }; // 修正：添加大括号包裹对象
     }
 
-    // 文件存在，继续处理
+    // 处理直播配置
     try {
-        // 读取配置文件的内容
-        const fileContent = fs.readFileSync(filePath, 'utf8');
-        // 将文件内容解析为JSON对象
+        const fileContent = readFileSync(filePath, 'utf8');
         const config = JSON.parse(fileContent);
 
-        // 从配置对象中提取直播相关的配置
-        const live_urls = config.live_urls || []; // 直播的URL列表，默认为空数组
-        const epg_url = config.epg_url || ''; // EPG（电子节目指南）的URL，默认为空字符串
-        const logo_url = config.logo_url || ''; // 直播的Logo图片URL，默认为空字符串
-        const names = config.names || []; // 直播名称列表，默认为空数组
+        const live_urls = config.live_urls || [];
+        const epg_url = config.epg_url || '';
+        const logo_url = config.logo_url || '';
+        const names = config.names || [];
 
-        // 定义一个函数，用于处理直播URL
+        // 处理URL拼接
         function processUrl(url) {
-            // 如果URL存在且不以 'http' 开头，说明是一个相对路径
             if (url && !url.startsWith('http')) {
-                // 构造完整的URL，将其拼接到请求主机的 'public/' 路径下
-                const public_url = urljoin(requestHost, 'public/');
-                return urljoin(public_url, url);
+                const publicUrl = `${requestHost}/public/`;
+                return publicUrl + url.replace(/^\//, ''); // 移除url开头的斜杠，避免重复
             }
-            // 如果URL以 'http' 开头，直接返回原URL
             return url;
         }
 
-        // 定义一个函数，用于创建直播对象
-        function createLiveObject(url, name) {
-            return {
-                name, // 直播名称
-                type: 0, // 直播类型，固定为0
-                url, // 直播的URL
-                playerType: 1, // 播放器类型，固定为1
-                ua: "okhttp/3.12.13", // 用户代理（User-Agent），固定值
-                epg: epg_url, // EPG的URL
-                logo: logo_url // Logo的URL
-            };
-        }
-
-        // 遍历直播URL列表，生成直播对象数组
+        // 生成直播对象
         const lives = live_urls.map((url, index) => {
-            // 处理每个直播URL
             const processedUrl = processUrl(url);
-            // 如果处理后的URL有效，创建直播对象
-            if (processedUrl) {
-                return createLiveObject(processedUrl, names[index]);
-            }
-            // 如果URL无效，返回null
-            return null;
-        }).filter(Boolean); // 过滤掉无效的直播对象（即null值）
+            return processedUrl ? {
+                name: names[index] || '',
+                type: 0,
+                url: processedUrl,
+                playerType: 1,
+                ua: "okhttp/3.12.13",
+                epg: epg_url,
+                logo: logo_url
+            } : null;
+        }).filter(Boolean);
 
-        // 返回包含直播信息的JSON对象
         return { lives };
+
     } catch (error) {
-        console.error('生成直播信息时发生错误:', error);
-        return { lives: [] }; // 如果发生错误，也返回空的直播列表
+        console.error('处理直播信息错误:', error.message);
+        return { lives: [] };
     }
 }
 
+
 function generatePlayerJSON(configDir, requestHost) {
     let playerConfig = {};
-    let playerConfigPath = path.join(configDir, './player.json');
+    let playerConfigPath = path.join(configDir, '../pz/player.json');
     if (existsSync(playerConfigPath)) {
         try {
             playerConfig = JSON.parse(readFileSync(playerConfigPath, 'utf-8'))
@@ -750,7 +968,38 @@ export default (fastify, options, done) => {
             let not_local = cfg_path.startsWith('/1') || cfg_path.startsWith('/index');
             let requestHost = not_local ? `${protocol}://${hostname}` : `http://127.0.0.1:${options.PORT}`; // 动态生成根地址
             let requestUrl = not_local ? `${protocol}://${hostname}${request.url}` : `http://127.0.0.1:${options.PORT}${request.url}`; // 动态生成请求链接
-
+            // console.log('requestUrl:', requestUrl);
+            // if (cfg_path.endsWith('.js')) {
+            //     if (cfg_path.includes('index.js')) {
+            //         // return reply.sendFile('index.js', path.join(options.rootDir, 'data/cat'));
+            //         let content = readFileSync(path.join(options.rootDir, 'data/cat/index.js'), 'utf-8');
+            //         // content = jinja.render(content, {config_url: requestUrl.replace(cfg_path, `/1?sub=all&pwd=${process.env.API_PWD || ''}`)});
+            //         content = content.replace('$config_url', requestUrl.replace(cfg_path, `/1?sub=all&pwd=${process.env.API_PWD || ''}`));
+            //         return reply.type('application/javascript;charset=utf-8').send(content);
+            //     } else if (cfg_path.includes('index.config.js')) {
+            //         let content = readFileSync(path.join(options.rootDir, 'data/cat/index.config.js'), 'utf-8');
+            //         // content = jinja.render(content, {config_url: requestUrl.replace(cfg_path, `/1?sub=all&pwd=${process.env.API_PWD || ''}`)});
+            //         content = content.replace('$config_url', requestUrl.replace(cfg_path, `/1?sub=all&pwd=${process.env.API_PWD || ''}`));
+            //         return reply.type('application/javascript;charset=utf-8').send(content);
+            //     }
+            // }
+            // if (cfg_path.endsWith('.js.md5')) {
+            //     if (cfg_path.includes('index.js')) {
+            //         let content = readFileSync(path.join(options.rootDir, 'data/cat/index.js'), 'utf-8');
+            //         // content = jinja.render(content, {config_url: requestUrl.replace(cfg_path, `/1?sub=all&pwd=${process.env.API_PWD || ''}`)});
+            //         content = content.replace('$config_url', requestUrl.replace(cfg_path, `/1?sub=all&pwd=${process.env.API_PWD || ''}`));
+            //         let contentHash = md5(content);
+            //         console.log('index.js contentHash:', contentHash);
+            //         return reply.type('text/plain;charset=utf-8').send(contentHash);
+            //     } else if (cfg_path.includes('index.config.js')) {
+            //         let content = readFileSync(path.join(options.rootDir, 'data/cat/index.config.js'), 'utf-8');
+            //         // content = jinja.render(content, {config_url: requestUrl.replace(cfg_path, `/1?sub=all&pwd=${process.env.API_PWD || ''}`)});
+            //         content = content.replace('$config_url', requestUrl.replace(cfg_path, `/1?sub=all&pwd=${process.env.API_PWD || ''}`));
+            //         let contentHash = md5(content);
+            //         console.log('index.config.js contentHash:', contentHash);
+            //         return reply.type('text/plain;charset=utf-8').send(contentHash);
+            //     }
+            // }
             const getFilePath = (cfgPath, rootDir, fileName) => path.join(rootDir, `data/cat/${fileName}`);
             const processContent = (content, cfgPath, requestUrl) =>
                 content.replace('$config_url', requestUrl.replace(cfgPath, `/1?sub=all&pwd=${process.env.API_PWD || ''}`));
