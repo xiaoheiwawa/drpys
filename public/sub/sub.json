@@ -30,51 +30,9 @@
     "status": 1
   },
   {
-  "name": "影视用",
-  "code": "ys",
-  "reg": "\\[小说\\]",  
-  "mode": 1,
-  "status": 1
-},
-{
-  "name": "优质",
-  "code": "yz",
-  "reg": "\\[直播|哔哩|直播|听书|爬虫|体育|小说\\]",  
-  "mode": 1,
-  "status": 1
-},
-{
-  "name": "非夸克",
-  "code": "kk",
-  "reg": "\\[夸克|搜索\\]",  
-  "mode": 1,
-  "status": 1
-},
-{
-  "name": "精简",
-  "code": "jj",
-  "reg": "\\[云盘|优汐|短剧|儿童|APP|合集|天翼|移动|优质|知识|存储|搜索|搜索|夸克\\]|设置|push_agent|推送",  
-  "mode": 0,
-  "status": 1
-},
-{
-  "name": "仅直播",
-  "code": "zb",
-  "reg": "\\[直播\\]|设置|push_agent|推送",  
-  "mode": 0,
-  "status": 1
-},
-{
-  "name": "仅网盘",
-  "code": "pan",
-  "reg": "\\[云盘|优汐|天翼|移动|存储|搜索|搜索|夸克\\]|设置|push_agent|推送",  
-  "mode": 0,
-  "status": 1
-},
-  {
-    "name": "仅短剧",
-    "code": "duan",
-    "reg": "\\[短剧\\]|短剧|push_agent|推送",
+    "name": "仅网盘",
+    "code": "pan",
+    "reg": "\\[[盘]\\]|push_agent|推送",
     "mode": 0,
     "status": 1
   }

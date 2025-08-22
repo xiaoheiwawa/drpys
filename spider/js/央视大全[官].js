@@ -3,9 +3,518 @@
   searchable: 1,
   filterable: 1,
   quickSearch: 0,
-  title: 'cntv',
+  title: '央视大全',
   lang: 'ds'
 })
 */
 
-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
+const {processFile, indexHtml} = $.require('./_lib.cntv.js');
+const {setH5Str} = $.require('./_lib.cntv.live.js');
+var rule = {
+    title: '央视大全',
+    host: 'https://api.cntv.cn',
+    homeUrl: '/lanmu/columnSearch?&fl=&fc=&cid=&p=1&n=500&serviceId=tvcctv&t=json',
+    // url: '/list/getVideoAlbumList?fyfilter&area=&letter=&n=24&serviceId=tvcctv&topv=1&t=json',
+    url: '/list/getVideoAlbumList?p=fypage&n=24&serviceId=tvcctv&topv=1&t=json',
+    searchUrl: 'https://search.cctv.com/ifsearch.php?page=fypage&qtext=**&sort=relevance&pageSize=20&type=video&vtime=-1&datepid=1&channel=&pageflag=0&qtext_str=**',
+    searchable: 1,
+    filterable: 1,
+    quickSearch: 0,
+    class_name: '4K专区&栏目大全&特别节目&纪录片&电视剧&动画片',
+    class_url: '4K专区&栏目大全&特别节目&纪录片&电视剧&动画片',
+    filter_url: 'channel={{fl.channel}}&sc={{fl.sc}}&bigday={{fl.bigday}}&year={{fl.year}}',
+    filter: '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',
+    headers: {
+        'User-Agent': 'PC_UA'
+    },
+    timeout: 10000,
+    play_parse: true,
+    lazy: async function () {
+        let {input, flag, getProxyUrl} = this;
+        // log(input);
+        // log(flag);
+        let guid = '';
+        let url = '';
+        if (flag === 'CCTV') {
+            guid = input;
+            url = await getM3u8(guid, getProxyUrl);
+        } else if (flag === 'CCTV4K') {
+            guid = input;
+            // url = 'https://hls09.cntv.myhwcdn.cn/asp/hls/4000/0303000a/3/default/' + guid + '/4000.m3u8';
+            url = await getM3u8(guid, getProxyUrl);
+        } else if (flag === 'CCTV直播') {
+            let channel = input.split('/').slice(-2)[0];
+            url = `https://vdnx.live.cntv.cn/api/v3/vdn/live?channel=${channel}&vn=1`;
+            // log(channel);
+            let authKey = getAuthKey(channel);
+            let html = await request(url, {headers: {'auth-key': authKey}});
+            let json = JSON.parse(html);
+            let indexM3u8 = json.manifest.hls_cdrm.split('?')[0]; // 不去除问号后面的内容的话只能获取到最高720p分辨率
+            // log(indexM3u8);
+            html = await request(indexM3u8);
+            let hdUrl = html.split('\n').find(i => i && !i.startsWith('#'));
+            hdUrl = urljoin(indexM3u8, hdUrl);
+            // log(html);
+            // log(hdUrl);
+            return {
+                parse: 0,
+                url: getProxyUrl() + '&url=' + base64Encode(hdUrl) + '#.m3u8',
+                header: {'user-agent': PC_UA, 'referer': 'https://tv.cctv.com/', 'origin': 'https://tv.cctv.com/'}
+            }
+        } else {
+            let html = await request(input);
+            guid = getRegexText(html, 'var\\sguid\\s*=\\s*"(.+?)";', 1);
+            url = await getM3u8(guid, getProxyUrl);
+        }
+        return {
+            parse: 0,
+            url: url,
+            headers: rule.headers
+        }
+    },
+    limit: 6,
+    double: false,
+
+    推荐: async function () {
+        let {input, publicUrl} = this;
+        let liveImgUrl = urljoin(publicUrl, './images/lives.jpg');
+        let html = await request(input);
+        let vods = get_list_lm(html, '栏目大全');
+        vods.unshift({
+            vod_name: '央视直播',
+            vod_pic: liveImgUrl,
+            vod_id: 'https://tv.cctv.com/epg/index.shtml#央视直播',
+            vod_remarks: 'CCTV台',
+        });
+        return vods
+    },
+
+    一级: async function () {
+        let {input, MY_CATE, MY_FL, MY_PAGE} = this;
+        let page_count = 24;
+        let queryString = objectToQueryString(MY_FL);
+        let year_prefix = ''  //栏目大全的年月筛选过滤
+        if (MY_CATE === '栏目大全') {
+            page_count = 20;
+            let url = `${HOST}/lanmu/columnSearch?p=${MY_PAGE}&n=${page_count}&serviceId=tvcctv&t=json`;
+            if (queryString) {
+                url += `&${queryString}`;
+            }
+            let year = MY_FL.year || '';
+            let month = MY_FL.month || '';
+            if (year) {
+                year_prefix = year + month
+            }
+            let html = await request(url);
+            return get_list_lm(html, MY_CATE, year_prefix)
+
+        } else if (MY_CATE === '4K专区') {
+            let cid = 'CHAL1558416868484111'
+            let url = `${HOST}/NewVideo/getLastVideoList4K?serviceId=cctv4k&cid=${cid}&p=${MY_PAGE}&n=${page_count}&t=json`;
+            let html = await request(url);
+            return get_list_4k(html, MY_CATE);
+        } else {
+            let channelMap = {
+                "特别节目": "CHAL1460955953877151",
+                "纪录片": "CHAL1460955924871139",
+                "电视剧": "CHAL1460955853485115",
+                "动画片": "CHAL1460955899450127",
+            };
+            let channelid = channelMap[MY_CATE];
+            let url = input + `&channelid=${channelid}`;
+            if (queryString) {
+                url += `&${queryString}`;
+            }
+            let html = await request(url);
+            return get_list_pk(html, MY_CATE)
+        }
+    },
+    二级: async function () {
+        let {orId, publicUrl, pdfa} = this;
+        // log('orId:', orId);
+        let vid = orId;
+        if (vid.includes('#央视直播')) {
+            let html = await request(vid);
+            let video_list = [];
+            let list = pdfa(html, '#jiemudan01&&.channel_con&&ul&&li');
+            // log(list);
+            list.forEach((it) => {
+                let _title = pdfh(it, 'img&&title');
+                let _url = `https://tv.cctv.com/live/${_title}/`;
+                video_list.append(`${_title}$${_url}`);
+            });
+            let liveImgUrl = urljoin(publicUrl, './images/lives.jpg');
+            let vod = {
+                "vod_id": vid,
+                "vod_name": 'CCTV直播频道列表',
+                "vod_pic": liveImgUrl,
+                "type_name": '直播',
+                "vod_year": '',
+                "vod_area": "",
+                "vod_remarks": '只含官方CCTV频道',
+                "vod_actor": '',
+                "vod_director": '',
+                "vod_content": '并非全部高清分辨率，取官方网页版最高分辨率'
+            };
+            vod['vod_play_from'] = 'CCTV直播';
+            vod['vod_play_url'] = video_list.join('#');
+            return vod
+        }
+        let year_prefix = '';
+        if (orId.includes('$$$')) {
+            year_prefix = orId.split('$$$')[0];
+            vid = orId.split('$$$')[1];
+        }
+        let aid = vid.split('||');
+        let tid = aid[0];
+        let title = aid[1];
+        let lastVideo = aid[2];
+        let logo = aid[3];
+        let id = aid[4];
+        let vod_year = aid[5];
+        let actors = aid.length > 6 ? aid[6] : '';
+        let brief = aid.length > 7 ? aid[7] : '';
+        let count = aid.length > 8 ? aid[8] : '';
+        let desc = aid.length > 9 ? aid[9] : '';
+        let fromId = 'CCTV';
+        let reqUrl = '';
+        if (tid === '栏目大全') {
+            let lastUrl = `https://api.cntv.cn/video/videoinfoByGuid?guid=${id}&serviceId=tvcctv`;
+            let html = await request(lastUrl);
+            let topicId = JSON.parse(html).ctid;
+            reqUrl = `https://api.cntv.cn/NewVideo/getVideoListByColumn?id=${topicId}&d=&p=1&n=100&sort=desc&mode=0&serviceId=tvcctv&t=json&d=${year_prefix}`;
+        } else if (tid === '4K专区') {
+            reqUrl = `https://api.cntv.cn/NewVideo/getVideoListByAlbumIdNew?id=${id}&serviceId=cctv4k&p=1&n=100&mode=0&pub=1`;
+            fromId = 'CCTV4K';
+        } else {
+            reqUrl = `https://api.cntv.cn/NewVideo/getVideoListByAlbumIdNew?id=${id}&serviceId=tvcctv&p=1&n=100&mode=0&pub=1`;
+        }
+        let video_list = [];
+        try {
+            if (tid === '搜索') {
+                fromId = '中央台';
+                video_list = [title + "$" + lastVideo];
+            } else {
+                let html = await request(reqUrl);
+                let list = JSON.parse(html).data.list;
+                video_list = get_episodes_list(list);
+                if (video_list.length < 1) {
+                    html = await request(lastVideo);
+                    let patternTxt;
+                    if (['电视剧', '纪录片', '4K专区'].includes(tid)) {
+                        // 调整为普通捕获组
+                        patternTxt = "'title':\\s*'(.+?)',\\n{0,1}\\s*'brief':\\s*'(.+?)',\\n{0,1}\\s*'img':\\s*'(.+?)',\\n{0,1}\\s*'url':\\s*'(.+?)'";
+                    } else if (tid === '特别节目') {
+                        // 调整为普通捕获组
+                        patternTxt = "class=\"tp1\"><a\\s*href=\"(https://.+?)\"\\s*target=\"_blank\"\\s*title=\"(.+?)\"></a></div>";
+                    } else if (tid === '动画片') {
+                        patternTxt = `'title':\\s*'(.+?)',\\n{0,1}\\s*'img':\\s*'(.+?)',\\n{0,1}\\s*'brief':\\s*'(.+?)',\\n{0,1}\\s*'url':\\s*'(.+?)'`;
+                    } else if (tid === '栏目大全') {
+                        // 调整为普通捕获组
+                        patternTxt = "href=\"(.+?)\" target=\"_blank\" alt=\"(.+?)\" title=\".+?\">";
+                    }
+                    video_list = get_episodes_list_re(html, patternTxt, tid);
+                    fromId = '央视';
+                }
+            }
+        } catch (e) {
+            log(`解析二级发生了错误: ${e.message}`);
+        }
+        if (video_list.length < 1) {
+            return {}
+        }
+        let vod = {
+            "vod_id": vid,
+            "vod_name": title.replace(' ', ''),
+            "vod_pic": logo,
+            "type_name": tid,
+            "vod_year": vod_year,
+            "vod_area": "",
+            "vod_remarks": count ? `共${count}集` : desc,
+            "vod_actor": actors,
+            "vod_director": '',
+            "vod_content": brief
+        };
+        vod['vod_play_from'] = fromId;
+        vod['vod_play_url'] = video_list.join('#');
+        return vod
+    },
+    搜索: async function () {
+        let {input} = this;
+        let html = await request(input);
+        return get_list_search(html, '搜索');
+    },
+    proxy_rule: async function () {
+        let {input, proxyPath, getProxyUrl} = this;
+        // log('input:', input);
+        // log('proxyPath:', proxyPath);
+        let url = '';
+        let is_live = 0;
+        if (proxyPath) {
+            const BASE_URL = 'https://dh5.cntv.qcloudcdn.com/'.rstrip('/');
+            // const BASE_URL = 'https://dh5.cntv.myalicdn.com/'.rstrip('/');
+            url = `${BASE_URL}/${proxyPath}`;
+        } else {
+            url = base64Decode(input.split('#')[0]);
+            is_live = 1;
+        }
+        log('start proxy:', url);
+        try {
+            const filename = pathLib.basename(new URL(url).pathname);
+            const extension = pathLib.extname(filename).toLowerCase();
+            // log('filename:', filename);
+            // log('extension:', extension);
+            if (extension !== '.ts' && extension !== '.m3u8') {
+                if (filename.endsWith('index.html')) {
+                    return [200, 'text/html', indexHtml]
+                }
+                return [400, 'text/plain', 'Only .ts and .m3u8 files are supported']
+            }
+            if (is_live && extension === '.m3u8') {
+                // log('处理直播的m3u8地址');
+                let proxy_url = getProxyUrl();
+                let html = await request(url);
+                let m3u8Str = html.split('\n').map((it) => {
+                    if (it && !it.startsWith("#")) {
+                        return proxy_url + '&url=' + base64Encode(urljoin(url, it));
+                    }
+                    return it
+                }).join('\n');
+                // log(m3u8Str);
+                return [200, 'application/vnd.apple.mpegurl', m3u8Str]
+            }
+            const contentType = extension === '.ts' ? 'video/MP2T' : 'application/vnd.apple.mpegurl';
+            const buffer = await processFile(url, extension);
+            const headers = {
+                'Content-Disposition': `attachment; filename="${filename}"`,
+                'Content-Type': contentType,
+            }
+            return [200, contentType, buffer, headers]
+
+        } catch (e) {
+            log('proxy error:', e.message);
+            return [500, 'text/plain', e.message]
+        }
+    },
+}
+
+// 获取片库一级数据
+function get_list_pk(html, tid) {
+    let d = [];
+    let list = JSON.parse(html).data.list;
+    list.forEach(it => {
+        let url = it.url;
+        let title = it.title;
+        let desc = it.sc + ((typeof it.year === 'undefined' || it.year === '') ? '' : ('•' + it.year)) + ((typeof it.count === 'undefined' || it.count === '') ? '' : ('•共' + it.count + '集'));
+        let img = it.image;
+        let id = it.id;
+        let brief = it.brief || '';
+        let year = it.year || '';
+        let actors = it.actors || '';
+        let count = it.count;
+        if (url) {
+            let guids = [tid, title, url, img, id, year, actors, brief, count];
+            let guid = guids.join('||');
+            d.push({
+                title: title,
+                desc: desc,
+                pic_url: img,
+                url: guid
+            });
+        }
+    });
+    return setResult(d)
+}
+
+// 获取栏目一级数据
+function get_list_lm(html, tid, year_prefix) {
+    let d = [];
+    let list = JSON.parse(html).response.docs;
+    list.forEach(it => {
+        let id = it.lastVIDE.videoSharedCode;
+        let desc = it.lastVIDE.videoTitle;
+        let title = it.column_name;
+        let url = it.column_website;
+        let img = it.column_logo;
+        let year = it.column_playdate;
+        let actors = '';
+        let brief = it.column_brief;
+        let count = it.count;
+        if (url.toString().length > 0) {
+            let guids = [tid, title, url, img, id, year, actors, brief, count, desc];
+            let guid = guids.join('||');
+            //log(`✅guid的结果: ${guid}`);
+            d.push({
+                title: title,
+                desc: desc.includes('》') ? desc.split('》')[1].strip() : desc.strip(),
+                pic_url: img,
+                url: year_prefix ? year_prefix + '$$$' + guid : guid
+            });
+
+        }
+    });
+    return setResult(d)
+}
+
+// 获取4k一级数据
+function get_list_4k(html, tid) {
+    let d = [];
+    let list = JSON.parse(html).data.list;
+    list.forEach(it => {
+        let desc = it.sc + ' ' + it.title;
+        let id = it.id;
+        let vod = it.last_video;
+        let img = vod.image;
+        let url = vod.url;
+        let title = vod.title;
+        let brief = vod.brief || '';
+        let year = vod.year || '';
+        let actors = vod.actors || '';
+        let count = it.count;
+        if (url) {
+            let guids = [tid, title, url, img, id, year, actors, brief, count];
+            let guid = guids.join('||');
+            d.push({
+                title: title,
+                desc: desc,
+                pic_url: img,
+                url: guid,
+            })
+        }
+    });
+    return setResult(d)
+}
+
+// 获取搜索列表数据
+function get_list_search(html, tid) {
+    let d = [];
+    let list = JSON.parse(html).list;
+    list.forEach(it => {
+        let url = it.urllink;
+        let title = removeHtml(it.title);
+        let img = it.imglink;
+        let vid = it.id;
+        let brief = it.channel;
+        let year = it.uploadtime;
+        if (url) {
+            let guids = [tid, title, url, img, vid, year, '', brief];
+            let guid = "||".join(guids);
+            d.push({
+                title: title,
+                desc: year,
+                pic_url: img,
+                url: guid,
+
+            });
+        }
+    });
+    return setResult(d)
+}
+
+// 获取集数
+function get_episodes_list(json_list) {
+    let videos = []
+    for (const vod of json_list) {
+        let url = vod['guid'];
+        let title = vod['title'];
+        if (url) {
+            videos.append(title + "$" + url);
+        }
+    }
+    return videos
+}
+
+// 获取集数列表
+function get_episodes_list_re(htmlTxt, patternTxt, tid) {
+    const regex = new RegExp(patternTxt, 'gm'); // 全局和多行匹配
+    const matches = [...htmlTxt.matchAll(regex)]; // 获取所有匹配项
+    const videos = [];
+
+    for (const match of matches) {
+        let title = null;
+        let url = null;
+        if (['电视剧', '纪录片', '4K专区', '动画片'].includes(tid)) {
+            title = match[1];
+            url = match[4];
+        } else {
+            title = match[2];
+            url = match[1];
+        }
+        if (!title || !url) continue; // 如果没有 title 或 url，跳过
+        videos.push(`${title}$${url}`);
+    }
+
+    return videos;
+}
+
+function removeHtml(txt) {
+    // 使用正则表达式移除 HTML 标签
+    const htmlTagRegex = /<[^>]+>/g;
+    txt = txt.replace(htmlTagRegex, '');
+
+    // 替换 "&nbsp;" 为普通空格
+    return txt.replace(/&nbsp;/g, ' ');
+}
+
+// 正则取文本
+function getRegexText(text, regexText, index) {
+    let returnTxt = "";
+    const regex = new RegExp(regexText, 'ms'); // 'm' 多行匹配, 's' 让 '.' 匹配换行符
+    const match = text.match(regex);
+
+    if (!match) {
+        returnTxt = "";
+    } else {
+        returnTxt = match[index] || "";
+    }
+
+    return returnTxt;
+}
+
+async function getM3u8(pid, getProxyUrl) {
+    const url = `https://vdn.apps.cntv.cn/api/getHttpVideoInfo.do?pid=${pid}`;
+    const htmlTxt = await request(url);
+    const jo = JSON.parse(htmlTxt);
+    const link = jo.hls_url.trim();
+    const link1 = jo.manifest.hls_h5e_url.trim();
+    const urlPrefix = link.match(/(http[s]?:\/\/[a-zA-Z0-9.]+)\//)?.[1] || '';
+    let newLink = link1.split('?')[0];
+    newLink = newLink.replace('https://dh5.cntv.qcloudcdn.com', 'https://dh5.cntv.myhwcdn.cn');
+    const htmlResponse = await request(newLink);
+    const content = htmlResponse.trim();
+    const arr = content.split('\n');
+    const subUrl = arr[arr.length - 1].split('/');
+    const maxVideo = subUrl[subUrl.length - 1].replace('.m3u8', '');
+    let hdUrl = link.replaceAll('main', maxVideo);
+    if (hdUrl === '') {
+        hdUrl = '2000';
+    }
+    hdUrl = hdUrl.replace(urlPrefix, 'https://newcntv.qcloudcdn.com');
+    /*
+    const hdResponse = await request(hdUrl);
+    if (hdResponse) {
+        return hdUrl.split('?')[0];
+    } else {
+        return '';
+    }
+    */
+    return hookM3u8(hdUrl.split('?')[0], getProxyUrl);
+}
+
+function hookM3u8(url, getProxyUrl) {
+    let proxy_path = url.replace('https://newcntv.qcloudcdn.com', '').replace('/asp/hls/', '/asp/h5e/hls/');
+    let proxy_url = getProxyUrl().split('?')[0].rstrip('/') + proxy_path;
+    // log('proxy_url:', proxy_url);
+    log('typeof WebAssembly:', typeof WebAssembly);
+    return proxy_url
+}
+
+function getAuthKey(channel) {
+    // channel 如 cctv1
+    let time = new Date().getTime();
+    let key = "a4220a71b31746908fa3e7fdd7a6852a";
+    let number = Math.round(Math.random() * 1000);
+    number - 100 < 0 && (number += 100);
+    let authKey = time + "-" + number + "-" + setH5Str(channel + time + number + key).toLocaleLowerCase();
+    return authKey
+}
