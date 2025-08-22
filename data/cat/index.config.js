@@ -24,10 +24,10 @@ __export(index_config_exports, {
 module.exports = __toCommonJS(index_config_exports);
 var index_config_default = {
   drpyS: {
-    config_url: "http://localhost:5757/config/1?sub=all&pwd=dzyyds",
+    config_url: "$config_url",
     // 本地ds 支持
     // config_url: 'http://localhost:5707/config/0?sub=dzyyds', // 本地hipy-t4 支持
-    home_site: "http://localhost:5757/api/设置中心",
+    home_site: "$host/api/设置中心",
     enable_dspush: 1,
     enable_home_site: 0,
     sniffer_rule: "http((?!http).){12,}?\\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg|m4a|mp3)\\?.*|http((?!http).){12,}\\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg|m4a|mp3)|http((?!http).)*?video/tos*|http((?!http).)*?obj/tos*",
