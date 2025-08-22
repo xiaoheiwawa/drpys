@@ -65,6 +65,18 @@
             "会员时长": "",
             "lazyheader": {}
         },
+		"萝卜": {
+            "muban": "AppGet",
+            "host": "https://apiapplbys.lbys.app:5678"",
+            "hosturl": "",
+            "key": "apiapplbyskey168",
+            "iv": "apiapplbyskey168"",
+            "verify": "true",
+            "username": "",
+            "password": "",
+            "会员时长": "",
+            "lazyheader": {}
+        },
         "蓝光": {
             "muban": "AppGet",
             "host": "http://122.228.193.2:9654",
