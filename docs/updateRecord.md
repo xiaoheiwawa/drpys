@@ -1,5 +1,30 @@
 # drpyS更新记录
 
+### 20250824
+
+更新至V1.2.19
+
+1. 给hipy源写了一个测试示例,详见文件: `spider/py/base_test.py`,方便py写源时候本地调试
+2. 修改了 `spider/py/base/requirements.txt` 添加必要的注释
+3. 增强了脚本 `spider/py/core/kill_t4_daemon.sh` 的杀进程能力
+4. 修复 `荐片`
+5. 增加脚本 `autorun.ps1` `uninstall.sh`,方便ds运维
+6. 设计了新的js版守护进程桥接程序 `spider/py/core/bridge.js`，同时让守护进程输入数据支持json协议，也许会大幅度提升hipy性能
+7. 修改局域网地址获取逻辑，避免获取到vmware的虚拟网段
+
+注意:本次更新新增了一个nodejs依赖 `pickleparser`，需要执行一次`yarn`命令
+
+### 20250823
+
+更新至V1.2.18
+
+1. 优化python守护进程启动逻辑，无python环境的设备启动ds速度会有所提升
+2. 修了ds的 `荐片` 和 `ikanbot`
+3. 可以在配置里自行选择守护进程版本
+4. 新增 `七猫小说[书]` 的hipy源，移除同名的ds源
+
+注意事项:本次更新有新增python依赖，大家请注意装一下py依赖
+
 ### 20250822
 
 更新至V1.2.17

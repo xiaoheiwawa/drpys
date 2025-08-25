@@ -47,14 +47,18 @@ fastify.addHook('onReady', async () => {
     }
 });
 
-// 停止时清理守护进程
-fastify.addHook('onClose', async () => {
+async function onClose() {
     try {
         await daemon.stopDaemon();
         fastify.log.info('Python守护进程已停止');
     } catch (error) {
         fastify.log.error(`停止Python守护进程失败: ${error.message}`);
     }
+}
+
+// 停止时清理守护进程
+fastify.addHook('onClose', async () => {
+    await onClose();
 });
 
 // 给静态目录插件中心挂载basic验证
@@ -100,7 +104,7 @@ const handleExit = async (signal) => {
     try {
         console.log(`\nReceived ${signal}, closing server...`);
         // Fastify 提供的关闭方法，内部会触发 onClose 钩子
-        await fastify.close();
+        await onClose();
         console.log('Fastify closed successfully');
         process.exit(0);
     } catch (err) {
@@ -167,8 +171,9 @@ const start = async () => {
         const localAddress = `http://localhost:${PORT}`;
         const interfaces = os.networkInterfaces();
         let lanAddress = 'Not available';
-        for (const iface of Object.values(interfaces)) {
-            if (!iface) continue;
+        // console.log('interfaces:', interfaces);
+        for (const [key, iface] of Object.entries(interfaces)) {
+            if (key.startsWith('VMware Network Adapter VMnet') || !iface) continue;
             for (const config of iface) {
                 if (config.family === 'IPv4' && !config.internal) {
                     lanAddress = `http://${config.address}:${PORT}`;
