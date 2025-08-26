@@ -1,1 +1,0 @@
-{"type":"影视","class":[{"type_id":"0","type_name":"热门"},{"type_id":"1","type_name":"足球"},{"type_id":"2","type_name":"篮球"}],"list":[]}

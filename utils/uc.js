@@ -2,9 +2,18 @@ import req from './req.js';
 import {ENV} from './env.js';
 import COOKIE from './cookieManager.js';
 import '../libs_drpy/crypto-js.js';
-import {join} from 'path';
 import fs from 'fs';
 import {PassThrough} from 'stream';
+import path from 'path';
+
+import { fileURLToPath } from 'url';
+import { dirname, resolve, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// 动态生成配置文件路径（基于当前文件所在目录）
+const configPath = resolve(__dirname, '../pz/tokenm.json');
 
 class UCHandler {
     constructor() {
@@ -28,7 +37,7 @@ class UCHandler {
             DeviceID: '07b48aaba8a739356ab8107b5e230ad4',
             RefreshToken: '',
             AccessToken: ''
-        }
+        };
         this.conf = {
             api: "https://open-api-drive.uc.cn",
             clientID: "5acf882d27b74502b7040b0c65519aa7",
@@ -38,18 +47,82 @@ class UCHandler {
             codeApi: "http://api.extscreen.com/ucdrive",
         };
 
+        // Token缓存相关
+        this.tokenConfig = {
+            uc_cookie: '',
+            uc_token_cookie: '',
+            lastUpdate: 0
+        };
+        
+        this.tokenFile = configPath;
+        this.cacheExpire = 30 * 60 * 1000; // 30分钟缓存
+        this.loadTokenConfig(); // 初始化加载配置
+        this.setupFileWatcher(); // 设置文件监听
     }
 
-    // 使用 getter 定义动态属性
+    // 加载token配置并缓存
+    loadTokenConfig() {
+        try {
+            const data = fs.readFileSync(this.tokenFile, 'utf8');
+            const jsonData = JSON.parse(data);
+            this.tokenConfig = {
+                uc_cookie: jsonData.uc_cookie || '',
+                uc_token_cookie: jsonData.uc_token_cookie || '',
+                lastUpdate: Date.now()
+            };
+            console.log('UC Token配置已从文件加载并缓存');
+        } catch (err) {
+            if (err.code === 'ENOENT') {
+              //  console.error('tokenm.json文件不存在。使用空配置。');
+            } else if (err instanceof SyntaxError) {
+               // console.error('tokenm.json文件格式错误');
+            } else {
+                console.error('加载UC token配置时出错:', err.message);
+            }
+            this.tokenConfig = {
+                uc_cookie: '',
+                uc_token_cookie: '',
+                lastUpdate: 0
+            };
+        }
+    }
+
+    // 设置文件监听
+    setupFileWatcher() {
+        try {
+            fs.watch(this.tokenFile, (eventType, filename) => {
+                if (eventType === 'change') {
+                   // console.log('检测到tokenm.json文件变化，重新加载配置');
+                    this.loadTokenConfig();
+                }
+            });
+           // console.log('已设置tokenm.json文件监听');
+        } catch (err) {
+            console.error('设置文件监听失败:', err.message);
+        }
+    }
+
+    // 检查并刷新缓存
+    checkAndRefreshCache() {
+        if (Date.now() - this.tokenConfig.lastUpdate > this.cacheExpire) {
+            console.log('Token缓存已过期，重新加载');
+            this.loadTokenConfig();
+        }
+    }
+
+    // 使用 getter 定义动态属性，自动检查缓存
     get cookie() {
-        // console.log('env.cookie.uc:',ENV.get('uc_cookie'));
-        return ENV.get('uc_cookie');
+        this.checkAndRefreshCache();
+        return this.tokenConfig.uc_cookie;
     }
 
     get token() {
-        return ENV.get('uc_token_cookie');
+        this.checkAndRefreshCache();
+        return this.tokenConfig.uc_token_cookie;
     }
 
+    // 以下保持原有方法不变，只修改了ENV.get()调用为this.cookie/this.token
+    // ================================================
     getShareData(url) {
         let matches = this.regex.exec(url);
         if (matches[1].indexOf("?") > 0) {
@@ -134,43 +207,25 @@ class UCHandler {
         };
     }
 
-
     findBestLCS(mainItem, targetItems) {
-
         const results = [];
-
         let bestMatchIndex = 0;
 
-
         for (let i = 0; i < targetItems.length; i++) {
-
             const currentLCS = this.lcs(mainItem.name, targetItems[i].name);
-
             results.push({target: targetItems[i], lcs: currentLCS});
-
             if (currentLCS.length > results[bestMatchIndex].lcs.length) {
-
                 bestMatchIndex = i;
-
             }
-
         }
 
-
         const bestMatch = results[bestMatchIndex];
-
-
         return {allLCS: results, bestMatch: bestMatch, bestMatchIndex: bestMatchIndex};
-
     }
-
 
     delay(ms) {
-
         return new Promise((resolve) => setTimeout(resolve, ms));
-
     }
-
 
     async api(url, data, headers, method, retry) {
         headers = headers || {};
@@ -200,7 +255,6 @@ class UCHandler {
         return resp.data || {};
     }
 
-
     async clearSaveDir() {
         const listData = await this.api(`file/sort?${this.pr}&pdir_fid=${this.saveDirId}&_page=1&_size=200&_sort=file_type:asc,updated_at:desc`, {}, {}, 'get');
         if (listData.data && listData.data.list && listData.data.list.length > 0) {
@@ -217,7 +271,6 @@ class UCHandler {
         if (this.saveDirId) {
             if (clean) await this.clearSaveDir();
             return;
-
         }
         const listData = await this.api(`file/sort?${this.pr}&pdir_fid=0&_page=1&_size=200&_sort=file_type:asc,updated_at:desc`, {}, {}, 'get');
         if (listData.data && listData.data.list)
@@ -227,7 +280,6 @@ class UCHandler {
                     await this.clearSaveDir();
                     break;
                 }
-
             }
 
         if (!this.saveDirId) {
@@ -254,9 +306,7 @@ class UCHandler {
             if (shareToken.data && shareToken.data.stoken) {
                 this.shareTokenCache[shareData.shareId] = shareToken.data;
             }
-
         }
-
     }
 
     async getFilesByShareUrl(shareInfo) {
@@ -342,7 +392,6 @@ class UCHandler {
                 const taskResult = await this.api(`task?${this.pr}&task_id=${saveResult.data.task_id}&retry_index=${retry}`, {}, {}, 'get');
                 if (taskResult.data && taskResult.data.save_as && taskResult.data.save_as.save_as_top_fids && taskResult.data.save_as.save_as_top_fids.length > 0) {
                     return taskResult.data.save_as.save_as_top_fids[0];
-
                 }
                 retry++;
                 if (retry > 5) break;
@@ -356,20 +405,17 @@ class UCHandler {
         if (!this.saveFileIdCaches[fileId]) {
             const saveFileId = await this.save(shareId, stoken, fileId, fileToken, true);
             if (!saveFileId) return null;
-
             this.saveFileIdCaches[fileId] = saveFileId;
         }
         const transcoding = await this.api(`file/v2/play?${this.pr}`, {
             fid: this.saveFileIdCaches[fileId],
             resolutions: 'normal,low,high,super,2k,4k',
             supports: 'fmp4',
-
         });
         if (transcoding.data && transcoding.data.video_list) {
             return transcoding.data.video_list;
         }
         return null;
-
     }
 
     async refreshUcCookie(from = '') {
@@ -388,10 +434,9 @@ class UCHandler {
         const resCookie = cookieResDataSelf['set-cookie'];
         if (!resCookie) {
             console.log(`${from}自动更新UC cookie: 没返回新的cookie`);
-            return
+            return;
         }
         const cookieObject = COOKIE.parse(resCookie);
-        // console.log(cookieObject);
         if (cookieObject.__puus) {
             const oldCookie = COOKIE.parse(nowCookie);
             const newCookie = COOKIE.stringify({
@@ -399,7 +444,9 @@ class UCHandler {
                 __puus: cookieObject.__puus,
             });
             console.log(`${from}自动更新UC cookie: ${newCookie}`);
-            ENV.set('uc_cookie', newCookie);
+            // 仅更新内存缓存，不写入文件
+            this.tokenConfig.uc_cookie = newCookie;
+            this.tokenConfig.lastUpdate = Date.now();
         }
     }
 
@@ -416,17 +463,11 @@ class UCHandler {
         return CryptoJS.SHA256(data).toString();
     }
 
-
     async getDownload(shareId, stoken, fileId, fileToken, clean) {
-
         if (!this.saveFileIdCaches[fileId]) {
-
             const saveFileId = await this.save(shareId, stoken, fileId, fileToken, clean);
-
             if (!saveFileId) return null;
-
             this.saveFileIdCaches[fileId] = saveFileId;
-
         }
         if (this.token) {
             let video = []
@@ -509,7 +550,9 @@ class UCHandler {
                 };
                 let req = await axios.request(config);
                 if(req.status === 200) {
-                    ENV.set('uc_token_cookie',req.data.data.refresh_token)
+                    // 仅更新内存缓存，不写入文件
+                    this.tokenConfig.uc_token_cookie = req.data.data.refresh_token;
+                    this.tokenConfig.lastUpdate = Date.now();
                     return await this.getDownload(shareId, stoken, fileId, fileToken, clean)
                 }
             }
@@ -525,9 +568,7 @@ class UCHandler {
                     "cookie": low_cookie,
                     "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) quark-cloud-drive/2.5.20 Chrome/100.0.4896.160 Electron/18.3.5.4-b478491100 Safari/537.36 Channel/pckk_other_ch'
                 };
-                // console.log('low_url:', low_url);
                 const test_result = await this.testSupport(low_url, low_headers);
-                // console.log('test_result:', test_result);
                 if (!test_result[0]) {
                     try {
                         await this.refreshUcCookie('getDownload');
@@ -549,436 +590,214 @@ class UCHandler {
             });
         }
         return {parse: 0, url: urls}
-
-        /*
-        // 旧的加速写法
-        const downUrl = downCache.download_url;
-        const headers = {
-            "Referer": "https://drive.uc.cn/",
-            "cookie": this.cookie,
-            "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) quark-cloud-drive/2.5.20 Chrome/100.0.4896.160 Electron/18.3.5.4-b478491100 Safari/537.36 Channel/pckk_other_ch'
-        };
-        urls.push("UC原画", downUrl);
-        urls.push("原代服", mediaProxyUrl + `?thread=${ENV.get('thread') || 6}&form=urlcode&randUa=1&url=` + encodeURIComponent(downUrl) + '&header=' + encodeURIComponent(JSON.stringify(headers)));
-        if (ENV.get('play_local_proxy_type', '1') === '2') {
-            urls.push("原代本", `http://127.0.0.1:7777/?thread=${ENV.get('thread') || 6}&form=urlcode&randUa=1&url=` + encodeURIComponent(downUrl) + '&header=' + encodeURIComponent(JSON.stringify(headers)));
-        } else {
-            urls.push("原代本", `http://127.0.0.1:5575/proxy?thread=${ENV.get('thread') || 6}&chunkSize=256&url=` + encodeURIComponent(downUrl));
-        }
-
-        return {
-            parse: 0,
-            url: urls,
-            header: headers,
-        }
-        */
-
     }
 
-
     async testSupport(url, headers) {
-
         const resp = await req
-
             .get(url, {
-
                 responseType: 'stream',
-
                 headers: Object.assign(
                     {
-
                         Range: 'bytes=0-0',
-
                     },
-
                     headers,
                 ),
-
             })
-
             .catch((err) => {
-
-                // console.error(err);
                 console.error('[testSupport] error:', err.message);
-
                 return err.response || {status: 500, data: {}};
-
             });
 
         if (resp && resp.status === 206) {
-
             const isAccept = resp.headers['accept-ranges'] === 'bytes';
-
             const contentRange = resp.headers['content-range'];
-
             const contentLength = parseInt(resp.headers['content-length']);
-
             const isSupport = isAccept || !!contentRange || contentLength === 1;
-
             const length = contentRange ? parseInt(contentRange.split('/')[1]) : contentLength;
-
             delete resp.headers['content-range'];
-
             delete resp.headers['content-length'];
-
             if (length) resp.headers['content-length'] = length.toString();
-
             return [isSupport, resp.headers];
-
         } else {
             console.log('[testSupport] resp.status:', resp.status);
             return [false, null];
-
         }
-
     }
-
 
     delAllCache(keepKey) {
-
         try {
-
             fs.readdir(this.cacheRoot, (_, files) => {
-
                 if (files)
-
                     for (const file of files) {
-
                         if (file === keepKey) continue;
-
                         const dir = join(this.cacheRoot, file);
-
                         fs.stat(dir, (_, stats) => {
-
                             if (stats && stats.isDirectory()) {
-
                                 fs.readdir(dir, (_, subFiles) => {
-
                                     if (subFiles)
-
                                         for (const subFile of subFiles) {
-
                                             if (!subFile.endsWith('.p')) {
-
                                                 fs.rm(join(dir, subFile), {recursive: true}, () => {
                                                 });
-
                                             }
-
                                         }
-
                                 });
-
                             }
-
                         });
-
                     }
-
             });
-
         } catch (error) {
-
             console.error(error);
-
         }
-
     }
 
-
     async chunkStream(inReq, outResp, url, urlKey, headers, option) {
-
         urlKey = urlKey || CryptoJS.enc.Hex.stringify(CryptoJS.MD5(url)).toString();
-
         if (this.currentUrlKey !== urlKey) {
-
             this.delAllCache(urlKey);
-
             this.currentUrlKey = urlKey;
-
         }
-
         if (!this.urlHeadCache[urlKey]) {
-
             const [isSupport, urlHeader] = await this.testSupport(url, headers);
-
             if (!isSupport || !urlHeader['content-length']) {
-
                 outResp.redirect(url);
-
                 return;
-
             }
-
             this.urlHeadCache[urlKey] = urlHeader;
-
         }
-
         let exist = true;
-
         await fs.promises.access(join(this.cacheRoot, urlKey)).catch((_) => (exist = false));
-
         if (!exist) {
-
             await fs.promises.mkdir(join(this.cacheRoot, urlKey), {recursive: true});
-
         }
-
         const contentLength = parseInt(this.urlHeadCache[urlKey]['content-length']);
-
         let byteStart = 0;
-
         let byteEnd = contentLength - 1;
-
         const streamHeader = {};
-
         if (inReq.headers.range) {
-
             const ranges = inReq.headers.range.trim().split(/=|-/);
-
             if (ranges.length > 2 && ranges[2]) {
-
                 byteEnd = parseInt(ranges[2]);
-
             }
-
             byteStart = parseInt(ranges[1]);
-
             Object.assign(streamHeader, this.urlHeadCache[urlKey]);
-
             streamHeader['content-length'] = (byteEnd - byteStart + 1).toString();
-
             streamHeader['content-range'] = `bytes ${byteStart}-${byteEnd}/${contentLength}`;
-
             outResp.code(206);
-
         } else {
-
             Object.assign(streamHeader, this.urlHeadCache[urlKey]);
-
             outResp.code(200);
-
         }
-
         option = option || {chunkSize: 1024 * 256, poolSize: 5, timeout: 1000 * 10};
-
         const chunkSize = option.chunkSize;
-
         const poolSize = option.poolSize;
-
         const timeout = option.timeout;
-
         let chunkCount = Math.ceil(contentLength / chunkSize);
-
         let chunkDownIdx = Math.floor(byteStart / chunkSize);
-
         let chunkReadIdx = chunkDownIdx;
-
         let stop = false;
-
         const dlFiles = {};
-
         for (let i = 0; i < poolSize && i < chunkCount; i++) {
-
             new Promise((resolve) => {
-
                 (async function doDLTask(spChunkIdx) {
-
                     if (stop || chunkDownIdx >= chunkCount) {
-
                         resolve();
-
                         return;
-
                     }
-
                     if (spChunkIdx === undefined && (chunkDownIdx - chunkReadIdx) * chunkSize >= this.maxCache) {
-
                         setTimeout(doDLTask, 5);
-
                         return;
-
                     }
-
                     const chunkIdx = spChunkIdx || chunkDownIdx++;
-
                     const taskId = `${inReq.id}-${chunkIdx}`;
-
                     try {
-
                         const dlFile = join(this.cacheRoot, urlKey, `${inReq.id}-${chunkIdx}.p`);
-
                         let exist = true;
-
                         await fs.promises.access(dlFile).catch((_) => (exist = false));
-
                         if (!exist) {
-
                             const start = chunkIdx * chunkSize;
-
                             const end = Math.min(contentLength - 1, (chunkIdx + 1) * chunkSize - 1);
-
                             console.log(inReq.id, chunkIdx);
-
                             const dlResp = await req.get(url, {
-
                                 responseType: 'stream',
-
                                 timeout: timeout,
-
                                 headers: Object.assign(
                                     {
-
                                         Range: `bytes=${start}-${end}`,
-
                                     },
-
                                     headers,
                                 ),
-
                             });
-
                             const dlCache = join(this.cacheRoot, urlKey, `${inReq.id}-${chunkIdx}.dl`);
-
                             const writer = fs.createWriteStream(dlCache);
-
                             const readTimeout = setTimeout(() => {
-
                                 writer.destroy(new Error(`${taskId} read timeout`));
-
                             }, timeout);
-
                             const downloaded = new Promise((resolve) => {
-
                                 writer.on('finish', async () => {
-
                                     if (stop) {
-
                                         await fs.promises.rm(dlCache).catch((e) => console.error(e));
-
                                     } else {
-
                                         await fs.promises.rename(dlCache, dlFile).catch((e) => console.error(e));
-
                                         dlFiles[taskId] = dlFile;
-
                                     }
-
                                     resolve(true);
-
                                 });
-
                                 writer.on('error', async (e) => {
-
                                     console.error(e);
-
                                     await fs.promises.rm(dlCache).catch((e1) => console.error(e1));
-
                                     resolve(false);
-
                                 });
-
                             });
-
                             dlResp.data.pipe(writer);
-
                             const result = await downloaded;
-
                             clearTimeout(readTimeout);
-
                             if (!result) {
-
                                 setTimeout(() => {
-
                                     doDLTask(chunkIdx);
-
                                 }, 15);
-
                                 return;
-
                             }
-
                         }
-
                         setTimeout(doDLTask, 5);
-
                     } catch (error) {
-
                         console.error(error);
-
                         setTimeout(() => {
-
                             doDLTask(chunkIdx);
-
                         }, 15);
-
                     }
-
                 })();
-
             });
-
         }
-
-
         outResp.headers(streamHeader);
-
         const stream = new PassThrough();
-
         new Promise((resolve) => {
-
             let writeMore = true;
-
             (async function waitReadFile() {
-
                 try {
-
                     if (chunkReadIdx >= chunkCount || stop) {
-
                         stream.end();
-
                         resolve();
-
                         return;
-
                     }
-
                     if (!writeMore) {
-
                         setTimeout(waitReadFile, 5);
-
                         return;
-
                     }
-
                     const taskId = `${inReq.id}-${chunkReadIdx}`;
-
                     if (!dlFiles[taskId]) {
-
                         setTimeout(waitReadFile, 5);
-
                         return;
-
                     }
-
                     const chunkByteStart = chunkReadIdx * chunkSize;
-
                     const chunkByteEnd = Math.min(contentLength - 1, (chunkReadIdx + 1) * chunkSize - 1);
-
                     const readFileStart = Math.max(byteStart, chunkByteStart) - chunkByteStart;
-
                     const dlFile = dlFiles[taskId];
-
                     delete dlFiles[taskId];
-
                     const fd = await fs.promises.open(dlFile, 'r');
-
                     const buffer = Buffer.alloc(chunkByteEnd - chunkByteStart - readFileStart + 1);
-
                     await fd.read(buffer, 0, chunkByteEnd - chunkByteStart - readFileStart + 1, readFileStart);
-
                     await fd.close().catch((e) => console.error(e));
-
                     await fs.promises.rm(dlFile).catch((e) => console.error(e));
                     writeMore = stream.write(buffer);
                     if (!writeMore) {
@@ -1004,7 +823,6 @@ class UCHandler {
             stop = true;
         });
         return stream;
-
     }
 }
 
