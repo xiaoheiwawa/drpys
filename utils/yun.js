@@ -1,6 +1,16 @@
 import axios from "axios";
 import CryptoJS from "crypto-js";
 import {ENV} from "./env.js";
+import COOKIE from './cookieManager.js';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// 动态生成配置文件路径（基于当前文件所在目录）
+const configPath = resolve(__dirname, '../pz/tokenm.json');
 
 class YunDrive {
     constructor() {
@@ -15,36 +25,101 @@ class YunDrive {
             'x-deviceinfo': '||3|12.27.0|chrome|131.0.0.0|5c7c68368f048245e1ce47f1c0f8f2d0||windows 10|1536X695|zh-CN|||'
         };
         this.linkID = '';
-        this.cache = {}; // 添加缓存对象
-        this.authorization = ''
+        this.cache = {};
+        this.authorization = '';
+
+        // Token缓存相关
+        this.tokenConfig = {
+            yun_cookie: '',
+            yun_account: '',
+            lastUpdate: 0
+        };
+        
+        this.tokenFile = configPath;
+        this.cacheExpire = 30 * 60 * 1000; // 30分钟缓存
+        this.loadTokenConfig(); // 初始化加载配置
+        this.setupFileWatcher(); // 设置文件监听
     }
 
-    async init(){
-        if(this.cookie){
-            console.log('移动cookie获取成功' + this.cookie)
+    // 加载token配置并缓存
+    loadTokenConfig() {
+        try {
+            const data = fs.readFileSync(this.tokenFile, 'utf8');
+            const jsonData = JSON.parse(data);
+            this.tokenConfig = {
+                yun_cookie: jsonData.yun_cookie || '',
+                yun_account: jsonData.yun_account || '',
+                lastUpdate: Date.now()
+            };
+            console.log('移动 Token配置已从文件加载并缓存');
+        } catch (err) {
+            if (err.code === 'ENOENT') {
+               // console.error('tokenm.json文件不存在。使用空配置。');
+            } else if (err instanceof SyntaxError) {
+              //  console.error('tokenm.json文件格式错误');
+            } else {
+                console.error('加载移动 token配置时出错:', err.message);
+            }
+            this.tokenConfig = {
+                yun_cookie: '',
+                yun_account: '',
+                lastUpdate: 0
+            };
+        }
+    }
+
+    // 设置文件监听
+    setupFileWatcher() {
+        try {
+            fs.watch(this.tokenFile, (eventType, filename) => {
+                if (eventType === 'change') {
+                    //console.log('检测到tokenm.json文件变化，重新加载配置');
+                    this.loadTokenConfig();
+                }
+            });
+           // console.log('已设置tokenm.json文件监听');
+        } catch (err) {
+           // console.error('设置文件监听失败:', err.message);
+        }
+    }
+
+    // 检查并刷新缓存
+    checkAndRefreshCache() {
+        if (Date.now() - this.tokenConfig.lastUpdate > this.cacheExpire) {
+            console.log('移动 Token缓存已过期，重新加载');
+            this.loadTokenConfig();
+        }
+    }
+
+    // 使用 getter 定义动态属性，自动检查缓存
+    get cookie() {
+        this.checkAndRefreshCache();
+        return this.tokenConfig.yun_cookie;
+    }
+
+    get account() {
+        this.checkAndRefreshCache();
+        return this.tokenConfig.yun_account;
+    }
+
+    async init() {
+        if (this.cookie) {
+            console.log('移动cookie获取成功');
             const cookie = this.cookie.split(';');
-            if(this.authorization === ''){
+            if (this.authorization === '') {
                 cookie.forEach((item) => {
                     if (item.indexOf('authorization') !== -1) {
-                        this.authorization = item.replace('authorization=', '');
-                        console.log('authorization获取成功:'+this.authorization)
+                        this.authorization = item.replace('authorization=', '').trim();
+                        console.log('authorization获取成功:' + this.authorization);
                     }
-                })
+                });
             }
-        }else {
-            console.error("请先获取移动cookie")
+        } else {
+            console.error("请先获取移动cookie");
         }
-        if(this.account){
-            console.log("移动账号获取成功")
+        if (this.account) {
+            console.log("移动账号获取成功");
         }
-    }
-
-    get cookie(){
-        return ENV.get('yun_cookie')
-    }
-
-    get account(){
-        return ENV.get('yun_account')
     }
 
     encrypt(data) {
@@ -67,11 +142,19 @@ class YunDrive {
     }
 
     async getShareID(url) {
-        const matches = this.regex.exec(url) || /https:\/\/caiyun.139.com\/m\/i\?([^&]+)/.exec(url);
-        if (matches && matches[1]) {
-            this.linkID = matches[1];
-        }
+    // 新增适配 /w/i/[linkID] 格式的正则，优先匹配
+    const regex = /https:\/\/caiyun.139.com\/w\/i\/([^\/]+)/;
+    const matches = regex.exec(url) 
+        || /https:\/\/caiyun.139.com\/m\/i\?([^&]+)/.exec(url)  // 保留旧版/m/i?格式支持
+        || this.regex.exec(url);  // 保留原有regex的优先级（若有）
+
+    if (matches && matches[1]) {
+        this.linkID = matches[1];  // 提取linkID（如2oRhbS0Yhox15）
+        return this.linkID;  // 建议返回结果，方便外部判断
     }
+    return null;  // 明确返回null，标识提取失败
+}
+
 
     async getShareInfo(pCaID) {
         if (!this.linkID) {
@@ -204,7 +287,7 @@ class YunDrive {
         }
     }
 
-    async getSharePlay(contentId,linkID){
+    async getSharePlay(contentId, linkID) {
         let data = {
             "getContentInfoFromOutLinkReq": {
                 "contentId": contentId.split('/')[1],
@@ -216,35 +299,64 @@ class YunDrive {
                 "accountType": 1
             }
         };
-        let resp = await axios.post(this.baseUrl+'getContentInfoFromOutLink',data,{
+        let resp = await axios.post(this.baseUrl + 'getContentInfoFromOutLink', data, {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
                 'Accept': 'application/json, text/plain, */*',
                 'Accept-Encoding': 'gzip, deflate, br, zstd',
                 'Content-Type': 'application/json'
             }
-        })
-        if(resp.status === 200 && resp.data.data !== null){
-            let data = resp.data
-            return data.data.contentInfo.presentURL
+        });
+        if (resp.status === 200 && resp.data.data !== null) {
+            let data = resp.data;
+            return data.data.contentInfo.presentURL;
         }
     }
 
-    async getDownload(contentId,linkID){
-        await this.init()
+    async refreshYunCookie(from = '') {
+        const nowCookie = this.cookie;
+        const cookieSelfRes = await axios({
+            url: "https://yun.139.com/",
+            method: "GET",
+            headers: {
+                "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+                Cookie: nowCookie
+            }
+        });
+        const cookieResDataSelf = cookieSelfRes.headers;
+        const resCookie = cookieResDataSelf['set-cookie'];
+        if (!resCookie) {
+            console.log(`${from}自动更新移动云 cookie: 没返回新的cookie`);
+            return;
+        }
+        const cookieObject = COOKIE.parse(resCookie);
+        if (cookieObject.authorization) {
+            const newCookie = COOKIE.stringify({
+                authorization: cookieObject.authorization
+            });
+            console.log(`${from}自动更新移动云 cookie: ${newCookie}`);
+            // 仅更新内存缓存，不写入文件
+            this.tokenConfig.yun_cookie = newCookie;
+            this.tokenConfig.lastUpdate = Date.now();
+        }
+    }
+
+    async getDownload(contentId, linkID) {
+        await this.init();
         let data = this.encrypt(JSON.stringify({
             "dlFromOutLinkReqV3": {
-                "linkID":linkID,
-                "account":this.account,
-                "coIDLst":{
-                    "item":[contentId]
-                }},
-            "commonAccountInfo":{
-                "account":this.account,
-                "accountType":1
+                "linkID": linkID,
+                "account": this.account,
+                "coIDLst": {
+                    "item": [contentId]
+                }
+            },
+            "commonAccountInfo": {
+                "account": this.account,
+                "accountType": 1
             }
         }));
-        let resp = await axios.post(this.baseUrl+'dlFromOutLinkV3',data,{
+        let resp = await axios.post(this.baseUrl + 'dlFromOutLinkV3', data, {
             headers: {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
                 "Connection": "keep-alive",
@@ -257,12 +369,54 @@ class YunDrive {
                 'hcy-cool-flag': '1',
                 'x-deviceinfo': '||3|12.27.0|chrome|136.0.0.0|189f4426ca008b9cbe9bf9bd79723d77||windows 10|1536X695|zh|||'
             }
-        })
-        if(resp.status === 200){
-            let json = JSON.parse(this.decrypt(resp.data))
-            return json.data.redrUrl
+        });
+        if (resp.status === 200) {
+            let json = JSON.parse(this.decrypt(resp.data));
+            const redrUrl = json.data.redrUrl;
+            const test_result = await this.testSupport(redrUrl, {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+                'Cookie': this.cookie
+            });
+            if (!test_result[0]) {
+                try {
+                    await this.refreshYunCookie('getDownload');
+                } catch (e) {
+                    console.log(`getDownload:自动刷新移动云cookie失败:${e.message}`);
+                }
+            }
+            return redrUrl;
         }
+        return null;
+    }
 
+    async testSupport(url, headers) {
+        const resp = await axios.get(url, {
+            responseType: 'stream',
+            headers: Object.assign(
+                {
+                    Range: 'bytes=0-0',
+                },
+                headers,
+            ),
+        }).catch((err) => {
+            console.error('[testSupport] error:', err.message);
+            return err.response || { status: 500, data: {} };
+        });
+
+        if (resp && (resp.status === 206 || resp.status === 200)) {
+            const isAccept = resp.headers['accept-ranges'] === 'bytes';
+            const contentRange = resp.headers['content-range'];
+            const contentLength = parseInt(resp.headers['content-length']);
+            const isSupport = isAccept || !!contentRange || contentLength === 1 || resp.status === 200;
+            const length = contentRange ? parseInt(contentRange.split('/')[1]) : contentLength;
+            delete resp.headers['content-range'];
+            delete resp.headers['content-length'];
+            if (length) resp.headers['content-length'] = length.toString();
+            return [isSupport, resp.headers];
+        } else {
+            console.log('[testSupport] resp.status:', resp.status);
+            return [false, null];
+        }
     }
 }
 
