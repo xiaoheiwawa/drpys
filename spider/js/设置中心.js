@@ -4,7 +4,6 @@
   filterable: 0,
   quickSearch: 0,
   title: '设置中心',
-  logo: 'https://avatars.githubusercontent.com/u/49803097?v=4',
   more: {
     sourceTag: '设置,动作',
     actions: [
@@ -227,8 +226,8 @@ var rule = {
     aliScanCheck: null,
     biliScanCheck: null,
     host: 'http://empty',
-    class_name: '推送&夸克&UC&阿里&天翼&百度&哔哩&系统配置&测试&接口挂载&视频解析',
-    class_url: 'push&quark&uc&ali&cloud&baidu&bili&system&test&apiLink&videoParse',
+    class_name: '推送&夸克&UC&阿里&天翼&哔哩&系统配置&测试&接口挂载&视频解析',
+    class_url: 'push&quark&uc&ali&cloud&bili&system&test&apiLink&videoParse',
     url: '/fyclass',
 
     预处理: async function (env) {
@@ -247,7 +246,6 @@ var rule = {
             'ali': urljoin(publicUrl, './images/icon_cookie/阿里.png'),
             'bili': urljoin(publicUrl, './images/icon_cookie/哔哩.png'),
             'cloud': urljoin(publicUrl, './images/icon_cookie/天翼.png'),
-            'baidu': urljoin(publicUrl, './images/icon_cookie/百度.png'),
             'adult': urljoin(publicUrl, './images/icon_cookie/chat.webp'),
             'test': urljoin(publicUrl, './icon.svg'),
             'lives': urljoin(publicUrl, './images/lives.jpg'),
@@ -342,10 +340,6 @@ var rule = {
                 d.push(getInput('get_cloud_password', '查看天翼 密码', images.cloud));
                 d.push(getInput('get_cloud_cookie', '查看天翼 cookie', images.cloud));
                 break;
-            case 'baidu':
-                d.push(genMultiInput('baidu_cookie', '设置百度 cookie', null, images.baidu));
-                d.push(getInput('get_baidu_cookie', '查看百度 cookie', images.baidu));
-                break;
             case 'bili':
                 d.push(genMultiInput('bili_cookie', '设置哔哩 cookie', null, images.bili));
                 d.push(getInput('get_bili_cookie', '查看哔哩 cookie', images.bili));
@@ -367,15 +361,10 @@ var rule = {
 
                 d.push(genMultiInput('play_proxy_mode', '设置播放代理模式', '默认为1，可自行配置成其他值如:2 (1 内存加速,2 磁盘加速 其他:内存加速)', images.settings));
                 d.push(getInput('get_play_proxy_mode', '查看播放代理模式', images.settings));
-                d.push(genMultiInput('enable_dr2', '设置drpy2源启用状态', '设置为1启用drpy2脚本服务，需要壳子内置处理；设置为2启用drpy2在线接口服务(默认2，设置其他值关闭)', images.settings));
+                d.push(genMultiInput('enable_dr2', '设置drpy2源启用状态', '设置为1可启用此功能(默认没设置也属于启动，设置其他值关闭)', images.settings));
                 d.push(getInput('get_enable_dr2', '查看drpy2源启用状态', images.settings));
-                d.push(genMultiInput('enable_py', '设置py源启用状态', '设置为1可启用此功能,设置为2启用T4(默认没设置也属于启动，设置其他值关闭)', images.settings));
+                d.push(genMultiInput('enable_py', '设置py源启用状态', '设置为1可启用此功能(默认没设置也属于启动，设置其他值关闭)', images.settings));
                 d.push(getInput('get_enable_py', '查看py源启用状态', images.settings));
-                d.push(genMultiInput('enable_cat', '设置cat源启用状态', '设置为1可启用此功能,设置为2启用T4(默认没设置也属于启动，设置其他值关闭)', images.settings));
-                d.push(getInput('get_enable_cat', '查看cat源启用状态', images.settings));
-                d.push(genMultiInput('enable_old_config', '设置兼容性配置', '设置为1可启用此功能(默认关闭)', images.settings));
-                d.push(getInput('get_enable_old_config', '查看兼容性配置', images.settings));
-
                 d.push(genMultiInput('now_ai', '设置当前AI', '1: 讯飞星火 2:deepseek 3.讯飞智能体 4.Kimi \n如果不填，连续对话默认使用讯飞星火', images.settings));
                 d.push(getInput('get_now_ai', '查看当前AI', images.settings));
                 d.push(genMultiInput('allow_forward', '设置允许代理转发', '设置为1可启用此功能，有一定的使用场景用于突破网络限制', images.settings));
@@ -415,10 +404,6 @@ var rule = {
                 d.push(getInput('get_enable_link_push', '查看启用挂载推送', images.settings));
                 d.push(genMultiInput('enable_link_jar', '设置允许挂载Jar', '设置为1可以启用。默认即关闭。设置其他值禁用', images.settings));
                 d.push(getInput('get_enable_link_jar', '查看允许挂载Jar', images.settings));
-                d.push(genMultiInput('cat_sub_code', '猫爪订阅码', '自定义猫爪源的订阅码。默认为all', images.settings));
-                d.push(getInput('get_cat_sub_code', '查看猫爪订阅码', images.settings));
-                d.push(genMultiInput('must_sub_code', '严格订阅码', '设置为1可以启用。默认即关闭', images.settings));
-                d.push(getInput('get_must_sub_code', '查看严格订阅码', images.settings));
 
                 break;
             case 'videoParse':
@@ -432,14 +417,14 @@ var rule = {
         let {input, orId, getProxyUrl} = this;
         // log(input, orId);
         if (orId === 'proxyStream') {
-            let media_url = 'https://vdse.bdstatic.com/628ca08719cef5987ea2ae3c6f0d2386.mp4';
+            let media_url = 'https://vdse.bdstatic.com//628ca08719cef5987ea2ae3c6f0d2386.mp4';
             let m3u8_url = 'http://kjsp.aikan.miguvideo.com/PLTV/88888888/224/3221236432/1.m3u8';
             return {
                 vod_id: 'proxyStream',
                 vod_name: '测试代理流',
                 vod_play_from: 'drpyS本地流代理',
-                // vod_play_url: '测试播放流$' + getProxyUrl().split('?')[0] + media_url + '#不代理直接播$' + media_url + '#8k播放$' + m3u8_url,
-                vod_play_url: '测试播放流$' + getProxyUrl().split('?')[0] + media_url + '#不代理直接播$' + media_url
+                // vod_play_url: '测试播放流$' + getProxyUrl().replace('?do=js', media_url) + '#不代理直接播$' + media_url + '#8k播放$' + m3u8_url,
+                vod_play_url: '测试播放流$' + getProxyUrl().replace('?do=js', media_url) + '#不代理直接播$' + media_url
             }
         }
     },
@@ -1054,15 +1039,12 @@ var rule = {
             'cloud_password',
             'cloud_cookie',
             'bili_cookie',
-            'baidu_cookie',
             'hide_adult',
             'thread',
             'play_local_proxy_type',
             'play_proxy_mode',
             'enable_dr2',
             'enable_py',
-            'enable_cat',
-            'enable_old_config',
             'enable_rule_name',
             'spark_ai_authKey',
             'deepseek_apiKey',
@@ -1075,8 +1057,6 @@ var rule = {
             'enable_link_data',
             'enable_link_push',
             'enable_link_jar',
-            'cat_sub_code',
-            'must_sub_code',
             'mg_hz',
         ];
         let get_cookie_sets = [
@@ -1087,15 +1067,12 @@ var rule = {
             'get_cloud_password',
             'get_cloud_cookie',
             'get_bili_cookie',
-            'get_baidu_cookie',
             'get_hide_adult',
             'get_thread',
             'play_local_proxy_type',
             'get_play_proxy_mode',
             'get_enable_dr2',
             'get_enable_py',
-            'get_enable_cat',
-            'get_enable_old_config',
             'get_enable_rule_name',
             'get_spark_ai_authKey',
             'get_deepseek_apiKey',
@@ -1108,8 +1085,6 @@ var rule = {
             'get_enable_link_data',
             'get_enable_link_push',
             'get_enable_link_jar',
-            'get_cat_sub_code',
-            'get_must_sub_code',
             'get_mg_hz',
         ];
         if (cookie_sets.includes(action) && value) {

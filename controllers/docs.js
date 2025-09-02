@@ -2,10 +2,9 @@ import path from 'path';
 import {existsSync, readFileSync} from 'fs';
 import {getMimeType} from '../utils/mime-type.js';
 import '../utils/marked.min.js';
-import {validateBasicAuth} from "../utils/api_validate.js";
 
 export default (fastify, options, done) => {
-    fastify.get('/docs/*', {preHandler: validateBasicAuth}, async (request, reply) => {
+    fastify.get('/docs/*', async (request, reply) => {
         const fullPath = request.params['*']; // 捕获整个路径
         console.log(`Request received for path: ${fullPath}`);
         try {
@@ -30,7 +29,7 @@ export default (fastify, options, done) => {
             if (ext === '.md') {
                 // 处理 Markdown 文件
                 const markdownContent = readFileSync(resolvedPath, 'utf8');
-                const htmlContent = marked.parse(markdownContent).replaceAll('$pwd', process.env.API_PWD || '');
+                const htmlContent = marked.parse(markdownContent);
 
                 reply.type('text/html').send(`
                 <!DOCTYPE html>

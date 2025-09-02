@@ -8,41 +8,39 @@
                 </head>
                 <body>
                     <h1 id="drpysdrpy-node">drpyS(drpy-node)</h1>
-<p>nodejs作为服务端的drpy实现。全面升级异步写法<br><del>积极开发中，每日一更</del>，当前进度 <code>91%</code><br><del>找工作中，随缘更新</del><br>上班当牛马，下班要带娃，阶段性佛系趁娃睡觉熬夜更新</p>
+<p>nodejs作为服务端的drpy实现。全面升级异步写法<br><del>积极开发中，每日一更</del>，当前进度 <code>63%</code><br><del>找工作中，随缘更新</del><br>上班当牛马，下班要带娃，阶段性佛系趁娃睡觉熬夜更新</p>
 <ul>
-<li><a href="docs/apidoc.md">接口文档</a> | <a href="docs/apiList.md">接口列表如定时任务</a> | <a href="https://github.com/waifu-project/movie/pull/135">小猫影视-待对接T4</a></li>
 <li><a href="/config?pwd=dzyyds">本地配置接口-动态本地</a></li>
 <li><a href="/config/1?pwd=dzyyds">本地配置接口-动态外网/局域网</a></li>
 <li><a href="/docs/sub.md">其他配置接口-订阅过滤</a></li>
-<li><a href="/docs/pyenv.md">python环境</a> | <a href="/docs/envdoc.md">DS项目环境变量说明</a></li>
-<li><a href="/docs/catDebug.md">猫源调试教程</a></li>
 <li><a href="/admin/encoder">代码加解密工具</a></li>
 <li><a href="/authcoder?len=10&amp;number=1">V我50支付凭证生成器</a></li>
 <li><a href="/docs/httpTest.md">接口压测教程</a></li>
 <li><a href="/proxy/%E5%A4%AE%E8%A7%86%E5%A4%A7%E5%85%A8%5B%E5%AE%98%5D/index.html">央视点播解析工具</a></li>
 <li><a href="/apps/cookie-butler/index.html">cookie管理插件</a></li>
-<li><a href="/apps/cron-generator/index.html">cron表达式插件</a></li>
 <li><a href="/robots.txt">本站防止爬虫协议</a></li>
 <li><a href="https://git-proxy.playdreamer.cn/hjdhnx/drpy-node">本项目主页-免翻</a></li>
 <li><a href="https://github.com/hjdhnx/CatPawOpen/tree/ds-cat">DS源适配猫影视</a></li>
-<li><a href="https://github.com/hjdhnx/drpy-plugin">DS插件项目-golang</a></li>
 <li><a href="https://github.com/hjdhnx/drpy-webpack">drpy2打包项目</a></li>
 <li><a href="/cat/index.html">在线猫ds源主页</a></li>
 </ul>
 <h2 id="更新记录">更新记录</h2>
-<h3 id="20250902">20250902</h3>
-<p>更新至V1.2.23</p>
-<h3 id="20250901">20250901</h3>
-<p>更新至V1.2.22</p>
-<h3 id="20250829">20250829</h3>
-<p>更新至V1.2.21</p>
-<h3 id="20250825">20250825</h3>
-<p>更新至V1.2.20</p>
-<h3 id="20250824">20250824</h3>
-<p>更新至V1.2.19</p>
-<h3 id="20250823">20250823</h3>
-<p>更新至V1.2.18</p>
-<h3 id="20250822">20250822</h3>
+<h3 id="20250801">20250801</h3>
+<p>更新至V1.2.4</p>
+<h3 id="20250729">20250729</h3>
+<p>更新至V1.2.3</p>
+<h3 id="20250728">20250728</h3>
+<p>更新至V1.2.2</p>
+<h3 id="20250727">20250727</h3>
+<p>更新至V1.2.1</p>
+<p>全新版本，大堆特性，性能优化，稳定性增强。</p>
+<h3 id="20250726">20250726</h3>
+<p>更新至V1.2.0</p>
+<ol>
+<li>支持挂载py源</li>
+</ol>
+<h3 id="20250310">20250310</h3>
+<p>更新至V1.1.23</p>
 <p><a href="docs/updateRecord.md">点此查看完整更新记录</a></p>
 <p><strong>注意事项</strong></p>
 <p>总是有人遇到各种奇葩问题，像什么没弹幕，访问/config/1服务马上崩溃等等，能自行解决最好，解决不了我建议你使用下方安装教程
@@ -70,7 +68,6 @@
 <li><a href="docs/pupInstall.md">puppeteer使用教程</a></li>
 <li><a href="docs/ruleAttr.md">drpyS源属性说明</a></li>
 <li><a href="docs/ruleDesc.md">drpy2写源简述</a></li>
-<li><a href="docs/suanfa.md">关姐算法搭建说明</a></li>
 </ul>
 <h2 id="问题说明">问题说明</h2>
 <ol>
@@ -87,11 +84,11 @@
 <ul>
 <li>终端执行</li>
 </ul>
-<p><code>bash -c &quot;$(curl -fsSLk https://git-proxy.playdreamer.cn/hjdhnx/drpy-node/raw/refs/heads/main/install/autorun.sh)&quot;</code></p>
+<p><code>bash -c &quot;$(curl -fsSLk https://git-proxy.playdreamer.cn/hjdhnx/drpy-node/raw/refs/heads/main/autorun.sh)&quot;</code></p>
 <ul>
 <li>添加定时方案</li>
 </ul>
-<p><code>echo &quot;30 7 * * * cd /patch &amp;&amp; bash -c \&quot;\$(curl -fsSLk https://git-proxy.playdreamer.cn/hjdhnx/drpy-node/raw/refs/heads/main/install/autorun.sh)\&quot; &gt;&gt; /patch/drpyslog.log 2&gt;&amp;1&quot; | crontab -</code></p>
+<p><code>echo &quot;30 7 * * * cd /patch &amp;&amp; bash -c \&quot;\$(curl -fsSLk https://git-proxy.playdreamer.cn/hjdhnx/drpy-node/raw/refs/heads/main/autorun.sh)\&quot; &gt;&gt; /patch/drpyslog.log 2&gt;&amp;1&quot; | crontab -</code></p>
 <p>或者下载脚本到本地后</p>
 <p><code>chmod a+x /path/autorun.sh</code></p>
 <p><code>echo &quot;30 7 * * * bash /path/autorun.sh  &gt;&gt; /path/logfile.log 2&gt;&amp;1&quot; | crontab -</code></p>
