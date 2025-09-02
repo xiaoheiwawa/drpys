@@ -1,3 +1,13 @@
+/*
+@header({
+  searchable: 0,
+  filterable: 0,
+  quickSearch: 0,
+  title: '可可影视',
+  '类型': '影视',
+  lang: 'ds'
+})
+*/
 var rule = {
     title: '可可影视',
     host: 'https://www.keke1.app/', // 使用活跃域名
