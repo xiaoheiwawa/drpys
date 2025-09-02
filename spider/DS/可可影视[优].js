@@ -21,7 +21,7 @@ var rule = {
     filterable: 0,
     filter: '',
     headers: {
-        'User-Agent': PC_UA,
+        'User-Agent':'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
     },
     timeout: 5000,
     class_name: '电影&连续剧&动漫&综艺&短剧',
