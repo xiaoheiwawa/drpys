@@ -42,24 +42,7 @@
             "hosturl": "",
             "version": ""
         },
-        "橘子": {
-            "host": "https://ajuzi.top"
-        },
-        "演员": {
-            "host": "https://vod.feiwang.cc"
-        },
-        "趣看": {
-            "host": "https://www.ququkan.cc"
-        },
-        "电影驿站": {
-            "host": "https://qqiqiyiyoukumgtvapiappdyyztvjsoni8n2o0z1ws2n7b6v3x8.68.gy:56789"
-        },
-        "火猫": {
-            "host": "http://app.789dd.cn"
-        },
-        "落功阁": {
-            "host": "https://ww.ndjdnd.icu"
-        }
+
     },
     "AppShark": {
         "示例": {
