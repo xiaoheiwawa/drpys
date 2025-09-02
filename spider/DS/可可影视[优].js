@@ -1,6 +1,6 @@
 var rule = {
     title: '可可影视',
-    host: 'https://www.keke1.app/',
+    host: 'https://www.kkys04.com',
     url: '/show/fyclass-----1-fypage.html',
     searchUrl: '/search?k=**&page=fypage', // 修正搜索占位符
     searchable: 1,
