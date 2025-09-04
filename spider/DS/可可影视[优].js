@@ -1,4 +1,5 @@
 var rule = {
+	类型:'影视',
     title: '可可影视',
     host: 'https://www.keke8.app/',
     // 推荐备用域名（若主站失效）
@@ -32,13 +33,33 @@ var rule = {
     limit: 20,
 
     // 推荐位：取首页第2个 section-box
-    推荐: '.section-box:eq(2)&&.module-box-inner&&.module-item;' +
-          '.v-item-footer .v-item-title:eq(1)&&Text;' +
-          'img[data-original]:not([src*="logo_placeholder"])&&data-original;' +
-          '.v-item-bottom&&Text;' +
-          'a&&href',
+    推荐: async function (tid, pg, filter, extend) {
+    // 如果有缓存或首页已加载，可直接复用 rule.一级 的逻辑
+    let homeFn = rule.一级.bind(this);
+    
+    // 请求首页
+    let html = await this.request(rule.host + rule.homeUrl);
 
-    double: false,
+    // 提取推荐区域：第3个 .section-box（索引为2），包含推荐内容
+    let $ = html.html();
+    let $box = $('.section-box').eq(2); // 第3个 section-box
+
+    if (!$box.length) {
+        return { list: [] };
+    }
+
+    // 将选中的推荐区块包装成新的 HTML，供 rule.一级 解析
+    let innerHtml = $box.find('.module-box-inner').html();
+    if (!innerHtml) {
+        return { list: [] };
+    }
+
+    // 构造模拟的 HTML 响应，只包含推荐内容
+    let fakeHtml = `<div class="module-box-inner">${innerHtml}</div>`;
+    
+    // 复用 '一级' 的解析逻辑来解析推荐项
+    return await homeFn(fakeHtml);
+},
 
     // 一级列表解析（修复标题、图片选择器）
     一级: '.module-box-inner&&.module-item;' +
