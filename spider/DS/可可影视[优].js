@@ -11,7 +11,7 @@
 
 var rule = {
     类型: '影视',
-    title: '可可影视',
+    title: '可可',
     host: 'https://www.keke1.app/',
     url: '/show/fyclass-----1-fypage.html',
     filter_url: '',
