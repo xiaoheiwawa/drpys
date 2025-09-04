@@ -13,7 +13,7 @@
 
 var rule = {
     类型: '影视',
-    title: '可可影视',
+    title: '可可影院',
     host: 'https://www.keke8.app/',
     // 备用域名（若主站失效）
     // host: 'https://www.kkys01.com/',
