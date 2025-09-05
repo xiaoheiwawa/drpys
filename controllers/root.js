@@ -1,10 +1,8 @@
 import path from 'path';
-import {readdirSync, readFileSync, writeFileSync, existsSync, createReadStream} from 'fs';
+import {readdirSync, readFileSync, writeFileSync, existsSync} from 'fs';
 import '../utils/marked.min.js';
 import {computeHash} from '../utils/utils.js';
 import {validateBasicAuth} from "../utils/api_validate.js";
-import {daemon} from "../utils/daemonManager.js";
-import {toBeijingTime} from "../utils/datetime-format.js"
 
 export default (fastify, options, done) => {
     // 添加 / 接口
@@ -67,10 +65,7 @@ export default (fastify, options, done) => {
 
     // 新增 /robots.txt 路由
     fastify.get('/robots.txt', (request, reply) => {
-        const filePath = path.join(options.rootDir, 'public', 'robots.txt');
-        const fileStream = createReadStream(filePath);
-        // reply.type('text/plain;charset=utf-8').sendFile('robots.txt', path.join(options.rootDir, 'public'));
-        reply.type('text/plain;charset=utf-8').send(fileStream);
+        reply.type('text/plain;charset=utf-8').sendFile('robots.txt', path.join(options.rootDir, 'public'));
     });
 
     // 新增 /favicon.ico 路由
@@ -81,9 +76,7 @@ export default (fastify, options, done) => {
 
             // 如果文件存在，返回图片
             if (existsSync(faviconPath)) {
-                const fileStream = createReadStream(faviconPath);
-                // return reply.sendFile('favicon.ico', path.join(options.rootDir, 'public')); // 直接返回图片
-                return reply.type('image/x-icon').send(fileStream); // 直接返回图片
+                return reply.sendFile('favicon.ico', path.join(options.rootDir, 'public')); // 直接返回图片
             } else {
                 reply.status(404).send({error: 'Favicon not found'}); // 如果文件不存在，返回 404 错误
             }
@@ -114,18 +107,6 @@ export default (fastify, options, done) => {
         } catch (error) {
             reply.status(500).send({error: 'Failed to fetch cat', details: error.message});
         }
-    });
-
-    // 健康检查端点
-    fastify.get('/health', async (request, reply) => {
-        return {
-            status: 'ok',
-            timestamp: toBeijingTime(new Date()),
-            python: {
-                available: await daemon.isPythonAvailable(),
-                daemon_running: daemon.isDaemonRunning()
-            }
-        };
     });
     done();
 };

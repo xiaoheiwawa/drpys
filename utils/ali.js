@@ -1,11 +1,18 @@
 import dayjs from 'dayjs';
 import {IOS_UA} from './misc.js';
 import req from './req.js';
-import {ENV} from "./env.js";
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// 动态生成配置文件路径（基于当前文件所在目录）
+const configPath = resolve(__dirname, '../pz/tokenm.json');
 
 const apiUrl = 'https://api.aliyundrive.com';
-// const openApiUrl = 'https://open.aliyundrive.com/adrive/v1.0';
-const userUrl = 'https://user.aliyundrive.com'
+const userUrl = 'https://user.aliyundrive.com';
 const subtitleExts = ['srt', 'ass', 'scc', 'stl', 'ttml'];
 
 class AliDrive {
@@ -18,42 +25,84 @@ class AliDrive {
         this.CLIENT_ID = "76917ccccd4441c39457a04f6084fb2f";
         this.deviceId = 'PkDvH8q6GRgBASQOA6EMvOI8';
         this.saveDirId = null; // 保存目录ID
-        this.sid = ''
+        this.sid = '';
         this.baseHeaders = {
             'User-Agent': IOS_UA, // 用户代理
             Referer: 'https://www.aliyundrive.com/', // 引用来源
         };
+
+        // Token缓存相关
+        this.tokenConfig = {
+            ali_token: '',
+            ali_refresh_token: '',
+            lastUpdate: 0
+        };
+        
+        this.tokenFile = configPath;
+        this.cacheExpire = 30 * 60 * 1000; // 30分钟缓存
+        this.loadTokenConfig(); // 初始化加载配置
+        this.setupFileWatcher(); // 设置文件监听
     }
 
-    // 初始化方法，加载本地配置
-    async init() {
-        if (this.token) {
-            console.log('阿里token获取成功：' + this.token)
-        }
-        if (this.ali_refresh_token === '') {
-            this.oauth.access_token = null
-        } else {
-            let exp = JSON.parse(CryptoJS.enc.Base64.parse(this.ali_refresh_token.split('.')[1]).toString(CryptoJS.enc.Utf8))
-            let now = Math.floor(Date.now() / 1000)
-            if (exp.exp < now) {
-                this.oauth.access_token = null
-                console.log('阿里ali_refresh_token已过期,重新获取阿里ali_refresh_token')
+    // 加载token配置并缓存
+    loadTokenConfig() {
+        try {
+            const data = fs.readFileSync(this.tokenFile, 'utf8');
+            const jsonData = JSON.parse(data);
+            this.tokenConfig = {
+                ali_token: jsonData.ali_token || '',
+                ali_refresh_token: jsonData.ali_refresh_token || '',
+                lastUpdate: Date.now()
+            };
+          //  console.log('Ali Token配置已从文件加载并缓存');
+        } catch (err) {
+            if (err.code === 'ENOENT') {
+               // console.error('tokenm.json文件不存在。使用空配置。');
+            } else if (err instanceof SyntaxError) {
+             //   console.error('tokenm.json文件格式错误');
             } else {
-                this.oauth.access_token = this.ali_refresh_token
-                console.log('阿里ali_refresh_token未过期，继续使用,可使用时间截止到：' + (new Date(exp.exp * 1000)).toLocaleString())
-                console.log('阿里ali_refresh_token获取成功：' + this.ali_refresh_token)
+                console.error('加载Ali token配置时出错:', err.message);
             }
+            this.tokenConfig = {
+                ali_token: '',
+                ali_refresh_token: '',
+                lastUpdate: 0
+            };
         }
     }
 
+    // 设置文件监听
+    setupFileWatcher() {
+        try {
+            fs.watch(this.tokenFile, (eventType, filename) => {
+                if (eventType === 'change') {
+                   // console.log('检测到tokenm.json文件变化，重新加载Ali配置');
+                    this.loadTokenConfig();
+                }
+            });
+         //   console.log('已设置tokenm.json文件监听(Ali)');
+        } catch (err) {
+           // console.error('设置文件监听失败:', err.message);
+        }
+    }
+
+    // 检查并刷新缓存
+    checkAndRefreshCache() {
+        if (Date.now() - this.tokenConfig.lastUpdate > this.cacheExpire) {
+            console.log('Ali Token缓存已过期，重新加载');
+            this.loadTokenConfig();
+        }
+    }
+
+    // 使用 getter 定义动态属性，自动检查缓存
     get token() {
-        // console.log('env.cookie.quark:',ENV.get('quark_cookie'));
-        return ENV.get('ali_token');
+        this.checkAndRefreshCache();
+        return this.tokenConfig.ali_token;
     }
 
     get ali_refresh_token() {
-        // console.log('env.cookie.quark:',ENV.get('quark_cookie'));
-        return ENV.get('ali_refresh_token');
+        this.checkAndRefreshCache();
+        return this.tokenConfig.ali_refresh_token;
     }
 
     // 从分享链接中提取分享ID和文件夹ID
@@ -222,73 +271,6 @@ class AliDrive {
         return resp.data || {};
     }
 
-    //alist获取授权码
-    // async getCode(auth){
-    //     const url = `https://open.aliyundrive.com/oauth/users/authorize?client_id=${this.CLIENT_ID}&redirect_uri=https://alist.nn.ci/tool/aliyundrive/callback&scope=user:base,file:all:read,file:all:write&state=Ojo%3D&response_type=code&relogin=true`
-    //     let data = JSON.stringify({
-    //         "scope": "user:base,file:all:read,file:all:write",
-    //         "authorize": 1,
-    //         "drives": [
-    //             "backup",
-    //             "resource"
-    //         ],
-    //         "folder": ""
-    //     })
-    //     let headers = {
-    //         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-    //         'Accept': 'application/json, text/plain, */*',
-    //         'Accept-Encoding': 'gzip, deflate, br, zstd',
-    //         'Content-Type': 'application/json',
-    //     }
-    //     Object.assign(headers, {
-    //         Authorization: auth,
-    //     });
-    //     const res = await req.post(url,data,{headers})
-    //     const parsedUrl = new URL(res.data.redirectUri);
-    //     return parsedUrl.searchParams.get("code");
-    // }
-    //
-    // // 获取 OAuth Token
-    // async openAuth() {
-    //     if (!this.oauth.access_token || this.oauth.expire_time - dayjs().unix() < 120 && this.user.auth) {
-    //         try {
-    //             const code = await this.getCode(this.user.auth)
-    //             const response = await req.post('https://api.nn.ci/alist/ali_open/code', {
-    //                     "code": code,
-    //                     "grant_type": "authorization_code",
-    //                     "client_id": "",
-    //                     "client_secret": ""
-    //                 }, {
-    //                     headers: {
-    //                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-    //                         'Content-Type': 'application/json',
-    //                         'origin': 'https://alist.nn.ci',
-    //                         'referer': 'https://alist.nn.ci/'
-    //                     }
-    //                 })
-    //                 if (response.status === 200) {
-    //                     this.oauth = response.data;
-    //                     const info = JSON.parse(CryptoJS.enc.Base64.parse(this.oauth.access_token.split('.')[1]).toString(CryptoJS.enc.Utf8));
-    //                     this.oauth.expire_time = info.exp;
-    //                     this.oauth.auth = `${this.oauth.token_type} ${this.oauth.access_token}`;
-    //                     await ENV.set('ali_refresh_token', this.oauth.access_token);
-    //                     // await ENV.set('oauth_cache', this.oauth);
-    //                     console.log("授权成功")
-    //                 }
-    //         } catch(err){
-    //             if(err.status === '429'){
-    //                 console.error('请求频繁，请稍后再试')
-    //             }else if(err.status === '401'){
-    //                 console.error("授权未成功，请重新授权")
-    //             }
-    //             return err.response || {status: 500, data: {}};
-    //         }
-    //
-    //     }else {
-    //         console.log("已授权")
-    //     }
-    // }
-
     // 获取 drive_sid
     async getDriveSid() {
         let data = JSON.stringify({
@@ -355,8 +337,9 @@ class AliDrive {
                     const info = JSON.parse(CryptoJS.enc.Base64.parse(this.oauth.access_token.split('.')[1]).toString(CryptoJS.enc.Utf8));
                     this.oauth.expire_time = info.exp;
                     this.oauth.auth = `${this.oauth.token_type} ${this.oauth.access_token}`;
-                    await ENV.set('ali_refresh_token', this.oauth.access_token);
-                    // await ENV.set('oauth_cache', this.oauth);
+                    // 更新内存缓存
+                    this.tokenConfig.ali_refresh_token = this.oauth.access_token;
+                    this.tokenConfig.lastUpdate = Date.now();
                     console.log("授权成功")
                 }
             }
@@ -384,8 +367,9 @@ class AliDrive {
                 this.user = loginResp.data;
                 this.user.expire_time = dayjs(loginResp.data.expire_time).unix();
                 this.user.auth = `${this.user.token_type} ${this.user.access_token}`;
-                ENV.set('ali_token', this.user.refresh_token);
-                // await ENV.set('user_cache', this.user);
+                // 更新内存缓存
+                this.tokenConfig.ali_token = this.user.refresh_token;
+                this.tokenConfig.lastUpdate = Date.now();
             } else {
                 console.error('刷新 Access Token 失败');
             }
@@ -545,7 +529,6 @@ class AliDrive {
     async save(shareId, fileId, clean) {
         await this.refreshAccessToken();
         await this.driveAuth()
-        // await this.openAuth();
         await this.createSaveDir(clean);
         if (clean) {
             const saves = Object.keys(this.saveFileIdCaches);
