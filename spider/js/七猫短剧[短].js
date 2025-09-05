@@ -65,7 +65,7 @@ async function getHeaderX() {
 }
 
 var rule = {
-    title: '七猫短剧',
+    title: '七猫',
     host: h_ost,
     homeUrl: '/api/v1/playlet/index?tag_id=0&playlet_privacy=1&operation=1',
     searchUrl: '/api/v1/playlet/search?keyword=fykey&page=fypage',
