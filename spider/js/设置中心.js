@@ -4,6 +4,7 @@
   filterable: 0,
   quickSearch: 0,
   title: '设置中心',
+  logo: 'https://avatars.githubusercontent.com/u/49803097?v=4',
   more: {
     sourceTag: '设置,动作',
     actions: [
@@ -226,8 +227,8 @@ var rule = {
     aliScanCheck: null,
     biliScanCheck: null,
     host: 'http://empty',
-    class_name: '推送&夸克&UC&阿里&天翼&哔哩&系统配置&测试&接口挂载&视频解析',
-    class_url: 'push&quark&uc&ali&cloud&bili&system&test&apiLink&videoParse',
+    class_name: '推送&夸克&UC&阿里&天翼&百度&哔哩&系统配置&测试&接口挂载&视频解析',
+    class_url: 'push&quark&uc&ali&cloud&baidu&bili&system&test&apiLink&videoParse',
     url: '/fyclass',
 
     预处理: async function (env) {
@@ -246,6 +247,7 @@ var rule = {
             'ali': urljoin(publicUrl, './images/icon_cookie/阿里.png'),
             'bili': urljoin(publicUrl, './images/icon_cookie/哔哩.png'),
             'cloud': urljoin(publicUrl, './images/icon_cookie/天翼.png'),
+            'baidu': urljoin(publicUrl, './images/icon_cookie/百度.png'),
             'adult': urljoin(publicUrl, './images/icon_cookie/chat.webp'),
             'test': urljoin(publicUrl, './icon.svg'),
             'lives': urljoin(publicUrl, './images/lives.jpg'),
@@ -340,6 +342,10 @@ var rule = {
                 d.push(getInput('get_cloud_password', '查看天翼 密码', images.cloud));
                 d.push(getInput('get_cloud_cookie', '查看天翼 cookie', images.cloud));
                 break;
+            case 'baidu':
+                d.push(genMultiInput('baidu_cookie', '设置百度 cookie', null, images.baidu));
+                d.push(getInput('get_baidu_cookie', '查看百度 cookie', images.baidu));
+                break;
             case 'bili':
                 d.push(genMultiInput('bili_cookie', '设置哔哩 cookie', null, images.bili));
                 d.push(getInput('get_bili_cookie', '查看哔哩 cookie', images.bili));
@@ -361,10 +367,15 @@ var rule = {
 
                 d.push(genMultiInput('play_proxy_mode', '设置播放代理模式', '默认为1，可自行配置成其他值如:2 (1 内存加速,2 磁盘加速 其他:内存加速)', images.settings));
                 d.push(getInput('get_play_proxy_mode', '查看播放代理模式', images.settings));
-                d.push(genMultiInput('enable_dr2', '设置drpy2源启用状态', '设置为1可启用此功能(默认没设置也属于启动，设置其他值关闭)', images.settings));
+                d.push(genMultiInput('enable_dr2', '设置drpy2源启用状态', '设置为1启用drpy2脚本服务，需要壳子内置处理；设置为2启用drpy2在线接口服务(默认2，设置其他值关闭)', images.settings));
                 d.push(getInput('get_enable_dr2', '查看drpy2源启用状态', images.settings));
-                d.push(genMultiInput('enable_py', '设置py源启用状态', '设置为1可启用此功能(默认没设置也属于启动，设置其他值关闭)', images.settings));
+                d.push(genMultiInput('enable_py', '设置py源启用状态', '设置为1可启用此功能,设置为2启用T4(默认没设置也属于启动，设置其他值关闭)', images.settings));
                 d.push(getInput('get_enable_py', '查看py源启用状态', images.settings));
+                d.push(genMultiInput('enable_cat', '设置cat源启用状态', '设置为1可启用此功能,设置为2启用T4(默认没设置也属于启动，设置其他值关闭)', images.settings));
+                d.push(getInput('get_enable_cat', '查看cat源启用状态', images.settings));
+                d.push(genMultiInput('enable_old_config', '设置兼容性配置', '设置为1可启用此功能(默认关闭)', images.settings));
+                d.push(getInput('get_enable_old_config', '查看兼容性配置', images.settings));
+
                 d.push(genMultiInput('now_ai', '设置当前AI', '1: 讯飞星火 2:deepseek 3.讯飞智能体 4.Kimi \n如果不填，连续对话默认使用讯飞星火', images.settings));
                 d.push(getInput('get_now_ai', '查看当前AI', images.settings));
                 d.push(genMultiInput('allow_forward', '设置允许代理转发', '设置为1可启用此功能，有一定的使用场景用于突破网络限制', images.settings));
@@ -404,6 +415,10 @@ var rule = {
                 d.push(getInput('get_enable_link_push', '查看启用挂载推送', images.settings));
                 d.push(genMultiInput('enable_link_jar', '设置允许挂载Jar', '设置为1可以启用。默认即关闭。设置其他值禁用', images.settings));
                 d.push(getInput('get_enable_link_jar', '查看允许挂载Jar', images.settings));
+                d.push(genMultiInput('cat_sub_code', '猫爪订阅码', '自定义猫爪源的订阅码。默认为all', images.settings));
+                d.push(getInput('get_cat_sub_code', '查看猫爪订阅码', images.settings));
+                d.push(genMultiInput('must_sub_code', '严格订阅码', '设置为1可以启用。默认即关闭', images.settings));
+                d.push(getInput('get_must_sub_code', '查看严格订阅码', images.settings));
 
                 break;
             case 'videoParse':
@@ -417,14 +432,14 @@ var rule = {
         let {input, orId, getProxyUrl} = this;
         // log(input, orId);
         if (orId === 'proxyStream') {
-            let media_url = 'https://vdse.bdstatic.com//628ca08719cef5987ea2ae3c6f0d2386.mp4';
+            let media_url = 'https://vdse.bdstatic.com/628ca08719cef5987ea2ae3c6f0d2386.mp4';
             let m3u8_url = 'http://kjsp.aikan.miguvideo.com/PLTV/88888888/224/3221236432/1.m3u8';
             return {
                 vod_id: 'proxyStream',
                 vod_name: '测试代理流',
                 vod_play_from: 'drpyS本地流代理',
-                // vod_play_url: '测试播放流$' + getProxyUrl().replace('?do=js', media_url) + '#不代理直接播$' + media_url + '#8k播放$' + m3u8_url,
-                vod_play_url: '测试播放流$' + getProxyUrl().replace('?do=js', media_url) + '#不代理直接播$' + media_url
+                // vod_play_url: '测试播放流$' + getProxyUrl().split('?')[0] + media_url + '#不代理直接播$' + media_url + '#8k播放$' + m3u8_url,
+                vod_play_url: '测试播放流$' + getProxyUrl().split('?')[0] + media_url + '#不代理直接播$' + media_url
             }
         }
     },
@@ -606,24 +621,26 @@ var rule = {
 
         if (action === '夸克扫码') {
             if (rule.quarkScanCheck) {
-                console.log('请等待上个扫码任务完成：' + rule.quarkScanCheck);
+                log('请等待上个扫码任务完成：' + rule.quarkScanCheck);
                 return '请等待上个扫码任务完成';
             }
             let requestId = generateUUID();
-            log('httpUrl:', httpUrl);
-            log('request_id:', requestId);
-            let data = await post('https://uop.quark.cn/cas/ajax/getTokenForQrcodeLogin', {
+            log(`[夸克扫码] httpUrl: ${httpUrl} | request_id: ${requestId}`);
+            let data = (await axios({
+                url: 'https://uop.quark.cn/cas/ajax/getTokenForQrcodeLogin',
+                responseType: 'text',
+                method: "POST",
                 headers: {Referer: '', ...QRCodeHandler.HEADERS},
                 data: {
                     request_id: requestId,
                     client_id: "532",
                     v: "1.2"
                 }
-            });
-            console.log('data:', data);
+            })).data;
+            log('[夸克扫码] data:', data);
             let qcToken = JSON.parse(data).data.members.token;
             let qrcodeUrl = `https://su.quark.cn/4_eMHBJ?token=${qcToken}&client_id=532&ssb=weblogin&uc_param_str=&uc_biz_str=S%3Acustom%7COPT%3ASAREA%400%7COPT%3AIMMERSIVE%401%7COPT%3ABACK_BTN_STYLE%400`;
-            // log('qrcodeUrl:', qrcodeUrl);
+            log('[夸克扫码] qrcodeUrl:', qrcodeUrl);
             qrcode.platformStates[QRCodeHandler.PLATFORM_QUARK] = {
                 token: qcToken,
                 request_id: requestId
@@ -656,10 +673,10 @@ var rule = {
             if (state) { // 生成二维码的时候设置了扫码id
                 for (let i = 1; i <= 15; i++) {
                     if (!rule.quarkScanCheck) {
-                        console.log('退出扫码检测：' + value);
+                        log('退出扫码检测：' + value);
                         return '扫码取消';
                     }
-                    console.log('[quarkScanCheck]等待用户扫码，第' + i + '次');
+                    log('[quarkScanCheck]等待用户扫码，第' + i + '次');
                     const scanResult = await _checkQuarkStatus(state, httpUrl);
                     log('scanResult:', scanResult);
                     if (scanResult.status === 'CONFIRMED') {
@@ -694,7 +711,7 @@ var rule = {
             });
         }
         if (action === 'quarkScanCancel') {
-            console.log('用户取消扫码：' + value);
+            log('用户取消扫码：' + value);
             rule.quarkScanCheck = null;
             qrcode.platformStates[QRCodeHandler.PLATFORM_QUARK] = null;
             return;
@@ -706,17 +723,19 @@ var rule = {
                 return '请等待上个扫码任务完成';
             }
             let requestId = generateUUID();
-            log('httpUrl:', httpUrl);
-            log('request_id:', requestId);
-            let data = await post('https://api.open.uc.cn/cas/ajax/getTokenForQrcodeLogin', {
+            log(`UC扫码] httpUrl: ${httpUrl} | request_id: ${requestId}`);
+            let data = (await axios({
+                url: 'https://api.open.uc.cn/cas/ajax/getTokenForQrcodeLogin',
+                responseType: 'text',
+                method: "POST",
                 headers: {Referer: '', ...QRCodeHandler.HEADERS},
                 data: {
                     request_id: requestId,
                     client_id: "381",
                     v: "1.2",
                 }
-            });
-            log('data:', data);
+            })).data;
+            log('[UC扫码] data:', data);
             let qcToken = JSON.parse(data).data.members.token;
             let qrcodeUrl = `https://su.uc.cn/1_n0ZCv?token=${qcToken}&client_id=381&uc_param_str=&uc_biz_str=S%3Acustom%7CC%3Atitlebar_fix`;
             // log('qrcodeUrl:', qrcodeUrl);
@@ -752,10 +771,10 @@ var rule = {
             if (state) { // 生成二维码的时候设置了扫码id
                 for (let i = 1; i <= 15; i++) {
                     if (!rule.UCScanCheck) {
-                        console.log('退出扫码检测：' + value);
+                        log('退出扫码检测：' + value);
                         return '扫码取消';
                     }
-                    console.log('[UCScanCheck]等待用户扫码，第' + i + '次');
+                    log('[UCScanCheck]等待用户扫码，第' + i + '次');
                     const scanResult = await _checkUCStatus(state, httpUrl);
                     log('scanResult:', scanResult);
                     if (scanResult.status === 'CONFIRMED') {
@@ -790,7 +809,7 @@ var rule = {
             });
         }
         if (action === 'UCScanCancel') {
-            console.log('用户取消扫码：' + value);
+            log('用户取消扫码：' + value);
             rule.UCScanCheck = null;
             qrcode.platformStates[QRCodeHandler.PLATFORM_UC] = null;
             return;
@@ -801,11 +820,13 @@ var rule = {
                 log('请等待上个扫码任务完成：' + rule.aliScanCheck);
                 return '请等待上个扫码任务完成';
             }
-            log('httpUrl:', httpUrl);
-            let data = await post('https://passport.aliyundrive.com/newlogin/qrcode/generate.do', {
+            log(`[阿里扫码] httpUrl: ${httpUrl}`);
+            let data = (await axios({
+                url: 'https://passport.aliyundrive.com/newlogin/qrcode/generate.do',
+                responseType: 'text',
+                method: "POST",
                 headers: {
-                    Referer: '',
-                    ...QRCodeHandler.HEADERS
+                    Referer: '', ...QRCodeHandler.HEADERS
                 },
                 data: {
                     appName: "aliyun_drive",
@@ -817,11 +838,12 @@ var rule = {
                     bizParams: "",
                     _bx_v: "2.2.3"
                 }
-            });
-            log('data:', data);
+            })).data;
+
+            log('[阿里扫码] data:', data);
             const contentData = JSON.parse(data).content.data;
             let qrcodeUrl = contentData.codeContent;
-            log('qrcodeUrl:', qrcodeUrl);
+            log('[阿里扫码] qrcodeUrl:', qrcodeUrl);
             qrcode.platformStates[QRCodeHandler.PLATFORM_ALI] = {
                 ck: contentData.ck,
                 t: contentData.t
@@ -854,10 +876,10 @@ var rule = {
             if (state) { // 生成二维码的时候设置了扫码id
                 for (let i = 1; i <= 15; i++) {
                     if (!rule.aliScanCheck) {
-                        console.log('退出扫码检测：' + value);
+                        log('退出扫码检测：' + value);
                         return '扫码取消';
                     }
-                    console.log('[aliScanCheck]等待用户扫码，第' + i + '次');
+                    log('[aliScanCheck]等待用户扫码，第' + i + '次');
                     const scanResult = await _checkAliStatus(state, httpUrl);
                     log('scanResult:', scanResult);
                     if (scanResult.status === 'CONFIRMED') {
@@ -892,7 +914,7 @@ var rule = {
             });
         }
         if (action === 'aliScanCancel') {
-            console.log('用户取消扫码：' + value);
+            log('用户取消扫码：' + value);
             rule.aliScanCheck = null;
             qrcode.platformStates[QRCodeHandler.PLATFORM_ALI] = null;
             return;
@@ -903,7 +925,7 @@ var rule = {
                 log('请等待上个扫码任务完成：' + rule.biliScanCheck);
                 return '请等待上个扫码任务完成';
             }
-            log('httpUrl:', httpUrl);
+            log(`UC扫码] httpUrl: ${httpUrl}`);
             const res = await axios({
                 url: httpUrl,
                 method: "POST",
@@ -955,10 +977,10 @@ var rule = {
             if (state) { // 生成二维码的时候设置了扫码id
                 for (let i = 1; i <= 15; i++) {
                     if (!rule.biliScanCheck) {
-                        console.log('退出扫码检测：' + value);
+                        log('退出扫码检测：' + value);
                         return '扫码取消';
                     }
-                    console.log('[biliScanCheck]等待用户扫码，第' + i + '次');
+                    log('[biliScanCheck]等待用户扫码，第' + i + '次');
                     const scanResult = await _checkBiliStatus(state, httpUrl);
                     log('scanResult:', scanResult);
                     if (scanResult.status === 'CONFIRMED') {
@@ -993,7 +1015,7 @@ var rule = {
             });
         }
         if (action === 'biliScanCancel') {
-            console.log('用户取消扫码：' + value);
+            log('用户取消扫码：' + value);
             rule.biliScanCheck = null;
             qrcode.platformStates[QRCodeHandler.PLATFORM_BILI] = null;
             return;
@@ -1039,12 +1061,15 @@ var rule = {
             'cloud_password',
             'cloud_cookie',
             'bili_cookie',
+            'baidu_cookie',
             'hide_adult',
             'thread',
             'play_local_proxy_type',
             'play_proxy_mode',
             'enable_dr2',
             'enable_py',
+            'enable_cat',
+            'enable_old_config',
             'enable_rule_name',
             'spark_ai_authKey',
             'deepseek_apiKey',
@@ -1057,6 +1082,8 @@ var rule = {
             'enable_link_data',
             'enable_link_push',
             'enable_link_jar',
+            'cat_sub_code',
+            'must_sub_code',
             'mg_hz',
         ];
         let get_cookie_sets = [
@@ -1067,12 +1094,15 @@ var rule = {
             'get_cloud_password',
             'get_cloud_cookie',
             'get_bili_cookie',
+            'get_baidu_cookie',
             'get_hide_adult',
             'get_thread',
             'play_local_proxy_type',
             'get_play_proxy_mode',
             'get_enable_dr2',
             'get_enable_py',
+            'get_enable_cat',
+            'get_enable_old_config',
             'get_enable_rule_name',
             'get_spark_ai_authKey',
             'get_deepseek_apiKey',
@@ -1085,6 +1115,8 @@ var rule = {
             'get_enable_link_data',
             'get_enable_link_push',
             'get_enable_link_jar',
+            'get_cat_sub_code',
+            'get_must_sub_code',
             'get_mg_hz',
         ];
         if (cookie_sets.includes(action) && value) {
