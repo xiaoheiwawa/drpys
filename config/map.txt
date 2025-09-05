@@ -12,6 +12,3 @@
 UC分享@@?type=url&params=../json/UC分享.json@@UC分享[盘]
 16wMV[听]@@?type=url&params=../json/十六万歌曲.txt
 点歌欢唱[B]@@?type=url&params=../json/十六万歌曲.txt
-AppHs@@{"host": "https://dy.jmzp.net.cn", "app_id": "shiguang", "deviceid": "", "versionCode": "10000", "UMENG_CHANNEL": "guan"}@@拾光视频[Hs]
-AppHs@@{"host": "https://dy.jszdzs.com", "app_id": "xuebao", "deviceid": "", "versionCode": "21300", "UMENG_CHANNEL": "share"}@@雪豹视频[Hs]
-AppHs@@{"host": "https://dy.stxbed.com", "app_id": "haigou", "deviceid": "", "versionCode": "20100", "UMENG_CHANNEL": "zhuan"}@@海狗视频[Hs]
