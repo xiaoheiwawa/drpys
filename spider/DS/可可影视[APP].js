@@ -1,6 +1,6 @@
 //搜索功能已修复，发布页地址 https://dl.kkys01.com/
 var rule = {
-  title: "可可",
+  title: "可可APP",
   host: "https://www.keke1.app",
   //host: `https://www.${(r=>r<0.5?'keke5':['keke1','keke2','keke3','keke4','keke6','keke7','keke8'][(r-0.5)*14|0])(Math.random())}.app`,
   url: "/show/fyclass-fyfilter-fypage.html",
