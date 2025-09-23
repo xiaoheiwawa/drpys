@@ -3,7 +3,7 @@
   searchable: 2,
   filterable: 1,
   quickSearch: 0,
-  title: '可可影视[优]',
+  title: '可可TV',
   logo: 'https://i-blog.csdnimg.cn/blog_migrate/2621e710a94ab40ba66645d47f296aaf.gif',
   lang: 'ds'
 })
