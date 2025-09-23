@@ -1,3 +1,12 @@
+/*
+@header({
+  searchable: 2,
+  filterable: 1,
+  quickSearch: 0,
+  title: '甜圈短剧[短]',
+  lang: 'ds'
+})
+*/
 globalThis.h_ost = 'https://api-store.qmplaylet.com';
 globalThis.h_ost1 = 'https://api-read.qmplaylet.com';
 globalThis.keys = 'd3dGiJc651gSQ8w1'; 
