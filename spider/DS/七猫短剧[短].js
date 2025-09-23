@@ -3,7 +3,7 @@
   searchable: 2,
   filterable: 1,
   quickSearch: 0,
-  title: '甜圈短剧[短]',
+  title: '七猫短剧[短]',
   lang: 'ds'
 })
 */
@@ -74,7 +74,7 @@ async function getHeaderX() {
 }
 
 var rule = {
-    title: '七猫短剧[短]',
+    title: '七猫短剧',
     host: h_ost,
     homeUrl: '/api/v1/playlet/index?tag_id=0&playlet_privacy=1&operation=1',
     searchUrl: '/api/v1/playlet/search?keyword=fykey&page=fypage',
