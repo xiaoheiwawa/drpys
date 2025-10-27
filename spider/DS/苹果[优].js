@@ -97,7 +97,7 @@ var rule = {
     },
 
     一级: async function () {
-        const { input } = this;
+        let {getProxyUrl, MY_CATE, input} = this;
         let d = [];
         let html = await request(input);
         let data = JSON.parse(html).data;
