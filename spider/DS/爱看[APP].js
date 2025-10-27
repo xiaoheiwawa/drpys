@@ -15,7 +15,7 @@
 const {getHtml} = $.require('./_lib.request.js')
 var rule = {
     类型: '影视',
-    title: 'ikanbot',
+    title: '爱看TV',
     desc: 'ikanbot纯js版本',
     homeUrl: 'https://v.ikanbot.com',
     url: '',
