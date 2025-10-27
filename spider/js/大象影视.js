@@ -3,7 +3,7 @@
   searchable: 2,
   filterable: 0,
   quickSearch: 0,
-  title: 'ikanbot',
+  title: '大象',
   lang: 'ds'
 })
 */
