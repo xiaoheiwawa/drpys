@@ -1,5 +1,5 @@
 var rule = {
-  title: 'DUSHE',
+  title: 'du',
   host: 'https://www.xnhrsb.com/',
   url: '/dsshiyisw/fyclass--------fypage---.html',
   searchUrl: '/dsshiyisc/**----------fypage---.html',
