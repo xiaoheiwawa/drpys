@@ -3,7 +3,7 @@
   searchable: 2,
   filterable: 0,
   quickSearch: 0,
-  title: '凡客TV',
+  title: 'fankeTV',
   lang: 'ds'
 })
 */
@@ -16,7 +16,7 @@
 const {getHtml} = $.require('./_lib.request.js')
 var rule = {
   类型: '影视',
-  title: '凡客TV',
+  title: 'fankeTV',
   desc: '源动力出品',
   // host: 'https://fktv.me', // 为与ikanbot规则保持一致，重命名为homeUrl
   homeUrl: 'https://fktv.me',
