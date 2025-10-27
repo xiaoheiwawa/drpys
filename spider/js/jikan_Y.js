@@ -463,7 +463,7 @@ var rule = {
       vod_year: pdfh(html, ".row.p-2 a:eq(-1)&&Text"),
       vod_area: pdfh(html, ".row.p-2 a:eq(-2)&&Text"),
       vod_content: pdfh(html, ".row.p-2 p&&Text"),
-      vod_play_from: "源动力偷的线路",
+      vod_play_from: "线路",
       vod_play_url: pdfa(html, ".col-md-12&&.sbtn-block")
         .map(
           (it) =>

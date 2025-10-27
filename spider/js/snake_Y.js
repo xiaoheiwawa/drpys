@@ -9,7 +9,7 @@
 */
 
 var rule = {
-  title: '毒舌影视',
+  title: 'snake',
   host: 'https://www.xnhrsb.com',
   url: '/dsshiyisw/fyclass--------fypage---.html',
   searchUrl: '/dsshiyisc/**----------fypage---.html',
