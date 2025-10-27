@@ -10,7 +10,7 @@
 */
 
 var rule = {
-    title: '兔小贝[儿]',
+    title: 'tuxiaobei',
     host: 'https://www.tuxiaobei.com',
     homeUrl: '',
     url: '/list/mip-data?typeId=fyclass&page=fypage&callback=',

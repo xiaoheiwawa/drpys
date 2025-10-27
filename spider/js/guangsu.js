@@ -10,7 +10,7 @@
 
 var rule = {
     类型: '影视',
-    title: '光速',
+    title: 'guangsu',
     host: 'https://jingyu-1312635929.cos.ap-nanjing.myqcloud.com/1.json',
     url: '/api.php/getappapi.index/typeFilterVodList',
     homeUrl: '/api.php/getappapi.index/initV119',
