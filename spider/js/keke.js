@@ -1,66 +1,67 @@
-var rule = {
-  title: '毒蛇',
-  host: 'https://www.xnhrsb.com/',
-  url: '/dsshiyisw/fyclass--------fypage---.html',
-  searchUrl: '/dsshiyisc/**----------fypage---.html',
-  class_name: '电影&电视剧&综艺&动漫&短剧&豆瓣',
-  class_url: '1&2&3&4&5&duoban',
+/*
+@header({
   searchable: 2,
+  filterable: 1,
   quickSearch: 0,
-  filterable: 0,
-  headers: {
-    'User-Agent': 'MOBILE_UA',
-  },
-  play_parse: true,
-  // lazy代码:源于海阔香雅情大佬 / 小程序：香情影视 https://pastebin.com/L4tHdvFn
-    lazy: `js:
-    pdfh = jsp.pdfh;
-    var html = request(input);
-    var ohtml = pdfh(html, '.videoplay&&Html');
-    var iframeSrc = pdfh(ohtml, "body&&iframe&&src");
-    if (/Cloud/.test(iframeSrc) || /pla\.py1080p\.com/.test(iframeSrc)) {
-        var ifrwy = request(iframeSrc);
-        var codeMatch = ifrwy.match(/var\s+url\s*=\s*['"](.*?)['"]/);
-        if (codeMatch) {
-            let code = codeMatch[1].split('').reverse().join('');
-            let temp = '';
-            for (let i = 0x0; i < code.length; i = i + 0x2) {
-                temp += String.fromCharCode(parseInt(code[i] + code[i + 0x1], 0x10));
-            }
-            input = {
-                jx: 0,
-                url: temp.substring(0x0, (temp.length - 0x7)/0x2) + temp.substring((temp.length - 0x7)/0x2 + 0x7),
-                parse: 0
-            };
-        } else {
-            input;
-        }
-    } else if (/decrypted/.test(ohtml)) {
-        var phtml = pdfh(ohtml, "body&&script:not([src])&&Html");
-        eval(getCryptoJS());
-        var scrpt = phtml.match(/var.*?\\)\\);/g)[0];
-        var data = [];
-        eval(scrpt.replace(/md5/g, 'CryptoJS').replace('eval', 'data = '));
+  title: '可可影视[优]',
+  '类型': '影视',
+  lang: 'dr2'
+})
+*/
+
+var rule = {
+    title: '可可影视[优]',
+    host: 'https://www.keke1.app',
+    //host: 'https://www.kkys01.com',
+    url: '/show/fyclass-----2-fypage.html',
+    //url: '/show/fyclass-fyfilter-fypage.html',
+    searchUrl: '/search?k=**&page=fypage',
+    searchable: 2,
+    quickSearch: 0,
+    filterable: 1,
+    headers: {
+        'User-Agent': 'MOBILE_UA',
+    },
+    class_parse: '#nav-swiper&&.nav-swiper-slide;a&&Text;a&&href;/(\\w+).html',
+    cate_exclude: 'Netflix|今日更新|专题列表|排行榜',
+    tab_exclude:'可可影视提供',
+    tab_order: ['超清', '蓝光', '极速蓝光'],
+    tab_remove:['4K(高峰不卡)'],
+    play_parse: true,
+	    lazy: $js.toString(() => {
         input = {
-            jx: 0,
-            url: data.match(/url:\s*['"](.*?)['"]/)[1],
-            parse: 0
-        };
-    } else {
-        input;
-    }
-`,
-  limit: 6,
-  double: true,
-  推荐: '.bt_img;ul&&li;*;*;*;*',
-  一级: '.mrb&&ul li;.dytit&&Text;.lazy&&data-original;.hdinfo&&Text;a&&href',
-  二级: {
-    title: 'h1&&Text;.moviedteail_list li&&a&&Text',
-    img: 'div.dyimg img&&src',
-    desc: '.moviedteail_list li:eq(3)&&Text;.moviedteail_list li:eq(2)&&Text;.moviedteail_list li:eq(1)&&Text;.moviedteail_list li:eq(6)&&Text;.moviedteail_list li:eq(4)&&Text',
-    content: '.yp_context&&Text',
-    tabs: '.mi_paly_box .ypxingq_t',
-    lists: '.paly_list_btn:eq(#id) a:gt(0)',
-  },
-   搜索: '.mrb&&ul li;.dytit&&Text;.lazy&&data-original;.hdinfo&&Text;a&&href',
+            parse: 1,
+            url: input,
+            js: 'document.querySelector("#my-video video").click()',
+        }
+    }),
+    limit: 20,
+    推荐: '.section-box:eq(2)&&.module-box-inner&&.module-item;*;*;*;*',
+    double: false,
+    一级: '.module-box-inner&&.module-item;.v-item-title:eq(1)&&Text;img:last-of-type&&data-original;.v-item-bottom&&span&&Text;a&&href',
+    二级: {
+        title: '.detail-pic&&img&&alt;.detail-tags&&a&&Text',
+        img: '.detail-pic&&img&&data-original',
+        desc: '.detail-info-row-main:eq(-2)&&Text;.detail-tags&&a&&Text;.detail-tags&&a:eq(1)&&Text;.detail-info-row-main:eq(1)&&Text;.detail-info-row-main&&Text',
+        content: '.detail-desc&&Text',
+        tabs: '.source-item-label',
+        //tabs: 'body&&.source-item-label[id]',
+        lists: '.episode-list:eq(#id) a',
+    },
+    搜索: '.search-result-list&&a;.title:eq(1)&&Text;*;.search-result-item-header&&Text;a&&href;.desc&&Text',
+    图片替换:'https://www.keke1.app=>https://vres.cfaqcgj.com',
+    // 预处理: $js.toString(() => {
+    //     let html = request(rule.host);
+    //     let scripts = pdfa(html, 'script');
+    //     let img_script = scripts.find(it => pdfh(it, 'script&&src').includes('rdul.js'));
+    //     if (img_script) {
+    //         let img_url = img_script.match(/src="(.*?)"/)[1];
+    //         //console.log(img_url);
+    //         let img_html = request(img_url);
+    //         let img_host = img_html.match(/'(.*?)'/)[1];
+    //         log(img_host);
+    //         rule.图片替换 = rule.host + '=>' + img_host;
+    //     }
+    // }),
+    
 }
