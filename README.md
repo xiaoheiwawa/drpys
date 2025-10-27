@@ -1,53 +1,82 @@
 # drpyS(drpy-node)
 
+[![zread](https://img.shields.io/badge/Ask_Zread-_.svg?style=plastic&color=00b0aa&labelColor=000000&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTYxNTYgMS42MDAxSDIuMjQxNTZDMS44ODgxIDEuNjAwMSAxLjYwMTU2IDEuODg2NjQgMS42MDE1NiAyLjI0MDFWNC45NjAxQzEuNjAxNTYgNS4zMTM1NiAxLjg4ODEgNS42MDAxIDIuMjQxNTYgNS42MDAxSDQuOTYxNTZDNS4zMTUwMiA1LjYwMDEgNS42MDE1NiA1LjMxMzU2IDUuNjAxNTYgNC45NjAxVjIuMjQwMUM1LjYwMTU2IDEuODg2NjQgNS4zMTUwMiAxLjYwMDEgNC45NjE1NiAxLjYwMDFaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00Ljk2MTU2IDEwLjM5OTlIMi4yNDE1NkMxLjg4ODEgMTAuMzk5OSAxLjYwMTU2IDEwLjY4NjQgMS42MDE1NiAxMS4wMzk5VjEzLjc1OTlDMS42MDE1NiAxNC4xMTM0IDEuODg4MSAxNC4zOTk5IDIuMjQxNTYgMTQuMzk5OUg0Ljk2MTU2QzUuMzE1MDIgMTQuMzk5OSA1LjYwMTU2IDE0LjExMzQgNS42MDE1NiAxMy43NTk5VjExLjAzOTlDNS42MDE1NiAxMC42ODY0IDUuMzE1MDIgMTAuMzk5OSA0Ljk2MTU2IDEwLjM5OTlaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik0xMy43NTg0IDEuNjAwMUgxMS4wMzg0QzEwLjY4NSAxLjYwMDEgMTAuMzk4NCAxLjg4NjY0IDEwLjM5ODQgMi4yNDAxVjQuOTYwMUMxMC4zOTg0IDUuMzEzNTYgMTAuNjg1IDUuNjAwMSAxMS4wMzg0IDUuNjAwMUgxMy43NTg0QzE0LjExMTkgNS42MDAxIDE0LjM5ODQgNS4zMTM1NiAxNC4zOTg0IDQuOTYwMVYyLjI0MDFDMTQuMzk4NCAxLjg4NjY0IDE0LjExMTkgMS42MDAxIDEzLjc1ODQgMS42MDAxWiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNNCAxMkwxMiA0TDQgMTJaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00IDEyTDEyIDQiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K&logoColor=ffffff)](https://zread.ai/hjdhnx/drpy-node)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/hjdhnx/drpy-node)
+
 nodejs作为服务端的drpy实现。全面升级异步写法  
-~~积极开发中，每日一更~~，当前进度 `63%`  
+~~积极开发中，每日一更~~，当前进度 `100%`  
 ~~找工作中，随缘更新~~  
 上班当牛马，下班要带娃，阶段性佛系趁娃睡觉熬夜更新
 
-* [本地配置接口-动态本地](/config?pwd=$pwd)
-* [本地配置接口-动态外网/局域网](/config/1?pwd=$pwd)
-* [其他配置接口-订阅过滤](/docs/sub.md)
-* [代码加解密工具](/admin/encoder)
-* [V我50支付凭证生成器](/authcoder?len=10&number=1)
-* [接口压测教程](/docs/httpTest.md)
-* [央视点播解析工具](/proxy/央视大全[官]/index.html)
-* [cookie管理插件](/apps/cookie-butler/index.html)
-* [本站防止爬虫协议](/robots.txt)
+### 常用超链接
+
 * [本项目主页-免翻](https://git-proxy.playdreamer.cn/hjdhnx/drpy-node)
-* [DS源适配猫影视](https://github.com/hjdhnx/CatPawOpen/tree/ds-cat)
-* [drpy2打包项目](https://github.com/hjdhnx/drpy-webpack)
+* [接口文档](docs/apidoc.md) | [接口列表如定时任务](docs/apiList.md) | [小猫影视-待对接T4](https://github.com/waifu-project/movie/pull/135)
+* [代码质量评估工具说明](docs/codeCheck.md) | [DS项目代码评估报告](docs/codeCheckReport.md)
+* [本地配置接口-动态本地](/config?healthy=1&pwd=$pwd)
+* [本地配置接口-动态外网/局域网](/config/1?healthy=1&pwd=$pwd)
+* [其他配置接口-订阅过滤](/docs/sub.md)
+* [python环境](/docs/pyenv.md) | [DS项目环境变量说明](/docs/envdoc.md)
+* [猫源调试教程](/docs/catDebug.md)
+* [接口压测教程](/docs/httpTest.md)
+* [AI编程工具 trae](https://www.trae.ai/account-setting#subscription) | 邮编ZIP输入: 518000
+* [免费AI-360纳米](https://bot.n.cn/)|[免费AI-当贝AI](https://ai.dangbei.com/chat)
+* [本站防止爬虫协议](/robots.txt)
+* [油猴脚本-反切屏检测](/public/monkey/check_screen_leave.user.js)
+* [油猴脚本-通用网页脚本框架](/public/monkey/clipboard-sender.user.js)
+* [油猴脚本-通用网页脚本框架自定义指令集](/public/monkey/自定义指令集-道长.json)
+
+-------------------------
+
+### 插件应用列表
+
+* [DrPlayer](/apps/drplayer)
+* [Websocket实时日志](/apps/websocket)
+* [cookie管理插件](/apps/cookie-butler/index.html)
+* [cron表达式插件](/apps/cron-generator/index.html)
+* [剪切板智能推送插件](/apps/clipboard-pusher/index.html)
+* [DS源可用性检测插件](/apps/source-checker/index.html)
+* [DS解析检测插件](/apps/vip-parser/index.html)
+* [DS源配置编辑插件](/apps/source-editor/index.html)
+* [DS内存图片管理器插件](/apps/image-manager/index.html)
+* [DS时钟插件-白色时钟](/apps/clock/white_clock.html)|[日历时钟](/apps/clock/index.html)
+* [DS庆祝页面-完结撒花](/apps/happy/index.html)
+* [bookReader](/apps/book-reader)
+* [代码加解密工具](/admin/encoder)
+* [央视点播解析工具](/proxy/央视大全[官]/index.html)
 * [在线猫ds源主页](/cat/index.html)
+* [V我50支付凭证生成器](/authcoder?len=10&number=1)
+
+### 同作者项目
+
+* [DS源适配猫影视](https://github.com/hjdhnx/CatPawOpen/tree/ds-cat)
+* [DS插件项目-golang](https://github.com/hjdhnx/drpy-plugin)
+* [DS 二进制插件项目-pup-sniffer](https://github.com/hjdhnx/pup-sniffer)
+* [DS 二进制插件项目-file-index](https://github.com/hjdhnx/file-index)
+* [DS web插件项目-drplayer](https://github.com/hjdhnx/DrPlayer)
+* [drpy2打包项目](https://github.com/hjdhnx/drpy-webpack)
 
 ## 更新记录
 
-### 20250801
+### 20251017
 
-更新至V1.2.4
+更新至V1.3.14
 
-### 20250729
+### 20251015
 
-更新至V1.2.3
+更新至V1.3.13
 
-### 20250728
+### 20251014
 
-更新至V1.2.2
+更新至V1.3.12
 
-### 20250727
+### 20251013
 
-更新至V1.2.1
+更新至V1.3.11
 
-全新版本，大堆特性，性能优化，稳定性增强。
+### 20251012
 
-### 20250726
-
-更新至V1.2.0
-
-1. 支持挂载py源
-
-### 20250310
-
-更新至V1.1.23
+更新至V1.3.10
 
 [点此查看完整更新记录](docs/updateRecord.md)
 
@@ -78,9 +107,11 @@ todo:
 ## 参考资料
 
 * [crypto-js-wasm使用教程](docs/crypto-js-wasm/readme-CN.md)
+* [webdav使用教程](docs/webdav.md)
 * [puppeteer使用教程](docs/pupInstall.md)
 * [drpyS源属性说明](docs/ruleAttr.md)
 * [drpy2写源简述](docs/ruleDesc.md)
+* [关姐算法搭建说明](docs/suanfa.md)
 
 ## 问题说明
 
@@ -98,11 +129,11 @@ todo:
 
 * 终端执行
 
-`bash -c "$(curl -fsSLk https://git-proxy.playdreamer.cn/hjdhnx/drpy-node/raw/refs/heads/main/autorun.sh)"`
+`bash -c "$(curl -fsSLk https://git-proxy.playdreamer.cn/hjdhnx/drpy-node/raw/refs/heads/main/install/autorun.sh)"`
 
 * 添加定时方案
 
-`echo "30 7 * * * cd /patch && bash -c \"\$(curl -fsSLk https://git-proxy.playdreamer.cn/hjdhnx/drpy-node/raw/refs/heads/main/autorun.sh)\" >> /patch/drpyslog.log 2>&1" | crontab -`
+`echo "30 7 * * * cd /patch && bash -c \"\$(curl -fsSLk https://git-proxy.playdreamer.cn/hjdhnx/drpy-node/raw/refs/heads/main/install/autorun.sh)\" >> /patch/drpyslog.log 2>&1" | crontab -`
 
 或者下载脚本到本地后
 
@@ -145,7 +176,9 @@ pm2 restart drpys
 * [猫影视git文件加速](https://github.catvod.com/)
 * [猫影视多功能主页](https://catvod.com/)
 * [ZY写源教学](https://zy.catni.cn/editSource/edit-grammar.html)
-* [源动力](https://sourcepower.top/index)
+* [源动力-新](https://tvshare.cn/)
+* [源动力-老](https://sourcepower.top/index)
+* [电竞专业反应测试](https://www.arealme.com/brain-memory-game/zh/)
 
 ## AI接入
 

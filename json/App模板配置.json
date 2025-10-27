@@ -12,8 +12,42 @@
             "会员时长": "会员函数(gzip压缩)",
             "lazyheader": "视频播放请求头,JSON格式"
         },
-       
+        "蓝鹰": {
+            "muban": "AppQiji",
+            "host": "",
+            "hosturl": "https://lanyinghz.oss-cn-hangzhou.aliyuncs.com/lanyingxmy.txt",
+            "key": "ca94b06ca359d80e",
+            "iv": "ca94b06ca359d80e",
+            "verify": "true",
+            "username": "",
+            "password": "",
+            "会员时长": "",
+            "lazyheader": {}
+        }
     },
-   
-
+    "Appmuou": {
+        "示例": {
+            "host": "",
+            "hosturl": "",
+            "version": ""
+        }
+    },
+    "AppShark": {
+        "示例": {
+            "host": "",
+            "hosturl": "",
+            "key": "",
+            "key1": "",
+            "key2": "",
+            "version": ""
+        },
+        "光映视界": {
+            "host": "",
+            "hosturl": "https://ymdtsy.lingutv.cn/shark/api.txt",
+            "key": "IKXRx4M6cB45SNTs",
+            "key1": "rectangleadsadxa",
+            "key2": "aassddwwxxllsx1x",
+            "version": "2.2.0"
+        }
+    }
 }

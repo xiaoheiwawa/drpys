@@ -8,6 +8,7 @@
 })
 */
 
+//fix by https://github.com/hunyanjie/FQWeb,https://github.com/POf-L/Fanqie-novel-Downloader
 // http://localhost:5757/api/番茄小说[书]?ac=list&t=主分类&pg=1
 // http://localhost:5757/api/番茄小说[书]?ac=detail&ids=https://fanqienovel.com/page/7431786294105099289
 // http://localhost:5757/api/番茄小说[书]?wd=斩神&pg=2
@@ -15,6 +16,8 @@
 
 const {getRandomFromList} = $.require('./_lib.random.js');
 const {requestHtml} = $.require('./_lib.request.js');
+// const fqweb_host = 'http://fqweb.jsj66.com';
+const fqweb_host = 'http://fanqie.mduge.com';
 
 var rule = {
     类型: '小说',
@@ -22,8 +25,8 @@ var rule = {
     desc: '番茄小说纯js版本',
     host: 'https://fanqienovel.com/',
     homeUrl: 'https://fanqienovel.com/api/author/book/category_list/v0/',
-    url: '/api/author/library/book_list/v0/?page_count=18&page_index=(fypage-1)&gender=-1&category_id=fyclass&creation_status=-1&word_count=-1&sort=0#fyfilter',
-    searchUrl: 'https://api5-normal-lf.fqnovel.com/reading/bookapi/search/page/v/?query=**&aid=1967&channel=0&os_version=0&device_type=0&device_platform=0&iid=466614321180296&passback=((fypage-1)*10)&version_code=999',
+    url: '/api/author/library/book_list/v0/?page_count=18&page_index=(fypage-1)&gender=1&category_id=fyclass&creation_status=-1&word_count=-1&book_type=-1&sort=0#fyfilter',
+    searchUrl: fqweb_host + '/search?query=**&page=fypage',
     searchable: 2,
     quickSearch: 0,
     filterable: 1,
@@ -38,6 +41,7 @@ var rule = {
     },
     headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
+
     },
     config: {
         api: 'https://novel.snssdk.com/api',
@@ -123,11 +127,12 @@ var rule = {
             }
         })).content;
         let jsonStr = cut(html, 'window.__INITIAL_STATE__=', '};').replace(/;$/, "").replaceAll('undefined', 'null');
+        // pathLib.writeFile('./temp/jsonStr.json', jsonStr);
         let book_info = jsonStr.parseX.page;
         let list = book_info.chapterListWithVolume.flat();
         let urls = [];
         list.forEach((it, index) => {
-            urls.push(it.title + '$' + it.itemId);
+            urls.push(it.title + '$' + it.itemId + '@' + it.title);
         });
         let vod = {
             vod_id: input,
@@ -141,19 +146,27 @@ var rule = {
         };
         return vod
     },
+    searchHandel: function (json) {
+        return {
+            data: json.data.search_tabs[0].data
+        };
+    },
     搜索: async function (wd, quick, pg) {
         let {input} = this;
-        log(input);
+        // log(input);
         let d = [];
         let html = (await req(input)).content;
         let json = JSON.parse(html);
-        for (let it of json.data) {
+        json = this.searchHandel(json);
+        // console.log(json);
+        for (let it of json.data.filter(i => i.book_data)) {
             let book = it.book_data[0];
+            // console.log(book)
             d.push({
                 title: book.book_name,
                 url: "https://fanqienovel.com/page/" + book.book_id,
                 desc: book.author,
-                content: book.book_abstract,
+                content: book.book_abstract || book.abstract,
                 pic_url: book.thumb_url
             });
         }
@@ -161,18 +174,34 @@ var rule = {
     },
     lazy: async function (flag, id, flags) {
         let {input} = this;
-        let title = '小说标题';
+        let title = input.split('@')[1];
+        input = input.split('@')[0];
         let content = '小说内容';
         let content_url = ''; // 正文获取接口
-        content_url = `https://fanqienovel.com/reader/${input}?enter_from=reader`;
+        // content_url = `http://fqweb.jsj66.com/content?item_id=${input}`;
+        //   content_url = `https://fanqienovel.com/reader/${input}?enter_from=reader`;
+        content_url = `${fqweb_host}/content?item_id=${input}`;
+        /*
         log(content_url);
+        
         let html = (await req(content_url, {headers: {Cookie: getFqCookie()}})).content;
         html = html.match(/window.__INITIAL_STATE__=(.+?});/)[1].replaceAll(':undefined,', ':"undefined",');
         let json = JSON.parse(html).reader.chapterData;
         title = json.title;
         content = decodeText(json.content, 2);
         content = content.replace(/<\/p>/g, '\n').replace(/<\w+>/g, '').replace(/<[^>]*>/g, '');
-        // print(content)
+        */
+
+        let html = (await req(content_url, {headers: {Cookie: getFqCookie()}})).content;
+        /*
+        let json = JSON.parse(html).data.data;
+        title = json.novel_data.title;
+        content = json.content;
+        */
+        let json = JSON.parse(html);
+
+        content = json.content.replace(/\n\n妍󠇕希󠆖󠅽󠇕󠆨󠅼󠄡󠄩󠄠󠄩󠄣󠄣󠄢󠄨󠄨󠄩\n/g, "\n");
+        //  print(content)
         let ret = JSON.stringify({
             title,
             content

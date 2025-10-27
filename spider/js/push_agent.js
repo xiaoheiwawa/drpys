@@ -21,6 +21,16 @@ var rule = {
     class_url: 'push',
     url: '',
     play_parse: true,
+    推荐: async function () {
+        let {publicUrl} = this;
+        let icon = urljoin(publicUrl, './images/icon_cookie/推送.jpg');
+        return [{
+            vod_id: 'https://vdse.bdstatic.com//628ca08719cef5987ea2ae3c6f0d2386.mp4',
+            vod_name: '测试推送直链',
+            vod_pic: icon,
+            vod_remarks: '纯二级源'
+        }]
+    },
     一级: async function (tid, pg, filter, extend) {
         let {MY_CATE, MY_PAGE, input} = this;
         return []
@@ -65,7 +75,7 @@ var rule = {
             let list = input.split('@');
             // log(list);
             for (let i = 0; i < list.length; i++) {
-                if (/pan.quark.cn|drive.uc.cn|www.alipan.com|www.aliyundrive.com|cloud.189.cn|yun.139.com|www.123684.com|www.123865.com|www.123912.com|www.123pan.com|www.123pan.cn|www.123592.com/.test(list[i])) {
+                if (/pan.quark.cn|drive.uc.cn|www.alipan.com|www.aliyundrive.com|cloud.189.cn|yun.139.com|www.123684.com|www.123865.com|www.123912.com|www.123pan.com|www.123pan.cn|www.123592.com|pan.baidu.com/.test(list[i])) {
                     if (/pan.quark.cn/.test(list[i])) {
                         playPans.push(list[i]);
                         const shareData = Quark.getShareData(list[i]);
@@ -136,7 +146,7 @@ var rule = {
                             playurls.push(urls);
                         })
                     }
-                    if(/www.123684.com|www.123865.com|www.123912.com/.test(list[i])) {
+                    if (/www.123684.com|www.123865.com|www.123912.com/.test(list[i])) {
                         playPans.push(list[i]);
                         let shareData = await Pan.getShareData(list[i])
                         let videos = await Pan.getFilesByShareUrl(shareData)
@@ -148,12 +158,24 @@ var rule = {
                             }).join('#'))
                         }
                     }
+                    if (/pan.baidu.com/.test(list[i])) {
+                        let data = await Baidu2.getShareData(list[i])
+                        let vod_content_add = [vod.vod_content];
+                        Object.keys(data).forEach((it, index) => {
+                            // playform.push('Baidu-' + it)
+                            playform.push('Baidu-' + Number(index + 1));
+                            vod_content_add.push(it);
+                            const urls = data[it].map(item => item.name + "$" + [item.path, item.uk, item.shareid, item.fsid].join('*')).join('#');
+                            playurls.push(urls);
+                        })
+                        vod.vod_content = vod_content_add.join('\n');
+                    }
                 } else {
                     playform.push('推送');
                     playurls.push("推送" + '$' + list[i])
                 }
             }
-        } else if (/pan.quark.cn|drive.uc.cn|www.alipan.com|www.aliyundrive.com|cloud.189.cn|yun.139.com|www.123684.com|www.123865.com|www.123912.com|www.123pan.com|www.123pan.cn|www.123592.com/.test(input)) {
+        } else if (/pan.quark.cn|drive.uc.cn|www.alipan.com|www.aliyundrive.com|cloud.189.cn|yun.139.com|www.123684.com|www.123865.com|www.123912.com|www.123pan.com|www.123pan.cn|www.123592.com|pan.baidu.com/.test(input)) {
             if (/pan.quark.cn/.test(input)) {
                 playPans.push(input);
                 const shareData = Quark.getShareData(input);
@@ -224,7 +246,7 @@ var rule = {
                     playurls.push(urls);
                 })
             }
-            if(/www.123684.com|www.123865.com|www.123912.com|www.123pan.com|www.123pan.cn|www.123592.com/.test(input)) {
+            if (/www.123684.com|www.123865.com|www.123912.com|www.123pan.com|www.123pan.cn|www.123592.com/.test(input)) {
                 playPans.push(input);
                 let shareData = await Pan.getShareData(input)
                 let videos = await Pan.getFilesByShareUrl(shareData)
@@ -236,6 +258,18 @@ var rule = {
                     }).join('#');
                     playurls.push(urls);
                 })
+            }
+            if (/pan.baidu.com/.test(input)) {
+                let data = await Baidu2.getShareData(input)
+                let vod_content_add = [vod.vod_content];
+                Object.keys(data).forEach((it, index) => {
+                    // playform.push('Baidu-' + it)
+                    playform.push('Baidu-' + Number(index + 1));
+                    vod_content_add.push(it);
+                    const urls = data[it].map(item => item.name + "$" + [item.path, item.uk, item.shareid, item.fsid].join('*')).join('#');
+                    playurls.push(urls);
+                })
+                vod.vod_content = vod_content_add.join('\n');
             }
         } else {
             playform.push('推送');
@@ -256,7 +290,7 @@ var rule = {
             } else {
                 return {parse: 1, url: input}
             }
-        } else if (/Quark-|UC-|Ali-|Cloud-|Yun-|Pan123-/.test(flag)) {
+        } else if (/Quark-|UC-|Ali-|Cloud-|Yun-|Pan123-|Baidu-/.test(flag)) {
             const ids = input.split('*');
             const urls = [];
             let UCDownloadingCache = {};
@@ -338,17 +372,44 @@ var rule = {
                     url: url
                 }
             }
-            if(flag.startsWith('Pan123-')) {
+            if (flag.startsWith('Pan123-')) {
                 log('盘123解析开始')
-                const url = await Pan.getDownload(ids[0],ids[1],ids[2],ids[3],ids[4])
-                urls.push("原画",url)
-                let data = await Pan.getLiveTranscoding(ids[0],ids[1],ids[2],ids[3],ids[4])
+                const url = await Pan.getDownload(ids[0], ids[1], ids[2], ids[3], ids[4])
+                urls.push("原画", url)
+                let data = await Pan.getLiveTranscoding(ids[0], ids[1], ids[2], ids[3], ids[4])
                 data.forEach((item) => {
-                    urls.push(item.name,item.url)
+                    urls.push(item.name, item.url)
                 })
                 return {
                     parse: 0,
                     url: urls
+                }
+            }
+            if (flag.startsWith('Baidu-')) {
+                log('百度网盘开始解析')
+                //网页转码
+                // let url = await Baidu2.getShareUrl(ids[0],ids[1],ids[2],ids[3])
+                // let urls = []
+                // url.map(it=>{
+                //     urls.push(it.name,it.url + "#isVideo=true##fastPlayMode##threads=10#")
+                // })
+                // return {
+                //     parse:0,
+                //     url:urls,
+                //     header:{
+                //         "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0',
+                //         "Cookie": ENV.get('baidu_cookie'),
+                //     }
+                // }
+                //App原画不转存
+                let url = await Baidu2.getAppShareUrl(ids[0], ids[1], ids[2], ids[3])
+                return {
+                    parse: 0,
+                    url: url + "#isVideo=true##fastPlayMode##threads=10#",
+                    header: {
+                        "User-Agent": 'netdisk;P2SP;2.2.91.136;android-android;',
+                        "Cookie": ENV.get('baidu_cookie'),
+                    }
                 }
             }
         } else {

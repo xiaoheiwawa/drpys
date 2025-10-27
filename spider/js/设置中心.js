@@ -4,14 +4,15 @@
   filterable: 0,
   quickSearch: 0,
   title: '设置中心',
+  logo: 'https://avatars.githubusercontent.com/u/49803097?v=4',
   more: {
     sourceTag: '设置,动作',
     actions: [
       {
         name: '推送',
-        action: '{\'actionId\':\'推送视频播放\',\'id\':\'push\',\'type\':\'input\',\'title\':\'推送视频地址进行播放\',\'tip\':\'支持网盘、官链、直链、待嗅探链接\',\'value\':\'\',\'msg\':\'请输入待推送的视频地址\',\'imageUrl\':\'https://github.catvod.com/https://raw.githubusercontent.com/hjdhnx/drpy-node/refs/heads/main/public/images/lives.jpg\',\'imageHeight\':200,\'imageType\':\'card_pic_3\',\'keep\':true,\'button\':4,\'width\':640,\'selectData\':\'123:=https://www.123684.com/s/oec7Vv-DggWh?ZY4K,腾讯:=https://v.qq.com/x/cover/mzc00200vkqr54u/u4100l66fas.html,爱奇艺:=http://www.iqiyi.com/v_1b0tk1b8tl8.html,夸克:=https://pan.quark.cn/s/6c8158e258f3,UC:=https://drive.uc.cn/s/59023f57d3ce4?public=1,阿里:=https://www.alipan.com/s/vgXMcowK8pQ,天翼:=https://cloud.189.cn/web/share?code=INJbU3NbqyUj,移动1:=https://yun.139.com/shareweb/#/w/i/0i5CLQ7BpV7Ai,移动2:=https://caiyun.139.com/m/i?2jexC1gcjeN7q,移动3:=https://yun.139.com/shareweb/#/w/i/2i2MoE9ZHn9p1,直链1:=https://vdse.bdstatic.com//628ca08719cef5987ea2ae3c6f0d2386.mp4,嗅探1:=https://www.6080kk.cc/haokanplay/178120-1-1.html,嗅探2:=https://www.hahads.com/play/537106-3-1.html,多集:=https://v.qq.com/x/cover/m441e3rjq9kwpsc/m00253deqqo.html#https://pan.quark.cn/s/6c8158e258f3,海阔二级单线路:=H4sIAAAAAAAAA52Uy27TQBSGXwUZlsT2GefadZ+AN3ATk7qKL7guUoKQXAQFeoEG6oKaVBUFlBZFbdQ0TXAIeRjPTJwVr8AYCsNyijQbnzPfPz72p3kk6WXf8aQFibzszFsb0l2p7Ni+YfusFAe78/W383C6eC8OmnEQsEVal7NxiEebeLQ/i75oKvl6iccfZwdPWY0OhnR8+uPbdnJ2kUx7ONrAo094skMOD+ZHHbL1nIbHbCf53KdBh7RPaP+Yfm8n5x+S3gWr016TtCb03VUa2Brh6A0Nm8ngVRysk7Nt+mI3aYfk9fs0YfMERxENn+FoKw6e3KJ7V8lgyF6+YnrG9UAPTLu6ZNgrpu4ZNlJRlrXve47FWrNomgzPEdJYydYtIx1/Z0rbXTzps9zrza5ZZo1l33dXFxSFPWlyvdGom5ZeNVblsmMpa27N0SvKQ6eipEwGIINAgYKGIA+lYg7kFbfKkta8Wnpqt6sC+8Z3/kQuyXm1qDZ+RbEMt6bXFVBBQ6UMy5KXfat2O4WQMIQ4pAlDGoeywlCWQzlhKMehvDCU51BBGCpwqCgMFTlUEoZKfyFQxX+uyqkbKMGdAHEnAP0Xxa0AcZWAawHiLgH3AsRlAi4GiNsE3AwQ1wm4GiDuE/zjhrhQiLuBxI1C3A0kbhTibqAb3DK/3ZAe/wSSQMKkPgYAAA==\'}',
+        action: '{\'actionId\':\'推送视频播放\',\'id\':\'push\',\'type\':\'input\',\'title\':\'推送视频地址进行播放\',\'tip\':\'支持网盘、官链、直链、待嗅探链接\',\'value\':\'\',\'msg\':\'请输入待推送的视频地址\',\'imageUrl\':\'https://youke1.picui.cn/s1/2025/10/10/68e7ec0390944.jpg\',\'imageHeight\':200,\'imageType\':\'card_pic_3\',\'keep\':true,\'button\':4,\'width\':640,\'selectData\':\'123:=https://www.123684.com/s/oec7Vv-DggWh?ZY4K,腾讯:=https://v.qq.com/x/cover/mzc00200vkqr54u/u4100l66fas.html,爱奇艺:=http://www.iqiyi.com/v_1b0tk1b8tl8.html,夸克:=https://pan.quark.cn/s/6c8158e258f3,UC:=https://drive.uc.cn/s/59023f57d3ce4?public=1,阿里:=https://www.alipan.com/s/vgXMcowK8pQ,天翼:=https://cloud.189.cn/web/share?code=INJbU3NbqyUj,移动1:=https://yun.139.com/shareweb/#/w/i/0i5CLQ7BpV7Ai,移动2:=https://caiyun.139.com/m/i?2jexC1gcjeN7q,移动3:=https://yun.139.com/shareweb/#/w/i/2i2MoE9ZHn9p1,直链1:=https://vdse.bdstatic.com//628ca08719cef5987ea2ae3c6f0d2386.mp4,嗅探1:=https://www.6080kk.cc/haokanplay/178120-1-1.html,嗅探2:=https://www.hahads.com/play/537106-3-1.html,多集:=https://v.qq.com/x/cover/m441e3rjq9kwpsc/m00253deqqo.html#https://pan.quark.cn/s/6c8158e258f3,海阔二级单线路:=H4sIAAAAAAAAA52Uy27TQBSGXwUZlsT2GefadZ+AN3ATk7qKL7guUoKQXAQFeoEG6oKaVBUFlBZFbdQ0TXAIeRjPTJwVr8AYCsNyijQbnzPfPz72p3kk6WXf8aQFibzszFsb0l2p7Ni+YfusFAe78/W383C6eC8OmnEQsEVal7NxiEebeLQ/i75oKvl6iccfZwdPWY0OhnR8+uPbdnJ2kUx7ONrAo094skMOD+ZHHbL1nIbHbCf53KdBh7RPaP+Yfm8n5x+S3gWr016TtCb03VUa2Brh6A0Nm8ngVRysk7Nt+mI3aYfk9fs0YfMERxENn+FoKw6e3KJ7V8lgyF6+YnrG9UAPTLu6ZNgrpu4ZNlJRlrXve47FWrNomgzPEdJYydYtIx1/Z0rbXTzps9zrza5ZZo1l33dXFxSFPWlyvdGom5ZeNVblsmMpa27N0SvKQ6eipEwGIINAgYKGIA+lYg7kFbfKkta8Wnpqt6sC+8Z3/kQuyXm1qDZ+RbEMt6bXFVBBQ6UMy5KXfat2O4WQMIQ4pAlDGoeywlCWQzlhKMehvDCU51BBGCpwqCgMFTlUEoZKfyFQxX+uyqkbKMGdAHEnAP0Xxa0AcZWAawHiLgH3AsRlAi4GiNsE3AwQ1wm4GiDuE/zjhrhQiLuBxI1C3A0kbhTibqAb3DK/3ZAe/wSSQMKkPgYAAA==\'}',
         vod_name: '推送视频播放',
-        vod_pic: 'https://github.catvod.com/https://raw.githubusercontent.com/hjdhnx/drpy-node/refs/heads/main/public/images/lives.jpg',
+        vod_pic: 'https://youke1.picui.cn/s1/2025/10/10/68e7ec0390944.jpg',
         vod_tag: 'action'
       },
       {
@@ -46,6 +47,7 @@ const {
     _checkUCStatus,
     _checkAliStatus,
     _checkBiliStatus,
+    _checkBaiduStatus,
     QRCodeHandler,
     qrcode
 } = $.require('./_lib.scan.js');
@@ -62,6 +64,7 @@ let quick_data = {
     UC: 'https://drive.uc.cn/s/59023f57d3ce4?public=1',
     阿里: 'https://www.alipan.com/s/vgXMcowK8pQ',
     天翼: 'https://cloud.189.cn/web/share?code=INJbU3NbqyUj',
+    百度: 'https://pan.baidu.com/s/1L0UIv4p0X0QrbbKErJuc_w?pwd=2pwj',
     移动1: 'https://yun.139.com/shareweb/#/w/i/0i5CLQ7BpV7Ai',
     移动2: 'https://caiyun.139.com/m/i?2jexC1gcjeN7q',
     移动3: 'https://yun.139.com/shareweb/#/w/i/2i2MoE9ZHn9p1',
@@ -69,7 +72,7 @@ let quick_data = {
     直链1: 'https://vdse.bdstatic.com//628ca08719cef5987ea2ae3c6f0d2386.mp4',
     嗅探1: 'https://www.6080kk.cc/haokanplay/178120-1-1.html',
     嗅探2: 'https://www.hahads.com/play/537106-3-1.html',
-    多集: 'https://v.qq.com/x/cover/m441e3rjq9kwpsc/m00253deqqo.html#https://pan.quark.cn/s/6c8158e258f3',
+    多集: 'https://v.qq.com/x/cover/m441e3rjq9kwpsc/m00253deqqo.html@https://pan.quark.cn/s/6c8158e258f3@https://pan.baidu.com/s/1TdbgcwaMG1dK7B5pQ1LbBg?pwd=1234',
     海阔二级单线路: gzip(JSON.stringify({
         "actor": "剧集",
         "content": "【道长DR】　　围绕上世纪30年代的上海滩，讲述了两位坚韧勇敢的女性在波澜诡谲的民国时代相互救赎、完成蜕变的动人故事。 收起",
@@ -85,6 +88,11 @@ let quick_data1 = {
     '十日终焉': 'https://fanqienovel.com/page/7143038691944959011',
     '斩神': 'https://fanqienovel.com/page/6982529841564224526',
 };
+let quick_data1Q = {
+    '掌门怀孕': 'https://www.qimao.com/shuku/2014393/',
+    '史上最强师父': 'https://www.qimao.com/shuku/1817221/',
+    '被逐出宗门后，美人师尊跪求我原谅': 'https://www.qimao.com/shuku/1886669/',
+};
 let quick_data2 = {
     '推送': 'push',
     '夸克': 'quark',
@@ -96,24 +104,18 @@ let quick_data2 = {
     '测试': 'test',
 };
 
-let selectDataList = [];
-let selectDataList1 = [];
-let selectDataList2 = [];
+let selectData = renderSelect(quick_data);
+let selectData1 = renderSelect(quick_data1);
+let selectDataList1Q = renderSelect(quick_data1Q);
+let selectData2 = renderSelect(quick_data2);
 
-for (let key of Object.keys(quick_data)) {
-    selectDataList.push(`${key}:=${quick_data[key]}`);
+function renderSelect(quick_data1) {
+    let selectDataList1 = [];
+    for (let key of Object.keys(quick_data1)) {
+        selectDataList1.push(`${key}:=${quick_data1[key]}`);
+    }
+    return selectDataList1.join(',')
 }
-let selectData = selectDataList.join(',');
-
-for (let key of Object.keys(quick_data1)) {
-    selectDataList1.push(`${key}:=${quick_data1[key]}`);
-}
-let selectData1 = selectDataList1.join(',');
-
-for (let key of Object.keys(quick_data2)) {
-    selectDataList2.push(`${key}:=${quick_data2[key]}`);
-}
-let selectData2 = selectDataList2.join(',');
 
 var rule = {
     类型: '设置',
@@ -223,11 +225,12 @@ var rule = {
     },
     UCScanCheck: null,
     quarkScanCheck: null,
+    baiduScanCheck: null,
     aliScanCheck: null,
     biliScanCheck: null,
     host: 'http://empty',
-    class_name: '推送&夸克&UC&阿里&天翼&哔哩&系统配置&测试&接口挂载&视频解析',
-    class_url: 'push&quark&uc&ali&cloud&bili&system&test&apiLink&videoParse',
+    class_name: '推送&夸克&UC&阿里&百度&哔哩&天翼&系统配置&测试&接口挂载&视频解析',
+    class_url: 'push&quark&uc&ali&baidu&bili&cloud&system&test&apiLink&videoParse',
     url: '/fyclass',
 
     预处理: async function (env) {
@@ -246,6 +249,7 @@ var rule = {
             'ali': urljoin(publicUrl, './images/icon_cookie/阿里.png'),
             'bili': urljoin(publicUrl, './images/icon_cookie/哔哩.png'),
             'cloud': urljoin(publicUrl, './images/icon_cookie/天翼.png'),
+            'baidu': urljoin(publicUrl, './images/icon_cookie/百度.png'),
             'adult': urljoin(publicUrl, './images/icon_cookie/chat.webp'),
             'test': urljoin(publicUrl, './icon.svg'),
             'lives': urljoin(publicUrl, './images/lives.jpg'),
@@ -268,7 +272,8 @@ var rule = {
                         imageHeight: 200,
                         imageType: 'card_pic_3',
                         keep: true,
-                        button: 4,
+                        // button: 3,
+                        button: 4, //故意传4,壳子应该默认视为3
                         width: 640,
                         // selectData: '腾讯:=https://v.qq.com/x/cover/m441e3rjq9kwpsc/l0045w5hv1k.html,2:=bb输入默认值bbbbb,3:=c输入默认值ddd,4:=输入默认值,5:=111,6:=22222,7:=HOHO,HELLO,world'
                         selectData: selectData
@@ -294,6 +299,26 @@ var rule = {
                         selectData: selectData1
                     }),
                     vod_name: '推送番茄小说',
+                    vod_pic: images.read,
+                    vod_tag: 'action'
+                },);
+
+                d.push({
+                    vod_id: JSON.stringify({
+                        actionId: '推送七猫小说',
+                        id: 'push',
+                        type: 'input',
+                        title: '推送七猫小说网页目录链接进行解析',
+                        tip: '支持七猫小说网页版链接',
+                        value: 'https://www.qimao.com/shuku/2014393/',
+                        msg: '请输入待推送的七猫小说网页版链接',
+                        imageUrl: images.read,
+                        imageHeight: 200,
+                        imageType: 'card_pic_3',
+                        keep: false,
+                        selectData: selectDataList1Q
+                    }),
+                    vod_name: '推送七猫小说',
                     vod_pic: images.read,
                     vod_tag: 'action'
                 },);
@@ -340,6 +365,17 @@ var rule = {
                 d.push(getInput('get_cloud_password', '查看天翼 密码', images.cloud));
                 d.push(getInput('get_cloud_cookie', '查看天翼 cookie', images.cloud));
                 break;
+            case 'baidu':
+                d.push(genMultiInput('baidu_cookie', '设置百度 cookie', null, images.baidu));
+                d.push(getInput('get_baidu_cookie', '查看百度 cookie', images.baidu));
+                d.push({
+                    vod_id: '百度扫码',
+                    vod_name: '百度扫码',
+                    vod_pic: images.baidu,
+                    vod_remarks: '百度',
+                    vod_tag: 'action'
+                });
+                break;
             case 'bili':
                 d.push(genMultiInput('bili_cookie', '设置哔哩 cookie', null, images.bili));
                 d.push(getInput('get_bili_cookie', '查看哔哩 cookie', images.bili));
@@ -361,10 +397,15 @@ var rule = {
 
                 d.push(genMultiInput('play_proxy_mode', '设置播放代理模式', '默认为1，可自行配置成其他值如:2 (1 内存加速,2 磁盘加速 其他:内存加速)', images.settings));
                 d.push(getInput('get_play_proxy_mode', '查看播放代理模式', images.settings));
-                d.push(genMultiInput('enable_dr2', '设置drpy2源启用状态', '设置为1可启用此功能(默认没设置也属于启动，设置其他值关闭)', images.settings));
+                d.push(genMultiInput('enable_dr2', '设置drpy2源启用状态', '设置为1启用drpy2脚本服务，需要壳子内置处理；设置为2启用drpy2在线接口服务(默认2，设置其他值关闭)', images.settings));
                 d.push(getInput('get_enable_dr2', '查看drpy2源启用状态', images.settings));
-                d.push(genMultiInput('enable_py', '设置py源启用状态', '设置为1可启用此功能(默认没设置也属于启动，设置其他值关闭)', images.settings));
+                d.push(genMultiInput('enable_py', '设置py源启用状态', '设置为1可启用此功能,设置为2启用T4(默认没设置也属于启动，设置其他值关闭)', images.settings));
                 d.push(getInput('get_enable_py', '查看py源启用状态', images.settings));
+                d.push(genMultiInput('enable_cat', '设置cat源启用状态', '设置为1可启用此功能,设置为2启用T4(默认没设置也属于启动，设置其他值关闭)', images.settings));
+                d.push(getInput('get_enable_cat', '查看cat源启用状态', images.settings));
+                d.push(genMultiInput('enable_old_config', '设置兼容性配置', '设置为1可启用此功能(默认关闭)', images.settings));
+                d.push(getInput('get_enable_old_config', '查看兼容性配置', images.settings));
+
                 d.push(genMultiInput('now_ai', '设置当前AI', '1: 讯飞星火 2:deepseek 3.讯飞智能体 4.Kimi \n如果不填，连续对话默认使用讯飞星火', images.settings));
                 d.push(getInput('get_now_ai', '查看当前AI', images.settings));
                 d.push(genMultiInput('allow_forward', '设置允许代理转发', '设置为1可启用此功能，有一定的使用场景用于突破网络限制', images.settings));
@@ -404,11 +445,18 @@ var rule = {
                 d.push(getInput('get_enable_link_push', '查看启用挂载推送', images.settings));
                 d.push(genMultiInput('enable_link_jar', '设置允许挂载Jar', '设置为1可以启用。默认即关闭。设置其他值禁用', images.settings));
                 d.push(getInput('get_enable_link_jar', '查看允许挂载Jar', images.settings));
+                d.push(genMultiInput('cat_sub_code', '猫爪订阅码', '自定义猫爪源的订阅码。默认为all', images.settings));
+                d.push(getInput('get_cat_sub_code', '查看猫爪订阅码', images.settings));
+                d.push(genMultiInput('must_sub_code', '严格订阅码', '设置为1可以启用。默认即关闭', images.settings));
+                d.push(getInput('get_must_sub_code', '查看严格订阅码', images.settings));
 
                 break;
             case 'videoParse':
                 d.push(genMultiInput('mg_hz', '设置芒果解析画质', '默认为4，可自行配置成其他值 (视频质量，9=4K, 4=1080p, 3=720p, 2=560p)', images.settings));
                 d.push(getInput('get_mg_hz', '查看芒果解析画质', images.settings));
+
+                d.push(genMultiInput('PROXY_AUTH', '设置代理播放授权', '默认为drpys，可自行配置成其他值', images.settings));
+                d.push(getInput('get_PROXY_AUTH', '查看代理播放授权', images.settings));
                 break;
         }
         return d
@@ -417,14 +465,14 @@ var rule = {
         let {input, orId, getProxyUrl} = this;
         // log(input, orId);
         if (orId === 'proxyStream') {
-            let media_url = 'https://vdse.bdstatic.com//628ca08719cef5987ea2ae3c6f0d2386.mp4';
+            let media_url = 'https://vdse.bdstatic.com/628ca08719cef5987ea2ae3c6f0d2386.mp4';
             let m3u8_url = 'http://kjsp.aikan.miguvideo.com/PLTV/88888888/224/3221236432/1.m3u8';
             return {
                 vod_id: 'proxyStream',
                 vod_name: '测试代理流',
                 vod_play_from: 'drpyS本地流代理',
-                // vod_play_url: '测试播放流$' + getProxyUrl().replace('?do=js', media_url) + '#不代理直接播$' + media_url + '#8k播放$' + m3u8_url,
-                vod_play_url: '测试播放流$' + getProxyUrl().replace('?do=js', media_url) + '#不代理直接播$' + media_url
+                // vod_play_url: '测试播放流$' + getProxyUrl().split('?')[0] + media_url + '#不代理直接播$' + media_url + '#8k播放$' + m3u8_url,
+                vod_play_url: '测试播放流$' + getProxyUrl().split('?')[0] + media_url + '#不代理直接播$' + media_url
             }
         }
     },
@@ -448,7 +496,7 @@ var rule = {
         }
     },
     action: async function (action, value) {
-        let {httpUrl, publicUrl} = this;
+        let {httpUrl, imageApi, requestHost, publicUrl} = this;
         if (action === 'set-cookie') {
             return JSON.stringify({
                 action: {
@@ -606,24 +654,26 @@ var rule = {
 
         if (action === '夸克扫码') {
             if (rule.quarkScanCheck) {
-                console.log('请等待上个扫码任务完成：' + rule.quarkScanCheck);
+                log('请等待上个扫码任务完成：' + rule.quarkScanCheck);
                 return '请等待上个扫码任务完成';
             }
             let requestId = generateUUID();
-            log('httpUrl:', httpUrl);
-            log('request_id:', requestId);
-            let data = await post('https://uop.quark.cn/cas/ajax/getTokenForQrcodeLogin', {
+            log(`[夸克扫码] httpUrl: ${httpUrl} | request_id: ${requestId}`);
+            let data = (await axios({
+                url: 'https://uop.quark.cn/cas/ajax/getTokenForQrcodeLogin',
+                responseType: 'text',
+                method: "POST",
                 headers: {Referer: '', ...QRCodeHandler.HEADERS},
                 data: {
                     request_id: requestId,
                     client_id: "532",
                     v: "1.2"
                 }
-            });
-            console.log('data:', data);
+            })).data;
+            log('[夸克扫码] data:', data);
             let qcToken = JSON.parse(data).data.members.token;
             let qrcodeUrl = `https://su.quark.cn/4_eMHBJ?token=${qcToken}&client_id=532&ssb=weblogin&uc_param_str=&uc_biz_str=S%3Acustom%7COPT%3ASAREA%400%7COPT%3AIMMERSIVE%401%7COPT%3ABACK_BTN_STYLE%400`;
-            // log('qrcodeUrl:', qrcodeUrl);
+            log('[夸克扫码] qrcodeUrl:', qrcodeUrl);
             qrcode.platformStates[QRCodeHandler.PLATFORM_QUARK] = {
                 token: qcToken,
                 request_id: requestId
@@ -656,10 +706,10 @@ var rule = {
             if (state) { // 生成二维码的时候设置了扫码id
                 for (let i = 1; i <= 15; i++) {
                     if (!rule.quarkScanCheck) {
-                        console.log('退出扫码检测：' + value);
+                        log('退出扫码检测：' + value);
                         return '扫码取消';
                     }
-                    console.log('[quarkScanCheck]等待用户扫码，第' + i + '次');
+                    log('[quarkScanCheck]等待用户扫码，第' + i + '次');
                     const scanResult = await _checkQuarkStatus(state, httpUrl);
                     log('scanResult:', scanResult);
                     if (scanResult.status === 'CONFIRMED') {
@@ -694,7 +744,7 @@ var rule = {
             });
         }
         if (action === 'quarkScanCancel') {
-            console.log('用户取消扫码：' + value);
+            log('用户取消扫码：' + value);
             rule.quarkScanCheck = null;
             qrcode.platformStates[QRCodeHandler.PLATFORM_QUARK] = null;
             return;
@@ -706,17 +756,19 @@ var rule = {
                 return '请等待上个扫码任务完成';
             }
             let requestId = generateUUID();
-            log('httpUrl:', httpUrl);
-            log('request_id:', requestId);
-            let data = await post('https://api.open.uc.cn/cas/ajax/getTokenForQrcodeLogin', {
+            log(`UC扫码] httpUrl: ${httpUrl} | request_id: ${requestId}`);
+            let data = (await axios({
+                url: 'https://api.open.uc.cn/cas/ajax/getTokenForQrcodeLogin',
+                responseType: 'text',
+                method: "POST",
                 headers: {Referer: '', ...QRCodeHandler.HEADERS},
                 data: {
                     request_id: requestId,
                     client_id: "381",
                     v: "1.2",
                 }
-            });
-            log('data:', data);
+            })).data;
+            log('[UC扫码] data:', data);
             let qcToken = JSON.parse(data).data.members.token;
             let qrcodeUrl = `https://su.uc.cn/1_n0ZCv?token=${qcToken}&client_id=381&uc_param_str=&uc_biz_str=S%3Acustom%7CC%3Atitlebar_fix`;
             // log('qrcodeUrl:', qrcodeUrl);
@@ -752,10 +804,10 @@ var rule = {
             if (state) { // 生成二维码的时候设置了扫码id
                 for (let i = 1; i <= 15; i++) {
                     if (!rule.UCScanCheck) {
-                        console.log('退出扫码检测：' + value);
+                        log('退出扫码检测：' + value);
                         return '扫码取消';
                     }
-                    console.log('[UCScanCheck]等待用户扫码，第' + i + '次');
+                    log('[UCScanCheck]等待用户扫码，第' + i + '次');
                     const scanResult = await _checkUCStatus(state, httpUrl);
                     log('scanResult:', scanResult);
                     if (scanResult.status === 'CONFIRMED') {
@@ -790,7 +842,7 @@ var rule = {
             });
         }
         if (action === 'UCScanCancel') {
-            console.log('用户取消扫码：' + value);
+            log('用户取消扫码：' + value);
             rule.UCScanCheck = null;
             qrcode.platformStates[QRCodeHandler.PLATFORM_UC] = null;
             return;
@@ -801,11 +853,13 @@ var rule = {
                 log('请等待上个扫码任务完成：' + rule.aliScanCheck);
                 return '请等待上个扫码任务完成';
             }
-            log('httpUrl:', httpUrl);
-            let data = await post('https://passport.aliyundrive.com/newlogin/qrcode/generate.do', {
+            log(`[阿里扫码] httpUrl: ${httpUrl}`);
+            let data = (await axios({
+                url: 'https://passport.aliyundrive.com/newlogin/qrcode/generate.do',
+                responseType: 'text',
+                method: "POST",
                 headers: {
-                    Referer: '',
-                    ...QRCodeHandler.HEADERS
+                    Referer: '', ...QRCodeHandler.HEADERS
                 },
                 data: {
                     appName: "aliyun_drive",
@@ -817,11 +871,12 @@ var rule = {
                     bizParams: "",
                     _bx_v: "2.2.3"
                 }
-            });
-            log('data:', data);
+            })).data;
+
+            log('[阿里扫码] data:', data);
             const contentData = JSON.parse(data).content.data;
             let qrcodeUrl = contentData.codeContent;
-            log('qrcodeUrl:', qrcodeUrl);
+            log('[阿里扫码] qrcodeUrl:', qrcodeUrl);
             qrcode.platformStates[QRCodeHandler.PLATFORM_ALI] = {
                 ck: contentData.ck,
                 t: contentData.t
@@ -854,10 +909,10 @@ var rule = {
             if (state) { // 生成二维码的时候设置了扫码id
                 for (let i = 1; i <= 15; i++) {
                     if (!rule.aliScanCheck) {
-                        console.log('退出扫码检测：' + value);
+                        log('退出扫码检测：' + value);
                         return '扫码取消';
                     }
-                    console.log('[aliScanCheck]等待用户扫码，第' + i + '次');
+                    log('[aliScanCheck]等待用户扫码，第' + i + '次');
                     const scanResult = await _checkAliStatus(state, httpUrl);
                     log('scanResult:', scanResult);
                     if (scanResult.status === 'CONFIRMED') {
@@ -892,7 +947,7 @@ var rule = {
             });
         }
         if (action === 'aliScanCancel') {
-            console.log('用户取消扫码：' + value);
+            log('用户取消扫码：' + value);
             rule.aliScanCheck = null;
             qrcode.platformStates[QRCodeHandler.PLATFORM_ALI] = null;
             return;
@@ -903,7 +958,7 @@ var rule = {
                 log('请等待上个扫码任务完成：' + rule.biliScanCheck);
                 return '请等待上个扫码任务完成';
             }
-            log('httpUrl:', httpUrl);
+            log(`UC扫码] httpUrl: ${httpUrl}`);
             const res = await axios({
                 url: httpUrl,
                 method: "POST",
@@ -955,10 +1010,10 @@ var rule = {
             if (state) { // 生成二维码的时候设置了扫码id
                 for (let i = 1; i <= 15; i++) {
                     if (!rule.biliScanCheck) {
-                        console.log('退出扫码检测：' + value);
+                        log('退出扫码检测：' + value);
                         return '扫码取消';
                     }
-                    console.log('[biliScanCheck]等待用户扫码，第' + i + '次');
+                    log('[biliScanCheck]等待用户扫码，第' + i + '次');
                     const scanResult = await _checkBiliStatus(state, httpUrl);
                     log('scanResult:', scanResult);
                     if (scanResult.status === 'CONFIRMED') {
@@ -993,9 +1048,165 @@ var rule = {
             });
         }
         if (action === 'biliScanCancel') {
-            console.log('用户取消扫码：' + value);
+            log('用户取消扫码：' + value);
             rule.biliScanCheck = null;
             qrcode.platformStates[QRCodeHandler.PLATFORM_BILI] = null;
+            return;
+        }
+
+        if (action === '百度扫码') {
+            if (rule.baiduScanCheck) {
+                log('请等待上个扫码任务完成：' + rule.baiduScanCheck);
+                return '请等待上个扫码任务完成';
+            }
+
+            let requestId = generateUUID();
+            let t3 = new Date().getTime().toString();
+            let t1 = Math.floor(new Date().getTime() / 1000).toString();
+            let call = `tangram_guid_${t3}`;
+            log(`[百度扫码] httpUrl: ${httpUrl} | request_id: ${requestId}`);
+            const res = await axios({
+                url: httpUrl,
+                method: "POST",
+                data: {
+                    url: "https://passport.baidu.com/v2/api/getqrcode",
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.61 Chrome/126.0.6478.61 Not/A)Brand/8  Safari/537.36',
+                        'sec-ch-ua-platform': '"Windows"',
+                        'sec-ch-ua': '"Not/A)Brand";v="8", "Chromium";v="126", "Google Chrome";v="126"',
+                        'DNT': '1',
+                        'sec-ch-ua-mobile': '?0',
+                        'Sec-Fetch-Site': 'same-site',
+                        'Sec-Fetch-Mode': 'no-cors',
+                        'Sec-Fetch-Dest': 'script',
+                        'Referer': 'https://pan.baidu.com/',
+                        'Accept-Language': 'zh-CN,zh;q=0.9',
+                    },
+                    params: {
+                        "lp": "pc",
+                        "qrloginfrom": "pc",
+                        "gid": requestId,
+                        // "callback": `tangram_guid_${t3}`,
+                        "apiver": "v3",
+                        "tt": `${t3}`,
+                        "tpl": "netdisk",
+                        "logPage": `traceId%3Apc_loginv5_${t1}%2ClogPage%3Aloginv5`,
+                        "_": `${t3}`
+                    }
+                }
+            });
+            const resData = res.data.data;
+            log('[百度扫码] data:', resData);
+            let qrcodeUrl = 'https://' + resData.imgurl;
+            let channel_id = resData.sign;
+            log('[百度扫码] qrcodeUrl:', qrcodeUrl);
+            const qrCode = await _getQRCode(httpUrl, qrcodeUrl);
+            const imageUploadUrl = imageApi + '/upload';
+            log('[百度扫码] 图片上传接口 imageUploadUrl:', imageUploadUrl);
+            // log('[百度扫码] qrCode:', qrCode);
+            try {
+                const basicHeader = createBasicAuthHeaders();
+                const baiduQrcode = (await axios({
+                    url: httpUrl,
+                    method: "POST",
+                    data: {
+                        url: imageUploadUrl,
+                        method: "POST",
+                        headers: {
+                            ...basicHeader
+                        },
+                        data: {imageId: 'baiduQrcode', base64Data: qrCode}
+                    },
+                })).data.data;
+                log('[百度扫码] baiduQrcode:', baiduQrcode);
+                qrcodeUrl = requestHost + baiduQrcode.data.imageUrl + `?t=${requestId}`;
+                log('[百度扫码] ds代理 qrcodeUrl:', qrcodeUrl);
+            } catch (e) {
+                log('[百度扫码] error:', e.message);
+            }
+            qrcode.platformStates[QRCodeHandler.PLATFORM_BAIDU] = {
+                t1: t1,
+                t3: t3,
+                channel_id: channel_id,
+                request_id: requestId,
+            };
+            return JSON.stringify({
+                action: {
+                    actionId: 'baiduScanCookie',
+                    id: 'baiduScanCookie',
+                    canceledOnTouchOutside: false,
+                    type: 'input',
+                    title: '百度扫码Cookie',
+                    msg: '请使用百度APP扫码登录获取',
+                    width: 500,
+                    button: 1,
+                    timeout: 30,
+                    imageUrl: qrcodeUrl,
+                    imageHeight: 400,
+                    // qrcode: qrcodeUrl,
+                    // isQrcode: 1, // 告诉壳子我已经是二维码了，你不要再去生成了(图片链接或者base64文本)！！！
+                    qrcodeSize: '400',
+                    initAction: 'baiduScanCheck',
+                    initValue: requestId,
+                    cancelAction: 'baiduScanCancel',
+                    cancelValue: requestId,
+                    httpTimeout: 60,
+                }
+            });
+        }
+        if (action === 'baiduScanCheck') {
+            log('baiduScanCheck value:', value);
+            rule.baiduScanCheck = value;
+            const state = qrcode.platformStates[QRCodeHandler.PLATFORM_BAIDU];
+            if (state) { // 生成二维码的时候设置了扫码id
+                setTimeout(() => {
+                    if (rule.baiduScanCheck) {
+                        rule.baiduScanCheck = null;
+                    }
+                }, 60000);
+                for (let i = 1; i <= 5; i++) {
+                    if (!rule.baiduScanCheck) {
+                        log('退出扫码检测：' + value);
+                        return '扫码取消';
+                    }
+                    log('[baiduScanCheck]等待用户扫码，第' + i + '次');
+                    const scanResult = await _checkBaiduStatus(state, httpUrl);
+                    log('scanResult:', scanResult);
+                    if (scanResult.status === 'CONFIRMED') {
+                        let cookie = scanResult.cookie;
+                        log('扫码成功获取到cookie:', cookie);
+                        parseSaveCookie('baidu_cookie', cookie);
+                        rule.baiduScanCheck = null;
+                        qrcode.platformStates[QRCodeHandler.PLATFORM_BAIDU] = null;
+                        return '扫描完成，已成功获取cookie并入库';
+                    } else if (scanResult.status === 'EXPIRED') {
+                        log('已过期')
+                        break;
+                    } else {
+                        await sleep(1000);
+                    }
+                }
+            }
+            rule.baiduScanCheck = null;
+            qrcode.platformStates[QRCodeHandler.PLATFORM_BAIDU] = null;
+            return JSON.stringify({
+                action: {
+                    actionId: 'baiduCookieError',
+                    id: 'cookie',
+                    type: 'input',
+                    title: 'baiduCookie',
+                    width: 300,
+                    button: false,
+                    imageUrl: 'https://preview.qiantucdn.com/agency/dp/dp_thumbs/1014014/15854479/staff_1024.jpg!w1024_new_small_1',
+                    imageHeight: 200,
+                    msg: '扫码超时,请重进'
+                }
+            });
+        }
+        if (action === 'baiduScanCancel') {
+            log('用户取消扫码：' + value);
+            rule.baiduScanCheck = null;
+            qrcode.platformStates[QRCodeHandler.PLATFORM_BAIDU] = null;
             return;
         }
 
@@ -1031,6 +1242,21 @@ var rule = {
                 return '推送番茄小说发生错误：' + e.message;
             }
         }
+        if (action === '推送七猫小说') {
+            try {
+                const obj = JSON.parse(value);
+                return JSON.stringify({
+                    action: {
+                        actionId: '__detail__',
+                        skey: 'drpyS_七猫小说[书]',
+                        ids: obj.push,
+                    },
+                    toast: `开始解析小说:${obj.push}`
+                });
+            } catch (e) {
+                return '推送七猫小说发生错误：' + e.message;
+            }
+        }
         let cookie_sets = [
             'quark_cookie',
             'uc_cookie',
@@ -1039,12 +1265,15 @@ var rule = {
             'cloud_password',
             'cloud_cookie',
             'bili_cookie',
+            'baidu_cookie',
             'hide_adult',
             'thread',
             'play_local_proxy_type',
             'play_proxy_mode',
             'enable_dr2',
             'enable_py',
+            'enable_cat',
+            'enable_old_config',
             'enable_rule_name',
             'spark_ai_authKey',
             'deepseek_apiKey',
@@ -1057,7 +1286,10 @@ var rule = {
             'enable_link_data',
             'enable_link_push',
             'enable_link_jar',
+            'cat_sub_code',
+            'must_sub_code',
             'mg_hz',
+            'PROXY_AUTH',
         ];
         let get_cookie_sets = [
             'get_quark_cookie',
@@ -1067,12 +1299,15 @@ var rule = {
             'get_cloud_password',
             'get_cloud_cookie',
             'get_bili_cookie',
+            'get_baidu_cookie',
             'get_hide_adult',
             'get_thread',
             'play_local_proxy_type',
             'get_play_proxy_mode',
             'get_enable_dr2',
             'get_enable_py',
+            'get_enable_cat',
+            'get_enable_old_config',
             'get_enable_rule_name',
             'get_spark_ai_authKey',
             'get_deepseek_apiKey',
@@ -1085,7 +1320,10 @@ var rule = {
             'get_enable_link_data',
             'get_enable_link_push',
             'get_enable_link_jar',
+            'get_cat_sub_code',
+            'get_must_sub_code',
             'get_mg_hz',
+            'get_PROXY_AUTH',
         ];
         if (cookie_sets.includes(action) && value) {
             try {
@@ -1275,4 +1513,33 @@ function parseSaveCookie(key, value) {
     }
     // 调用 ENV.set 设置环境变量
     ENV.set(key, cookie_str);
+}
+
+
+function arrayBufferToBase64(buffer) {
+    // 将 ArrayBuffer 转为 Uint8Array（字节数组）
+    const bytes = new Uint8Array(buffer);
+    // 将每个字节转为字符，拼接成字符串（需确保二进制安全）
+    let binary = '';
+    for (let i = 0; i < bytes.byteLength; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    // 用 btoa 将二进制字符串转为 Base64（btoa 支持单字节字符串）
+    return btoa(binary);
+}
+
+async function _getQRCode(httpUrl, url) {
+    let arrayBufferData = await axios({
+        url: httpUrl,
+        method: "POST",
+        data: {
+            url: url,
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.61 Chrome/126.0.6478.61 Not/A)Brand/8  Safari/537.36',
+            },
+            responseType: 'arraybuffer'
+        }
+    });
+    let base64Images = arrayBufferToBase64(arrayBufferData.data.data.data)
+    return 'data:image/png;base64,' + base64Images;
 }

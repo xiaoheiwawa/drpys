@@ -4,16 +4,28 @@ import argparse
 import re
 
 # 要排除的目录列表
-EXCLUDE_DIRS = ['.git', '.idea', 'soft', 'pyTools', 'drop_code', 'jstest', 'local', 'logs', '对话1.txt','vod_cache','data/mv']
+EXCLUDE_DIRS = ['.git', '.idea', 'soft', 'examples', 'apps/cat', 'plugins/pvideo', 'plugins/req-proxy',
+                'plugins/pup-sniffer', 'plugins/mediaProxy',
+                'pyTools', 'drop_code',
+                'jstest',
+                'local', 'logs',
+                '对话1.txt',
+                'vod_cache', 'data/mv']
 
 # 要排除的文件列表
-EXCLUDE_FILES = ['config/env.json', '.env','spider/js/UC分享.js','spider/js/百忙无果[官].js','json/UC分享.json','jx/奇奇.js','jx/芒果关姐.js','data/settings/link_data.json','index.json','custom.json']
+EXCLUDE_FILES = ['config/env.json', '.env', '.claude', 'clipboard.txt', 'clipboard.txt.bak', '.plugins.js', 'yarn.lock',
+                 't4_daemon.pid',
+                 'spider/js/UC分享.js', 'spider/js/百忙无果[官].js',
+                 'json/UC分享.json',
+                 'jx/奇奇.js', 'jx/芒果关姐.js', 'data/settings/link_data.json', 'index.json', 'custom.json']
+
 
 def get_script_dir():
     """
     获取当前脚本所在目录
     """
     return os.path.dirname(os.path.abspath(__file__))
+
 
 def filter_green_files(script_dir):
     """
@@ -30,7 +42,18 @@ def filter_green_files(script_dir):
 
     return green_files
 
-def compress_directory(script_dir, green=False):
+
+def generate_archive_name(script_dir, green=False):
+    """
+    生成压缩包文件名
+    
+    Args:
+        script_dir (str): 脚本所在目录
+        green (bool): 是否为green模式
+        
+    Returns:
+        str: 压缩包的完整路径
+    """
     # 获取当前目录名
     current_dir = os.path.basename(script_dir)
 
@@ -45,7 +68,20 @@ def compress_directory(script_dir, green=False):
     parent_dir = os.path.abspath(os.path.join(script_dir, ".."))
     archive_path = os.path.join(parent_dir, archive_name)
 
-    # 构建 7z 压缩命令
+    return archive_path
+
+
+def build_exclude_params(script_dir, green=False):
+    """
+    构建7z压缩命令的排除参数
+    
+    Args:
+        script_dir (str): 脚本所在目录
+        green (bool): 是否为green模式
+        
+    Returns:
+        list: 排除参数列表
+    """
     exclude_params = []
 
     # 排除目录
@@ -67,6 +103,18 @@ def compress_directory(script_dir, green=False):
         for file in green_files:
             exclude_params.append(f"-x!{file}")
 
+    return exclude_params
+
+
+def execute_compression(archive_path, script_dir, exclude_params):
+    """
+    执行7z压缩命令
+    
+    Args:
+        archive_path (str): 压缩包输出路径
+        script_dir (str): 脚本所在目录
+        exclude_params (list): 排除参数列表
+    """
     # 构建命令，打包目录内容而不包含目录本身
     command = f"7z a \"{archive_path}\" \"{script_dir}\\*\" " + " ".join(exclude_params)
 
@@ -79,6 +127,25 @@ def compress_directory(script_dir, green=False):
         print(f"压缩完成: {archive_path}")
     except Exception as e:
         print(f"压缩失败: {e}")
+
+
+def compress_directory(script_dir, green=False):
+    """
+    压缩目录为7z包
+    
+    Args:
+        script_dir (str): 要压缩的目录路径
+        green (bool): 是否启用green模式，筛选带[密]的文件
+    """
+    # 生成压缩包文件名和路径
+    archive_path = generate_archive_name(script_dir, green)
+
+    # 构建排除参数
+    exclude_params = build_exclude_params(script_dir, green)
+
+    # 执行压缩
+    execute_compression(archive_path, script_dir, exclude_params)
+
 
 if __name__ == "__main__":
     # 获取脚本所在目录
