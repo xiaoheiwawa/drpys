@@ -90,7 +90,7 @@ var rule = {
         return []
     },
     一级: async function (tid, pg, filter, extend) {
-        let {MY_CATE, input} = this;
+        let {getProxyUrl, MY_CATE, input} = this;
         if (pg <= 0) pg = 1;
         let html = ''
         let list = ''
