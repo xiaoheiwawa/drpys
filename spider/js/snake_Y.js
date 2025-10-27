@@ -1,5 +1,5 @@
 var rule = {
-  title: 'du',
+  title: '毒蛇',
   host: 'https://www.xnhrsb.com/',
   url: '/dsshiyisw/fyclass--------fypage---.html',
   searchUrl: '/dsshiyisc/**----------fypage---.html',
