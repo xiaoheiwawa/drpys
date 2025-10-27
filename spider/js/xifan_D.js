@@ -10,7 +10,7 @@
 */
 
 var rule = {
-    title: '西饭短剧[短]',
+    title: 'xifan_D',
     host: 'https://xifan-api-cn.youlishipin.com',
     homeUrl: '/xifan/drama/portalPage?reqType=duanjuCategory&version=2001001&androidVersionCode=28',
     searchUrl: '**',
