@@ -3,7 +3,7 @@
   searchable: 2,
   filterable: 1,
   quickSearch: 0,
-  title: '斗鱼直播弹幕[官]',
+  title: 'douyu',
   lang: 'ds'
 })
 */
