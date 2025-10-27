@@ -20,7 +20,7 @@ const alphabetList = Array.from({length: 26}, (_, index) => {
 alphabetList.unshift({n: '全部', v: ''});
 var rule = {
     类型: '搜索',
-    title: '16wMV',
+    title: 'MV',
     alias: '16wMV搜索引擎',
     desc: '仅搜索源纯js写法',
     host: 'hiker://empty',
