@@ -1,5 +1,13 @@
 
-
+/*
+@header({
+  searchable: 1,
+  filterable: 1,
+  quickSearch: 0,
+  title: '瓜子',
+  lang: 'ds'
+})
+*/
 var rule = {
     title: '瓜子',
     host: 'https://api.8utdtcq.com',
