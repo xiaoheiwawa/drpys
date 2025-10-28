@@ -5,12 +5,12 @@
   quickSearch: 0,
   title: '王子TV',
   logo: 'https://i-blog.csdnimg.cn/blog_migrate/2621e710a94ab40ba66645d47f296aaf.gif',
+   类型: '影视',
   lang: 'ds'
 })
 */
 
 var rule = {
-  类型: '影视',
   title: '王子TV',
   author: '不告诉你',
   logo:'https://i-blog.csdnimg.cn/blog_migrate/2621e710a94ab40ba66645d47f296aaf.gif',

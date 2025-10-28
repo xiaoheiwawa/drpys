@@ -4,12 +4,12 @@
   filterable: 0,
   quickSearch: 0,
   title: '凡客TV',
+  类型: '影视',
   lang: 'ds'
 })
 */
 
 var rule = {
-  类型: '影视',
   title: '凡客TV',
   desc: '源动力出品',
   host: 'https://fktv.me',
