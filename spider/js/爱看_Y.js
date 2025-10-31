@@ -1,3 +1,12 @@
+/*
+@header({
+  searchable: 2,
+  filterable: 0,
+  quickSearch: 0,
+  title: 'ikan',
+  lang: 'ds'
+})
+*/
 var rule = {
     title: '爱电影',
     host: 'https://kuhh4jo.com/',

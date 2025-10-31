@@ -1,3 +1,12 @@
+/*
+@header({
+  searchable: 2,
+  filterable: 0,
+  quickSearch: 0,
+  title: '人人美剧',
+  lang: 'ds'
+})
+*/
 var rule = {
   title: '人人美剧[优]',
   host: 'https://rrmja.com/',
