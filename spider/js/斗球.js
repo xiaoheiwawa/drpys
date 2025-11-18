@@ -1,3 +1,13 @@
+/*
+@header({
+  searchable: 2,
+  filterable: 0,
+  quickSearch: 1,
+  title: '篮球录像吧',
+  '类型': '影视',
+  lang: 'ds'
+})
+*/
 var rule = {
     title:'篮球录像吧',
     host:'https://www.luxiangwu.com/',
