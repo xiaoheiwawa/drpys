@@ -1,99 +1,140 @@
 /*
 @header({
-  searchable: 2,
-  filterable: 0,
-  quickSearch: 0,
-  title: 'NBA录像屋',
-  '类型': '体育',
-  lang: 'ds'
+  searchable: 2,
+  filterable: 0,
+  quickSearch: 0,
+  title: 'NBA录像屋',
+  '类型': '体育',
+  lang: 'ds'
 })
 */
 
 var rule = {
-    title:'NBA录像屋',
-    host:'https://www.nbaluxiangwu.com',
-    // 1. 分类/分頁 URL 结构定制
-    url: function (params) {
-        let { class: cls, page } = params;
-        
-        // 首页分类路径: /nbalx, /zqlx 等。
-        // 分页路径: /nbalx/page/2
-        if (page === 1) {
-            // 首页 (page=1) 的分类链接就是 host + class_url，例如: https://www.nbaluxiangwu.com/nbalx/
-            return `/${cls}/`; 
-        } else {
-            // 分页链接: https://www.nbaluxiangwu.com/nbalx/page/2
-            return `/${cls}/page/${page}`;
-        }
-    },
-    detailUrl: 'fyid', 
-    
-    // 搜索由于网站使用 GET 参数，不需要定制，但网站首页表单 action="/"，所以搜索结果页路径是 /?s=关键字
-    searchUrl:'/index.php?s=**', // 适配 WordPress 的搜索结构
-    searchable: 2,
-    quickSearch: 0,
-    
-    // 2. 增加多分类
-    class_name:'NBA录像&足球录像&综合录像&体育资讯',
-    class_url:'nbalx&zqlx&zhlx&tyzx', // 对应导航栏的路径
-    
-    headers:{
-        'User-Agent':'PC_UA'
-    },
-    timeout:15000,
-    play_parse:true,
-    limit:6,
-    double:false,
-    
-    // 3. 修正一级选择器
-    // 列表项: article.excerpt.excerpt-one
-    // 标题: header h2 a&&Text
-    // 图片: a.focus img&&data-original (网站使用了 data-original 延迟加载图片)
-    // 备注: div.info time&&Text (时间作为备注)
-    // 链接: h2 a&&href
-    一级:'.content article.excerpt.excerpt-one;h2 a&&Text;a.focus img&&data-original;div.info time&&Text;h2 a&&href',
-    
-    // 4. 二级详情页解析
-    二级:{
-        title:'.news_title&&Text',
-        img:'.news_con img&&src', // 图片可能在正文区域
-        desc:'',
-        content:'div.news_con div.baidu_share&&Text', // 避免抓取到分享按钮的脚本
-        // 播放列表: 链接位于 .news_con p/a 下
-        lists:'.news_con p', 
-        list_text:'a&&Text',
-        list_url:'a&&href'
-    },
-    
-    // 5. Lazy 播放解析（外链直透）
-    lazy: $js.toString(async () => {
-        // 二级页面解析出来的 a&&href 通常是腾讯/快手等外部链接，直接透传给播放器解析
-        return { 
-            parse: 1, 
-            url: input,
-            jx: 0 // 标记为不需要二次解析
-        };
-    }),
-    
-    // 6. 搜索 (与一级结构相似，只需调整入口)
-    搜索: $js.toString(async () => {
-        let d = [];
-        try {
-            let html = await request(input);
-            // 搜索结果列表项选择器
-            let items = pdfa(html, '.content article.excerpt.excerpt-one');
-            
-            for (let item of items) {
-                d.push({
-                    title: pdfh(item, 'h2 a&&Text'),
-                    img: pdfh(item, 'a.focus img&&data-original'),
-                    content: pdfh(item, 'div.info time&&Text'),
-                    url: pdfh(item, 'h2 a&&href')
-                });
-            }
-        } catch (e) {
-            console.error('📌 搜索抓取失败:', e.message);
-        }
-        return setResult(d);
-    }),
+    title: 'NBA录像屋',
+    host: 'https://www.nbaluxiangwu.com',
+    url: function (params) {
+        let { class: cls = 'nbalx', page = 1 } = params;
+        return page === 1 ? `/${cls}/` : `/${cls}/page/${page}`;
+    },
+    detailUrl: 'fyid',
+    searchUrl: '/?s=**', // WordPress 搜索标准格式
+    searchable: 2,
+    quickSearch: 0,
+    class_name: 'NBA录像&足球录像&综合录像&体育资讯',
+    class_url: 'nbalx&zqlx&zhlx&tyzx',
+    headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+    },
+    timeout: 15000,
+    play_parse: true,
+    limit: 6,
+    double: false,
+
+    // ★★ 木兮风格：推荐（取首页首个分类前6条）
+    推荐: $js.toString(async () => {
+        let d = [];
+        try {
+            let html = await request('https://www.nbaluxiangwu.com/nbalx/');
+            let matches = [...html.matchAll(/<article\s+class="excerpt[^"]*excerpt-one[^"]*"[^>]*>[\s\S]*?<h2><a\s+href="([^"]+)"[^>]*>([^<]+)<\/a><\/h2>[\s\S]*?<div\s+class="info">[\s\S]*?<time[^>]*>([^<]+)<\/time>/gi)];
+            for (let m of matches.slice(0, 6)) {
+                let [_, url, title, time] = m;
+                let imgMatch = m[0].match(/<img\s+[^>]*data-original="([^"]+)"/i);
+                d.push({
+                    title: title.trim(),
+                    img: imgMatch ? imgMatch[1] : '',
+                    content: time.trim(),
+                    url: url
+                });
+            }
+        } catch (e) {
+            console.error('📌 推荐抓取失败:', e.message);
+        }
+        return setResult(d);
+    }),
+
+    // ★★ 木兮风格：一级（正则提取，兼容 data-original）
+    一级: $js.toString(async () => {
+        let d = [];
+        try {
+            let html = await request(input);
+            let matches = [...html.matchAll(/<article\s+class="excerpt[^"]*excerpt-one[^"]*"[^>]*>[\s\S]*?<h2><a\s+href="([^"]+)"[^>]*>([^<]+)<\/a><\/h2>[\s\S]*?<div\s+class="info">[\s\S]*?<time[^>]*>([^<]+)<\/time>/gi)];
+            for (let m of matches) {
+                let [_, url, title, time] = m;
+                if (!url || !title) continue;
+                let imgMatch = m[0].match(/<img\s+[^>]*data-original="([^"]+)"/i);
+                d.push({
+                    title: title.trim(),
+                    img: imgMatch ? imgMatch[1] : '',
+                    content: time.trim(),
+                    url: url
+                });
+            }
+        } catch (e) {
+            console.error('📌 一级抓取失败:', e.message);
+        }
+        return setResult(d);
+    }),
+
+    // ★★ 木兮风格：二级（纯字符串解析，避免 DOM）
+    二级: $js.toString(async () => {
+        let html = await request(input);
+        
+        // 标题
+        let titleMatch = html.match(/<h1\s+class="news_title"[^>]*>([^<]+)<\/h1>/i);
+        let vod_name = titleMatch ? titleMatch[1].trim() : '未知录像';
+        
+        // 图片（取第一张）
+        let imgMatch = html.match(/<div\s+class="news_con"[^>]*>[\s\S]*?<img\s+[^>]*src="([^"]+)"/i);
+        let vod_pic = imgMatch ? imgMatch[1] : '';
+
+        // 播放分组（假设无 tabs，全归为「视频源」）
+        let playLines = [];
+        let aMatches = [...html.matchAll(/<div\s+class="news_con"[^>]*>[\s\S]*?<p>([\s\S]*?<a\s+href="([^"]+)"[^>]*>([^<]+)<\/a>[\s\S]*?)<\/p>/gi)];
+        for (let a of aMatches) {
+            let text = a[3].trim();
+            let url = a[2];
+            if (url && text && !url.startsWith('#') && !url.includes('javascript')) {
+                playLines.push(`${text}$${url}`);
+            }
+        }
+
+        return {
+            vod_id: input.replace(/^.+\/([^\/]+)\.html?$/, '$1'),
+            vod_name: vod_name,
+            type_name: '体育',
+            vod_pic: vod_pic,
+            vod_remarks: '',
+            vod_content: '',
+            vod_play_from: '视频源',
+            vod_play_url: playLines.join('#')
+        };
+    }),
+
+    // ★★ 木兮风格：搜索（同 一级 逻辑）
+    搜索: $js.toString(async () => {
+        let d = [];
+        try {
+            let html = await request(input);
+            let matches = [...html.matchAll(/<article\s+class="excerpt[^"]*excerpt-one[^"]*"[^>]*>[\s\S]*?<h2><a\s+href="([^"]+)"[^>]*>([^<]+)<\/a><\/h2>[\s\S]*?<div\s+class="info">[\s\S]*?<time[^>]*>([^<]+)<\/time>/gi)];
+            for (let m of matches) {
+                let [_, url, title, time] = m;
+                let imgMatch = m[0].match(/<img\s+[^>]*data-original="([^"]+)"/i);
+                d.push({
+                    title: title.trim(),
+                    img: imgMatch ? imgMatch[1] : '',
+                    content: time.trim(),
+                    url: url
+                });
+            }
+        } catch (e) {
+            console.error('📌 搜索失败:', e.message);
+        }
+        return setResult(d);
+    }),
+
+    // ★★ 木兮风格：lazy（外链直透）
+    lazy: $js.toString(async () => {
+        // 支持腾讯、快手、微博、爱奇艺等主流平台
+        return { parse: 1, url: input };
+    })
 };
